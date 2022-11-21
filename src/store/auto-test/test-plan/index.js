@@ -31,7 +31,7 @@ const getDefaultState = () => {
     planDialogVisible: false,
     planConfigFrom: {},
     requestParamReport: {
-      pagenum: 0,
+      pagenum: 1,
       pagesize: 20000,
       f_database: 'smartest',
       f_collection: '',

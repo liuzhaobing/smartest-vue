@@ -182,13 +182,14 @@ export default {
       Message.info('敬请期待！')
     },
     handleMissionDownload(row) {
+      Message.info('正在导出！')
       this.$store.commit('testPlan/SET_COLLECTION', `${row.task_type}_results`)
       this.$store.commit('testPlan/SET_FILTER', { job_instance_id: row.job_instance_id })
       this.$store.dispatch('testPlan/exportData', this.$store.getters['testPlan/reportRequestParam']).then(() => {
-        // this.$store.dispatch('testPlan/downloadFile', this.$store.getters['testPlan/getFileName'])
+        Message.success('导出成功！')
         const result = this.$store.getters['testPlan/getFileName']
         const a = document.createElement('a')
-        a.href = `/download?filename=${result}`
+        a.href = `${process.env.VUE_APP_BASE_API}/api/v1/download?filename=${result}`
         a.download = result.split('/').pop()
         a.click()
         window.URL.revokeObjectURL(a.href)
