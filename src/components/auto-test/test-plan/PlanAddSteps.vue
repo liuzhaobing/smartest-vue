@@ -45,9 +45,6 @@
             </el-form-item>
           </div>
           <div v-if="addPlanFrom.task_type === 'kg'">
-            <el-form-item label="并发数">
-              <el-input-number v-model="config_kg.chan_num" :min="1" />
-            </el-form-item>
             <el-form-item label="前端地址">
               <el-autocomplete
                 v-model="config_kg.env_info.front_url"
@@ -56,7 +53,9 @@
                 clearable
                 :fetch-suggestions="
                   (queryString, cb) => {
-                    cb([{ value: 'https://mmue-dit87.harix.iamidata.com' }])
+                    cb([{ value: 'https://mmue-dit87.harix.iamidata.com' },
+                     { value: 'https://mmue-sit134.harix.iamidata.com' },
+                      { value: 'https://mmue.harix.iamidata.com' }])
                   }
                 "
               />
@@ -127,13 +126,97 @@
                 placeholder="选择用例来源"
                 style="display: block; width: 100%;"
               >
-                <el-option v-for="(i, v) in taskDataSources" :value="v" :label="i" />
+                <el-option autocomplete="on" v-for="(i, v) in taskDataSources" :value="v" :label="i" />
               </el-select>
             </el-form-item>
           </div>
-          <div v-if="dataSourceType === 'source_kg'" />
-          <div v-if="dataSourceType === 'cases_kg'" />
-          <div v-if="dataSourceType === 'excel_kg'" />
+          <div v-if="dataSourceType === 'source_kg'" >
+            <el-form-item label="用例总数">
+              <el-input-number v-model="source_kg.case_num" :min="100"/>
+            </el-form-item>
+            <el-form-item label="随机用例">
+              <el-tooltip>
+                <el-switch
+                  v-model="source_kg.is_random"
+                  active-color="#13ce66"
+                  active-value="yes"
+                  inactive-color="#eaeefb"
+                  inactive-value="no"
+                />
+              </el-tooltip>
+            </el-form-item>
+            <el-form-item label="断点续传">
+              <el-tooltip>
+                <el-switch
+                  v-model="source_kg.is_continue"
+                  active-color="#13ce66"
+                  active-value="yes"
+                  inactive-color="#eaeefb"
+                  inactive-value="no"
+                />
+              </el-tooltip>
+            </el-form-item>
+            <el-form-item label="用例来源库">
+              <el-autocomplete
+                v-model="source_kg.kg_data_base.db"
+                style="display: block; width: 100%;"
+                autocomplete="off"
+                clearable
+                :fetch-suggestions="
+                  (queryString, cb) => {
+                    cb([{ value: 'common_kg_v4' }])
+                  }
+                "
+              />
+            </el-form-item>
+            <el-form-item label="库连接地址">
+              <el-autocomplete
+                v-model="source_kg.kg_data_base.mongo_connect_url"
+                style="display: block; width: 100%;"
+                autocomplete="off"
+                clearable
+                :fetch-suggestions="
+                  (queryString, cb) => {
+                    cb([{ value: 'mongodb://172.16.23.85:30966/common_kg_v4?connect=direct' }])
+                  }
+                "
+              />
+            </el-form-item>
+            <el-form-item label="单跳/两跳">
+              <el-radio-group
+                v-model="source_kg.c_type"
+                style="margin-left: 20px">
+                <el-radio :label=2>两跳</el-radio>
+                <el-radio :label=1>单跳</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="模板">
+              <el-input v-model="source_kg.template_json" />
+            </el-form-item>
+          </div>
+          <div v-if="dataSourceType === 'cases_kg'" >
+            <el-form-item label="用例数据">
+              <el-input v-model="cases_kg" />
+            </el-form-item>
+          </div>
+          <div v-if="dataSourceType === 'excel_kg'">
+            <el-form-item label="文件地址">
+              <el-input v-model="excel_kg.file_name" />
+            </el-form-item>
+            <el-form-item label="Sheet页">
+              <el-autocomplete
+                v-model="excel_kg.sheet_name"
+                style="display: block; width: 100%;"
+                autocomplete="off"
+                clearable
+                :fetch-suggestions="
+                  (queryString, cb) => {
+                    cb([{ value: 'Sheet1' }])
+                  }
+                "
+              />
+            </el-form-item>
+          </div>
         </div>
         <div v-if="active === 2">
             <el-form-item label="任务名称">
@@ -142,7 +225,7 @@
             <el-form-item label="任务分组">
               <el-select
                 v-model="addPlanFrom.task_group"
-                placeholder="输入/选择任务需要加入的组 以便查询"
+                placeholder="输入/选择任务需要加入的组"
                 filterable
                 allow-create
                 style="display: block; width: 100%;"
@@ -150,6 +233,9 @@
                 <el-option v-for="g in taskGroups" :value="g" :label="g" />
               </el-select>
             </el-form-item>
+          <el-form-item label="并发数">
+            <el-input-number v-model="chan_num" :min="1" />
+          </el-form-item>
             <el-form-item label="定时任务">
               <el-tooltip>
                 <el-switch
@@ -219,6 +305,7 @@ export default {
     return {
       step: 3,
       active: 0,
+      chan_num: 1,
       dataSourceType: '',
       taskGroups: ['SmartVoice', '展厅测试', '知识图谱'],
       taskTypes: {
@@ -238,9 +325,7 @@ export default {
         task_group: '',
         is_crontab: '',
         crontab_string: '',
-        task_type: '',
-        task_config: null,
-        task_data_source: null
+        task_type: ''
       },
       config_kg: {
         task_name: '',
@@ -260,6 +345,20 @@ export default {
         spaces: [{space_name: 'common_kg_v4'}]
       },
       source_kg: {
+        case_num: 0,
+        c_type: 1,
+        is_continue: "no",
+        is_random: "yes",
+        kg_data_base: {
+          db: "common_kg_v4",
+          mongo_connect_url: "mongodb://172.16.23.85:30966/common_kg_v4?connect=direct"
+        },
+        template_json: ""
+      },
+      cases_kg: "",
+      excel_kg : {
+        file_name: "",
+        sheet_name: ""
       },
       report_strings: [{value: ''}],
     }
@@ -276,9 +375,16 @@ export default {
     clickToAddPlan: function() {
       if (this.addPlanFrom.task_type === 'kg') {
         this.config_kg.task_name = this.addPlanFrom.task_name
+        this.config_kg.chan_num = this.chan_num
         this.addPlanFrom.task_config = {config_kg: this.config_kg}
         if (this.dataSourceType === "source_kg") {
           this.addPlanFrom.task_data_source = this.source_kg
+        }
+        if (this.dataSourceType === "excel_kg") {
+          this.addPlanFrom.task_data_source = this.excel_kg
+        }
+        if (this.dataSourceType === "cases_kg") {
+          this.addPlanFrom.task_data_source = this.cases_kg
         }
       }
       const li = []
