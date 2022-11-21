@@ -36,34 +36,21 @@
           <div>
             <el-form-item label="任务类型" filterable>
               <el-select
-                v-model="stepOneFrom.task_type"
-                placeholder="任务类型选择 单选"
+                v-model="addPlanFrom.task_type"
+                placeholder="选择任务类型"
                 style="display: block; width: 100%;"
               >
                 <el-option v-for="(i, v) in taskTypes" :value="v" :label="i" />
               </el-select>
             </el-form-item>
           </div>
-          <div v-if="stepOneFrom.task_type === 'kg'">
+          <div v-if="addPlanFrom.task_type === 'kg'">
             <el-form-item label="并发数">
-              <el-input-number v-model="stepTwoFrom.task_config.config_kg.chan_num" :min="1" />
-            </el-form-item>
-            <el-form-item label="图空间">
-              <el-select
-                v-model="stepTwoFrom.task_config.config_kg.spaces"
-                placeholder="图空间选择 单选/多选/输入"
-                filterable
-                multiple
-                clearable
-                allow-create
-                style="display: block; width: 100%;"
-              >
-                <el-option value="common_kg_v4" label="common_kg_v4" />
-              </el-select>
+              <el-input-number v-model="config_kg.chan_num" :min="1" />
             </el-form-item>
             <el-form-item label="前端地址">
               <el-autocomplete
-                v-model="stepTwoFrom.task_config.config_kg.env_info.front_url"
+                v-model="config_kg.env_info.front_url"
                 style="display: block; width: 100%;"
                 autocomplete="off"
                 clearable
@@ -76,7 +63,7 @@
             </el-form-item>
             <el-form-item label="后端地址">
               <el-autocomplete
-                v-model="stepTwoFrom.task_config.config_kg.env_info.backend_url"
+                v-model="config_kg.env_info.backend_url"
                 style="display: block; width: 100%;"
                 autocomplete="off"
                 clearable
@@ -88,23 +75,48 @@
               />
             </el-form-item>
             <el-form-item label="登录用户">
-              <el-input v-model="stepTwoFrom.task_config.config_kg.env_info.username" />
+              <el-input v-model="config_kg.env_info.username" />
             </el-form-item>
             <el-form-item label="登录密码">
-              <el-input v-model="stepTwoFrom.task_config.config_kg.env_info.pwd" />
+              <el-input v-model="config_kg.env_info.pwd" />
             </el-form-item>
             <el-form-item label="Token">
               <el-input
-                v-model="stepTwoFrom.task_config.config_kg.env_info.token"
+                v-model="config_kg.env_info.token"
                 placeholder="非必填"
               />
             </el-form-item>
             <el-form-item label="实例ID">
               <el-input
-                v-model="stepTwoFrom.task_config.config_kg.job_instance_id"
+                v-model="config_kg.job_instance_id"
                 placeholder="非必填"
               />
             </el-form-item>
+            <template v-for="(item, index) in config_kg.spaces">
+              <el-form-item
+                :label="'图空间' + (index+1)"
+                :prop="'config_kg.spaces.' + index + '.space_name'"
+              >
+                <el-input
+                  v-model="item.space_name"
+                />
+                <div class="addSpaceName">
+                  <i
+                    style="font-size: 20px; color: #2d8cf0"
+                    v-if="index === config_kg.spaces.length - 1"
+                    @click="addSpaceName"
+                    class="el-icon-circle-plus-outline"
+                  />
+                  <i
+                    style="font-size: 20px; color: red"
+                    v-if="index !== config_kg.spaces.length - 1"
+                    @click="delSpaceName(item)"
+                    class="el-icon-remove-outline"
+                  />
+                </div>
+              </el-form-item>
+            </template>
+
           </div>
         </div>
         <div v-if="active === 1">
@@ -112,7 +124,7 @@
             <el-form-item label="数据源类型">
               <el-select
                 v-model="dataSourceType"
-                placeholder="数据源型选择 单选"
+                placeholder="选择用例来源"
                 style="display: block; width: 100%;"
               >
                 <el-option v-for="(i, v) in taskDataSources" :value="v" :label="i" />
@@ -124,55 +136,74 @@
           <div v-if="dataSourceType === 'excel_kg'" />
         </div>
         <div v-if="active === 2">
-          <el-form-item label="任务名称" prop="task_name">
-            <el-input v-model="stepOneFrom.task_name" />
-          </el-form-item>
-          <el-form-item label="任务分组">
-            <el-select
-              v-model="stepOneFrom.task_group"
-              placeholder="输入/选择任务需要加入的组 以便查询"
-              filterable
-              allow-create
-              style="display: block; width: 100%;"
-            >
-              <el-option v-for="g in taskGroups" :value="g" :label="g" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="定时任务">
-            <el-tooltip>
-              <el-switch
-                v-model="stepOneFrom.is_crontab"
-                active-color="#13ce66"
-                active-value="yes"
-                inactive-color="#eaeefb"
-                inactive-value="no"
+            <el-form-item label="任务名称">
+              <el-input v-model="addPlanFrom.task_name" />
+            </el-form-item>
+            <el-form-item label="任务分组">
+              <el-select
+                v-model="addPlanFrom.task_group"
+                placeholder="输入/选择任务需要加入的组 以便查询"
+                filterable
+                allow-create
+                style="display: block; width: 100%;"
+              >
+                <el-option v-for="g in taskGroups" :value="g" :label="g" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="定时任务">
+              <el-tooltip>
+                <el-switch
+                  v-model="addPlanFrom.is_crontab"
+                  active-color="#13ce66"
+                  active-value="yes"
+                  inactive-color="#eaeefb"
+                  inactive-value="no"
+                />
+              </el-tooltip>
+            </el-form-item>
+            <el-form-item label="定时表达式">
+              <el-input
+                v-model="addPlanFrom.crontab_string"
+                :placeholder="'[分] [时] [天] [月] [星期几]'"
+                :disabled="addPlanFrom.is_crontab === 'no'"
               />
-            </el-tooltip>
-          </el-form-item>
-          <el-form-item label="定时表达式">
-            <el-input
-              v-model="stepOneFrom.crontab_string"
-              :placeholder="'[分] [时] [天] [月] [星期几]'"
-              :disabled="stepOneFrom.is_crontab === 'no'"
-            />
-          </el-form-item>
-          <el-form-item label="测试报告">
-            <el-tooltip>
-              <el-switch
-                v-model="stepOneFrom.is_report"
-                active-color="#13ce66"
-                active-value="yes"
-                inactive-color="#eaeefb"
-                inactive-value="no"
-              />
-            </el-tooltip>
-          </el-form-item>
-          <el-form-item label="报告地址">
-            <el-input
-              v-model="stepOneFrom.report_string"
-              :disabled="stepOneFrom.is_report === 'no'"
-            />
-          </el-form-item>
+            </el-form-item>
+            <el-form-item label="测试报告">
+              <el-tooltip>
+                <el-switch
+                  v-model="config_kg.is_report"
+                  active-color="#13ce66"
+                  active-value="yes"
+                  inactive-color="#eaeefb"
+                  inactive-value="no"
+                />
+              </el-tooltip>
+            </el-form-item>
+            <template v-for="(item, index) in report_strings">
+              <el-form-item
+                :label="'报告地址' + (index+1)"
+                :prop="'report_strings.' + index + '.value'"
+              >
+                <el-input
+                  v-model="item.value"
+                  :disabled="config_kg.is_report === 'no'"
+                />
+                <div class="addDelete" disabled="stepOneFrom.is_report === 'no'">
+                  <i
+                    style="font-size: 20px; color: #2d8cf0"
+                    v-if="index === report_strings.length - 1"
+                    @click="addReportString"
+                    class="el-icon-circle-plus-outline"
+                  />
+                  <i
+                    style="font-size: 20px; color: red"
+                    v-if="index !== report_strings.length - 1"
+                    @click="delReportString(item)"
+                    class="el-icon-remove-outline"
+                  />
+                </div>
+              </el-form-item>
+            </template>
         </div>
 
       </el-form>
@@ -202,37 +233,35 @@ export default {
         cases_kg: '用例输入',
         excel_kg: '表格导入'
       },
-      stepOneFrom: {
+      addPlanFrom: {
         task_name: '',
         task_group: '',
         is_crontab: '',
         crontab_string: '',
-        task_type: ''
+        task_type: '',
+        task_config: null,
+        task_data_source: null
       },
-      stepTwoFrom: {
-        task_config: {
-          config_kg: {
-            task_name: '',
-            job_instance_id: '',
-            chan_num: 1,
-            is_report: '',
-            report_string: '',
-            env_info: {
-              front_url: '',
-              backend_url: '',
-              token: '',
-              username: '',
-              pwd: '',
-              captchaid: '5555',
-              authcode: '5555'
-            },
-            spaces: []
-          }
-        }
+      config_kg: {
+        task_name: '',
+        job_instance_id: '',
+        chan_num: 1,
+        is_report: '',
+        report_string: '',
+        env_info: {
+          front_url: '',
+          backend_url: '',
+          token: '',
+          username: '',
+          pwd: '',
+          captchaid: '5555',
+          authcode: '5555'
+        },
+        spaces: [{space_name: 'common_kg_v4'}]
       },
-      stepThreeFrom: {
-        task_data_source: {}
-      }
+      source_kg: {
+      },
+      report_strings: [{value: ''}],
     }
   },
   layout: 'blank',
@@ -245,10 +274,54 @@ export default {
       if (--this.active < 0) this.active = 0
     },
     clickToAddPlan: function() {
-      console.log(this.stepOneFrom)
-      console.log(this.stepTwoFrom)
-      console.log(this.stepThreeFrom)
+      if (this.addPlanFrom.task_type === 'kg') {
+        this.config_kg.task_name = this.addPlanFrom.task_name
+        this.addPlanFrom.task_config = {config_kg: this.config_kg}
+        if (this.dataSourceType === "source_kg") {
+          this.addPlanFrom.task_data_source = this.source_kg
+        }
+      }
+      const li = []
+      for (let i = this.report_strings.length - 1; i >= 0; i--) {
+        if (this.report_strings[i].value !== '') {
+          li.push(this.report_strings[i].value)
+        }
+      }
+      console.log(li)
+      console.log(this.addPlanFrom)
       Message.info('敬请期待！')
+    },
+    delReportString: function (item) {
+      const min_len = this.report_strings.length
+      const index = this.report_strings.indexOf(item)
+      if (min_len !== 1) {
+        this.report_strings.splice(index, 1)
+      }
+    },
+    addReportString: function () {
+      this.report_strings.push({value: ""})
+    },
+    delSpaceName: function (item) {
+      const min_len = this.config_kg.spaces.length
+      const index = this.config_kg.spaces.indexOf(item)
+      if (min_len !== 1) {
+        this.config_kg.spaces.splice(index, 1)
+      }
+    },
+    addSpaceName: function () {
+      this.config_kg.spaces.push({space_name: ""})
+    },
+    acceptUrlValidator: function (rule, value, callBack) {
+      let url = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/[\]@!\$&'\*\+,;=.]+$/;
+      if (value) {
+        if (!url.test(value)) {
+          callBack("请输入正确的接收地址");
+        } else {
+          callBack();
+        }
+      } else {
+        callBack();
+      }
     }
   }
 }
