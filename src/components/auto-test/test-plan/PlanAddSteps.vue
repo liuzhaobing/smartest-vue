@@ -191,12 +191,12 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="模板">
-              <el-input v-model="source_kg.template_json" />
+              <el-input v-model="source_kg.template_json"  type="textarea" :rows="10"/>
             </el-form-item>
           </div>
           <div v-if="dataSourceType === 'cases_kg'" >
             <el-form-item label="用例数据">
-              <el-input v-model="cases_kg" />
+              <el-input v-model="cases_kg" type="textarea" :rows="10"/>
             </el-form-item>
           </div>
           <div v-if="dataSourceType === 'excel_kg'">
@@ -378,13 +378,14 @@ export default {
         this.config_kg.chan_num = this.chan_num
         this.addPlanFrom.task_config = {config_kg: this.config_kg}
         if (this.dataSourceType === "source_kg") {
-          this.addPlanFrom.task_data_source = this.source_kg
+          this.source_kg.template_json = JSON.parse(this.source_kg.template_json)
+          this.addPlanFrom.task_data_source = {source_kg: this.source_kg}
         }
         if (this.dataSourceType === "excel_kg") {
-          this.addPlanFrom.task_data_source = this.excel_kg
+          this.addPlanFrom.task_data_source = {excel_kg: this.excel_kg}
         }
         if (this.dataSourceType === "cases_kg") {
-          this.addPlanFrom.task_data_source = this.cases_kg
+          this.addPlanFrom.task_data_source = {cases_kg: JSON.parse(this.cases_kg)}
         }
       }
       const li = []
