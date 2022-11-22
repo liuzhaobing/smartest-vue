@@ -373,9 +373,18 @@ export default {
       if (--this.active < 0) this.active = 0
     },
     clickToAddPlan: function() {
+      // 测试报告地址预处理
+      const report_strings_list = []
+      for (let i = this.report_strings.length - 1; i >= 0; i--) {
+        if (this.report_strings[i].value !== '') {
+          report_strings_list.push(this.report_strings[i].value)
+        }
+      }
+      // 根据具体测试场景选择结构体
       if (this.addPlanFrom.task_type === 'kg') {
         this.config_kg.task_name = this.addPlanFrom.task_name
         this.config_kg.chan_num = this.chan_num
+        this.config_kg.report_string = report_strings_list
         this.addPlanFrom.task_config = {config_kg: this.config_kg}
         if (this.dataSourceType === "source_kg") {
           this.source_kg.template_json = JSON.parse(this.source_kg.template_json)
@@ -388,13 +397,6 @@ export default {
           this.addPlanFrom.task_data_source = {cases_kg: JSON.parse(this.cases_kg)}
         }
       }
-      const li = []
-      for (let i = this.report_strings.length - 1; i >= 0; i--) {
-        if (this.report_strings[i].value !== '') {
-          li.push(this.report_strings[i].value)
-        }
-      }
-      console.log(li)
       console.log(this.addPlanFrom)
       Message.info('敬请期待！')
     },

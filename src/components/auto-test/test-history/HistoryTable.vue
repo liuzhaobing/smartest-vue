@@ -63,7 +63,12 @@
       </el-table-column>
       <el-table-column label="状态" width="90" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">
+          <el-tag
+            popper-class="cell-popover"
+            trigger="hover"
+            placement="top"
+            :title="scope.row.message"
+            :type="scope.row.status | statusFilter">
             {{
               scope.row.status === 32
                 ? "成功"
