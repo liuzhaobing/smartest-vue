@@ -28,8 +28,6 @@ const getDefaultState = () => {
       status: 0
     },
     crontabSetting: {},
-    planDialogVisible: false,
-    planConfigFrom: {},
     requestParamReport: {
       pagenum: 1,
       pagesize: 20000,
@@ -40,7 +38,9 @@ const getDefaultState = () => {
     filterData: {
       job_instance_id: ''
     },
-    filename: ''
+    filename: '',
+    planDialogVisible: false,
+    planForm: {}
   }
 }
 
@@ -93,8 +93,8 @@ const getters = {
   planDialogVisible(state) {
     return state.planDialogVisible
   },
-  planConfigFrom(state) {
-    return state.planConfigFrom
+  planForm(state) {
+    return state.planForm
   },
   reportRequestParam(state) {
     state.requestParamReport.filter = state.filterData
@@ -137,7 +137,7 @@ const mutations = {
     state.planDialogVisible = data
   },
   SET_ONE_PLAN_FORM: (state, data) => {
-    state.planConfigFrom = data
+    state.planForm = data
   },
   SET_DATABASE: (state, value) => {
     state.requestParamReport.f_database = value
