@@ -22,7 +22,7 @@
       element-loading-text="Loading"
       border
       fit
-      highlight-current-row
+      :highlight-current-row="true"
       height="750"
       :row-style="{
         height: '20px'
@@ -105,7 +105,7 @@
                 icon="el-icon-edit"
                 size="mini"
                 type="warning"
-                @click="editConfig(scope.row)"
+                @click="editPlan(scope.row)"
               />
             </el-tooltip>
 
@@ -199,14 +199,40 @@ export default {
     handleDeleteMission(row) {
       return this.$store.dispatch('testPlan/deleteOnePlan', row.id)
     },
-    editConfig(row) {
+    editPlan(row) {
       this.$store.commit('testPlan/SET_ONE_PLAN_VISIBLE', true)
-      this.$store.commit('testPlan/SET_ONE_PLAN_FORM', row)
-      Message.info('敬请期待！')
-      // this.$store.dispatch('testPlan/updateOnePlan', row)
+      this.$store.commit('testPlan/SET_ONE_PLAN_FORM', {
+        id: row.id,
+        task_name: row.task_name,
+        task_type: row.task_type,
+        task_group: row.task_group,
+        is_crontab: row.is_crontab,
+        crontab_string: row.crontab_string,
+        task_data_source_label: row.task_data_source_label,
+        task_config: row.task_config,
+        task_data_source: row.task_data_source
+      })
     },
     addPlan() {
-      Message.info('敬请期待！')
+      this.$store.commit('testPlan/SET_ONE_PLAN_VISIBLE', true)
+      this.$store.commit('testPlan/SET_ONE_PLAN_FORM', {
+        task_name: '',
+        task_type: '',
+        task_group: '',
+        is_crontab: '',
+        crontab_string: '',
+        task_data_source_label: '',
+        task_config: {
+          config_kg: {
+
+          }
+        },
+        task_data_source: {
+          source_kg: {
+
+          }
+        }
+      })
     }
   }
 }
