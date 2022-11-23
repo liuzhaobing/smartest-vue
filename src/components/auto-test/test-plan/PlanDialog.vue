@@ -269,8 +269,6 @@ export default {
   name: 'PlanDialog',
   data() {
     return {
-      step: 3,
-      active: 0,
       rules: {},
       report_strings: [{value: ''}],
       taskGroups: ['知识图谱', 'SmartVoice', '展厅测试'],
@@ -278,6 +276,30 @@ export default {
     }
   },
   layout: 'blank',
+  computed: {
+    visible: {
+      get() {
+        return this.$store.getters['testPlan/planDialogVisible']
+      },
+      set(val) {
+        this.$store.commit('testPlan/SET_ONE_PLAN_VISIBLE', val)
+      }
+    },
+    title() {
+      if (this.addPlanForm.id !== null) {
+        return '编辑任务'
+      }
+      return '新增任务'
+    },
+    addPlanForm: {
+      get() {
+        return this.$store.getters['testPlan/planForm']
+      },
+      set(val) {
+        this.$store.commit('testPlan/SET_ONE_PLAN_FORM', val)
+      }
+    }
+  },
   watch: {
     visible: {
       handler(val) {
@@ -317,33 +339,10 @@ export default {
                 mongo_connect_url: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
                 template_json: [{required: true, message: '请输入任务名称', trigger: 'blur'}]
               }
+              this.rules = Object.assign(this.rules, extraRules2)
             }
           }
         }
-      }
-    }
-  },
-  computed: {
-    visible: {
-      get() {
-        return this.$store.getters['testPlan/planDialogVisible']
-      },
-      set(val) {
-        this.$store.commit('testPlan/SET_ONE_PLAN_VISIBLE', val)
-      }
-    },
-    title() {
-      if (this.form.id !== null) {
-        return '编辑任务'
-      }
-      return '新增任务'
-    },
-    addPlanForm: {
-      get() {
-        return this.$store.getters['testPlan/planForm']
-      },
-      set(val) {
-        this.$store.commit('testPlan/SET_ONE_PLAN_FORM', val)
       }
     }
   },
