@@ -1,5 +1,10 @@
 <template>
-  <el-dialog :title="title" :visible.sync="visible" width="550px" append-to-body>
+  <el-dialog :title="title" :visible.sync="visible" width="650px" append-to-body>
+    <el-steps :active="active" finish-status="success">
+      <el-step title="环境配置" />
+      <el-step title="数据源选择" />
+      <el-step title="基础信息" />
+    </el-steps>
     <el-form
       :model="form"
       :rules="rules"
@@ -8,256 +13,287 @@
       autocomplete="off"
       size="medium"
     >
-      <el-form-item label="任务名称" prop="task_name">
-        <el-input v-model="form.task_name" />
-      </el-form-item>
-      <el-form-item label="任务分组" prop="task_group">
-        <el-select
-          v-model="form.task_group"
-          placeholder="输入/选择任务需要加入的组"
-          filterable
-          allow-create
-          style="display: block; width: 100%;"
-        >
-          <el-option v-for="g in taskGroups" :value="g" :label="g" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="并发数" prop="chan_num">
-        <el-input-number v-model="form.task_config.config_kg.chan_num" :min="1" />
-      </el-form-item>
-      <el-form-item label="定时任务" prop="is_crontab">
-        <el-tooltip>
-          <el-switch
-            v-model="form.is_crontab"
-            active-color="#13ce66"
-            active-value="yes"
-            inactive-color="#eaeefb"
-            inactive-value="no"
-          />
-        </el-tooltip>
-      </el-form-item>
-      <el-form-item label="定时表达式" prop="crontab_string">
-        <el-input
-          v-model="form.crontab_string"
-          :placeholder="'[分] [时] [天] [月] [星期几]'"
-          :disabled="form.is_crontab === 'no'"
-        />
-      </el-form-item>
-      <el-form-item label="测试报告" prop="is_report">
-        <el-tooltip>
-          <el-switch
-            v-model="form.task_config.config_kg.is_report"
-            active-color="#13ce66"
-            active-value="yes"
-            inactive-color="#eaeefb"
-            inactive-value="no"
-          />
-        </el-tooltip>
-      </el-form-item>
-      <template v-for="(item, index) in report_strings">
-        <el-form-item
-          :label="'报告地址' + (index+1)"
-          :prop="'report_strings.' + index + '.value'"
-        >
-          <el-input
-            v-model="item.value"
-            :disabled="form.task_config.config_kg.is_report === 'no'"
-          />
-          <div class="addDelete" disabled="form.task_config.config_kg.is_report === 'no'">
-            <i
-              style="font-size: 20px; color: #2d8cf0"
-              v-if="index === report_strings.length - 1"
-              @click="addReportString"
-              class="el-icon-circle-plus-outline"
+      <div v-if="active === 0">
+        <div>
+          <el-form-item label="任务类型" filterable prop="task_type">
+            <el-select
+              v-model="form.task_type"
+              placeholder="选择任务类型"
+              @change="onTypeChange"
+              style="display: block; width: 100%;"
+            >
+              <el-option v-for="(item, index) in taskTypes" :value="item.tp_en" :label="item.tp_zh" />
+            </el-select>
+          </el-form-item>
+        </div>
+        <div v-if="form.task_type === 'kg'">
+          <el-form-item label="前端地址" prop="front_url" v-if="form.task_type === 'kg'">
+            <el-autocomplete
+              v-model="form.task_config.config_kg.env_info.front_url"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
+          (queryString, cb) => {
+            cb([{ value: 'https://mmue-dit87.harix.iamidata.com' },
+             { value: 'https://mmue-sit134.harix.iamidata.com' },
+              { value: 'https://mmue.harix.iamidata.com' }])
+          }
+        "
             />
-            <i
-              style="font-size: 20px; color: red"
-              v-if="index !== report_strings.length - 1"
-              @click="delReportString(item)"
-              class="el-icon-remove-outline"
+          </el-form-item>
+          <el-form-item label="后端地址" prop="backend_url" v-if="form.task_type === 'kg'">
+            <el-autocomplete
+              v-model="form.task_config.config_kg.env_info.backend_url"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
+          (queryString, cb) => {
+            cb([{ value: 'http://172.16.23.85:31917' }])
+          }
+        "
             />
-          </div>
-        </el-form-item>
-      <el-form-item label="任务类型" filterable prop="task_type">
-        <el-select
-          v-model="form.task_type"
-          placeholder="选择任务类型"
-          @change="onTypeChange"
-          style="display: block; width: 100%;"
-        >
-          <el-option v-for="(item, index) in taskTypes" :value="item.tp_en" :label="item.tp_zh" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="前端地址" prop="front_url" v-if="form.task_type === 'kg'">
-        <el-autocomplete
-          v-model="form.task_config.config_kg.env_info.front_url"
-          style="display: block; width: 100%;"
-          autocomplete="off"
-          clearable
-          :fetch-suggestions="
-            (queryString, cb) => {
-              cb([{ value: 'https://mmue-dit87.harix.iamidata.com' },
-               { value: 'https://mmue-sit134.harix.iamidata.com' },
-                { value: 'https://mmue.harix.iamidata.com' }])
-            }
-          "
-        />
-      </el-form-item>
-      <el-form-item label="后端地址" prop="backend_url" v-if="form.task_type === 'kg'">
-        <el-autocomplete
-          v-model="form.task_config.config_kg.env_info.backend_url"
-          style="display: block; width: 100%;"
-          autocomplete="off"
-          clearable
-          :fetch-suggestions="
-            (queryString, cb) => {
-              cb([{ value: 'http://172.16.23.85:31917' }])
-            }
-          "
-        />
-      </el-form-item>
-      <el-form-item label="登录用户" prop="username" v-if="form.task_type === 'kg'">
-        <el-input v-model="form.task_config.config_kg.env_info.username" />
-      </el-form-item>
-      <el-form-item label="登录密码" prop="pwd" v-if="form.task_type === 'kg'">
-        <el-input v-model="form.task_config.config_kg.env_info.pwd" />
-      </el-form-item>
-      <el-form-item label="Token" prop="token" v-if="form.task_type === 'kg'">
-        <el-input
-          v-model="form.task_config.config_kg.env_info.token"
-          placeholder="非必填"
-        />
-      </el-form-item>
-      <el-form-item label="实例ID" prop="job_instance_id" v-if="form.task_type === 'kg'">
-        <el-input
-          v-model="form.task_config.config_kg.job_instance_id"
-          placeholder="非必填"
-        />
-      </el-form-item>
-      <template v-for="(item, index) in form.task_config.config_kg.spaces">
-        <el-form-item
-          v-if="form.task_type === 'kg'"
-          :label="'图空间' + (index+1)"
-          :prop="'form.task_config.config_kg.spaces.' + index + '.space_name'"
-        >
-          <el-input
-            v-model="item.space_name"
-          />
-          <div class="addSpaceName">
-            <i
-              style="font-size: 20px; color: #2d8cf0"
-              v-if="index === form.task_config.config_kg.spaces.length - 1"
-              @click="addSpaceName"
-              class="el-icon-circle-plus-outline"
+          </el-form-item>
+          <el-form-item label="登录用户" prop="username" v-if="form.task_type === 'kg'">
+            <el-input v-model="form.task_config.config_kg.env_info.username" />
+          </el-form-item>
+          <el-form-item label="登录密码" prop="pwd" v-if="form.task_type === 'kg'">
+            <el-input v-model="form.task_config.config_kg.env_info.pwd" />
+          </el-form-item>
+          <el-form-item label="Token" prop="token" v-if="form.task_type === 'kg'">
+            <el-input
+              v-model="form.task_config.config_kg.env_info.token"
+              placeholder="非必填"
             />
-            <i
-              style="font-size: 20px; color: red"
-              v-if="index !== form.task_config.config_kg.spaces.length - 1"
-              @click="delSpaceName(item)"
-              class="el-icon-remove-outline"
+          </el-form-item>
+          <el-form-item label="实例ID" prop="job_instance_id" v-if="form.task_type === 'kg'">
+            <el-input
+              v-model="form.task_config.config_kg.job_instance_id"
+              placeholder="非必填"
             />
-          </div>
-        </el-form-item>
-      </template>
-
-      <el-form-item label="数据源类型" prop="task_data_source_label" v-if="form.task_type !== ''">
-        <el-select
-          v-model="form.task_data_source_label"
-          placeholder="选择用例来源"
-          style="display: block; width: 100%;"
-        >
-          <el-option autocomplete="on" v-for="(item, index) in taskTypes[0].data" :value="item.data_en" :label="item.data_zh" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="用例总数" prop="case_num" v-if="form.task_data_source_label === 'source_kg'">
-        <el-input-number v-model="form.task_data_source.source_kg.case_num" :min="100"/>
-      </el-form-item>
-      <el-form-item label="随机用例" prop="is_random" v-if="form.task_data_source_label === 'source_kg'">
-        <el-tooltip>
-          <el-switch
-            v-model="form.task_data_source.source_kg.is_random"
-            active-color="#13ce66"
-            active-value="yes"
-            inactive-color="#eaeefb"
-            inactive-value="no"
-          />
-        </el-tooltip>
-      </el-form-item>
-      <el-form-item label="断点续传" prop="is_continue" v-if="form.task_data_source_label === 'source_kg'">
-        <el-tooltip>
-          <el-switch
-            v-model="form.task_data_source.source_kg.is_continue"
-            active-color="#13ce66"
-            active-value="yes"
-            inactive-color="#eaeefb"
-            inactive-value="no"
-          />
-        </el-tooltip>
-      </el-form-item>
-      <el-form-item label="用例来源库" prop="db" v-if="form.task_data_source_label === 'source_kg'">
-        <el-autocomplete
-          v-model="form.task_data_source.source_kg.kg_data_base.db"
-          style="display: block; width: 100%;"
-          autocomplete="off"
-          clearable
-          :fetch-suggestions="
+          </el-form-item>
+          <template v-for="(item, index) in form.task_config.config_kg.spaces">
+            <el-form-item
+              v-if="form.task_type === 'kg'"
+              :label="'图空间' + (index+1)"
+              :prop="'form.task_config.config_kg.spaces.' + index + '.space_name'"
+            >
+              <el-input
+                v-model="item.space_name"
+              />
+              <div class="addSpaceName">
+                <i
+                  style="font-size: 20px; color: #2d8cf0"
+                  v-if="index === form.task_config.config_kg.spaces.length - 1"
+                  @click="addSpaceName"
+                  class="el-icon-circle-plus-outline"
+                />
+                <i
+                  style="font-size: 20px; color: red"
+                  v-if="index !== form.task_config.config_kg.spaces.length - 1"
+                  @click="delSpaceName(item)"
+                  class="el-icon-remove-outline"
+                />
+              </div>
+            </el-form-item>
+          </template>
+        </div>
+      </div>
+      <div v-if="active === 1">
+        <div>
+          <el-form-item label="数据源类型" prop="task_data_source_label" v-if="form.task_type !== ''">
+            <el-select
+              v-model="form.task_data_source_label"
+              placeholder="选择用例来源"
+              style="display: block; width: 100%;"
+            >
+              <el-option autocomplete="on" v-for="(item, index) in taskTypes[0].data" :value="item.data_en" :label="item.data_zh" />
+            </el-select>
+          </el-form-item>
+        </div>
+        <div v-if="form.task_data_source_label === 'source_kg'">
+          <el-form-item label="用例总数" prop="case_num">
+            <el-input-number v-model="form.task_data_source.source_kg.case_num" :min="100"/>
+          </el-form-item>
+          <el-form-item label="随机用例" prop="is_random">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_data_source.source_kg.is_random"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
+          </el-form-item>
+          <el-form-item label="断点续传" prop="is_continue">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_data_source.source_kg.is_continue"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
+          </el-form-item>
+          <el-form-item label="用例来源库" prop="db">
+            <el-autocomplete
+              v-model="form.task_data_source.source_kg.kg_data_base.db"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
             (queryString, cb) => {
               cb([{ value: 'common_kg_v4' }])
             }
           "
-        />
-      </el-form-item>
-      <el-form-item label="库连接地址" prop="mongo_connect_url" v-if="form.task_data_source_label === 'source_kg'">
-        <el-autocomplete
-          v-model="form.task_data_source.source_kg.kg_data_base.mongo_connect_url"
-          style="display: block; width: 100%;"
-          autocomplete="off"
-          clearable
-          :fetch-suggestions="
+            />
+          </el-form-item>
+          <el-form-item label="库连接地址" prop="mongo_connect_url">
+            <el-autocomplete
+              v-model="form.task_data_source.source_kg.kg_data_base.mongo_connect_url"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
             (queryString, cb) => {
               cb([{ value: 'mongodb://172.16.23.85:30966/common_kg_v4?connect=direct' }])
             }
           "
-        />
-      </el-form-item>
-      <el-form-item label="单跳/两跳" prop="c_type" v-if="form.task_data_source_label === 'source_kg'">
-        <el-radio-group
-          v-model="form.task_data_source.source_kg.c_type"
-          style="margin-left: 20px">
-          <el-radio :label=1>单跳</el-radio>
-          <el-radio :label=2>两跳</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="模板" prop="template_json" v-if="form.task_data_source_label === 'source_kg'">
-        <el-input v-model="form.task_data_source.source_kg.template_json"  type="textarea" :rows="10"/>
-      </el-form-item>
-
-      <el-form-item label="用例数据" prop="cases_kg" v-if="form.task_data_source_label === 'cases_kg'">
-        <el-input v-model="form.task_data_source.cases_kg" type="textarea" :rows="10"/>
-      </el-form-item>
-
-      <el-form-item label="文件地址" prop="file_name" v-if="form.task_data_source_label === 'excel_kg'">
-        <el-input v-model="form.task_data_source.excel_kg.file_name" />
-      </el-form-item>
-      <el-form-item label="Sheet页" prop="sheet_name" v-if="form.task_data_source_label === 'excel_kg'">
-        <el-autocomplete
-          v-model="form.task_data_source.excel_kg.sheet_name"
-          style="display: block; width: 100%;"
-          autocomplete="off"
-          clearable
-          :fetch-suggestions="
+            />
+          </el-form-item>
+          <el-form-item label="单跳/两跳" prop="c_type">
+            <el-radio-group
+              v-model="form.task_data_source.source_kg.c_type"
+              style="margin-left: 20px">
+              <el-radio :label=1>单跳</el-radio>
+              <el-radio :label=2>两跳</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="模板" prop="template_json">
+            <el-input v-model="form.task_data_source.source_kg.template_json"  type="textarea" :rows="10"/>
+          </el-form-item>
+        </div>
+        <div v-if="form.task_data_source_label === 'cases_kg'">
+          <el-form-item label="用例数据" prop="cases_kg">
+            <el-input v-model="form.task_data_source.cases_kg" type="textarea" :rows="10"/>
+          </el-form-item>
+        </div>
+        <div v-if="form.task_data_source_label === 'excel_kg'">
+          <el-form-item label="文件地址" prop="file_name">
+            <el-input v-model="form.task_data_source.excel_kg.file_name" />
+          </el-form-item>
+          <el-form-item label="Sheet页" prop="sheet_name">
+            <el-autocomplete
+              v-model="form.task_data_source.excel_kg.sheet_name"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
             (queryString, cb) => {
               cb([{ value: 'Sheet1' }])
             }
           "
-        />
-      </el-form-item>
-      </template>
-
+            />
+          </el-form-item>
+        </div>
+      </div>
+      <div v-if="active === 2">
+        <div>
+          <el-form-item label="任务名称" prop="task_name">
+            <el-input v-model="form.task_name" />
+          </el-form-item>
+          <el-form-item label="任务分组" prop="task_group">
+            <el-select
+              v-model="form.task_group"
+              placeholder="输入/选择任务需要加入的组"
+              filterable
+              allow-create
+              style="display: block; width: 100%;"
+            >
+              <el-option v-for="g in taskGroups" :value="g" :label="g" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="定时任务" prop="is_crontab">
+            <el-tooltip>
+              <el-switch
+                v-model="form.is_crontab"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
+          </el-form-item>
+          <el-form-item label="定时表达式" prop="crontab_string">
+            <el-input
+              v-model="form.crontab_string"
+              :placeholder="'[分] [时] [天] [月] [星期几]'"
+              :disabled="form.is_crontab === 'no'"
+            />
+          </el-form-item>
+        </div>
+        <div v-if="form.task_type === 'kg'">
+          <el-form-item label="并发数" prop="chan_num">
+            <el-input-number v-model="form.task_config.config_kg.chan_num" :min="1" />
+          </el-form-item>
+          <el-form-item label="测试报告" prop="is_report">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_config.config_kg.is_report"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
+          </el-form-item>
+          <template v-for="(item, index) in report_strings">
+            <el-form-item
+              :label="'报告地址' + (index+1)"
+              :prop="'report_strings.' + index + '.value'"
+            >
+              <el-input
+                v-model="item.value"
+                :disabled="form.task_config.config_kg.is_report === 'no'"
+              />
+              <div class="addDelete" disabled="form.task_config.config_kg.is_report === 'no'">
+                <i
+                  style="font-size: 20px; color: #2d8cf0"
+                  v-if="index === report_strings.length - 1"
+                  @click="addReportString"
+                  class="el-icon-circle-plus-outline"
+                />
+                <i
+                  style="font-size: 20px; color: red"
+                  v-if="index !== report_strings.length - 1"
+                  @click="delReportString(item)"
+                  class="el-icon-remove-outline"
+                />
+              </div>
+            </el-form-item>
+          </template>
+        </div>
+      </div>
     </el-form>
     <div class="footer" align="right" style="padding-top:10px">
+      <el-button
+        v-if="active > 0"
+        type="info"
+        icon="el-icon-arrow-left"
+        @click="prev"
+      >上一步
+      </el-button>
+      <el-button
+        v-if="active < step - 1"
+        type="primary"
+        icon="el-icon-arrow-right"
+        @click="next"
+      >下一步</el-button>
       <el-button @click="visible = false">取 消</el-button>
-      <el-button type="primary" @click="submit">确 定</el-button>
+      <el-button v-if="active === step - 1" type="primary" @click="submit">确 定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -268,6 +304,8 @@ export default {
   name: 'PlanDialog',
   data() {
     return {
+      step: 3,
+      active: 0,
       rules: {},
       report_strings: [{value: ''}],
       taskGroups: ['知识图谱', 'SmartVoice', '展厅测试'],
@@ -344,6 +382,13 @@ export default {
     }
   },
   methods: {
+    next: function() {
+      this.active++
+    },
+    prev: function() {
+      this.$refs['ruleForm'].clearValidate()
+      if (--this.active < 0) this.active = 0
+    },
     onTypeChange(type) {
       if (type === 'kg') {
         this.rules = {
