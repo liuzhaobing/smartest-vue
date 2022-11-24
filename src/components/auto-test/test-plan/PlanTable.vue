@@ -219,7 +219,7 @@ export default {
         task_name: '',
         task_type: '',
         task_group: '',
-        is_crontab: '',
+        is_crontab: 'no',
         crontab_string: '',
         task_data_source_label: '',
         task_config: {
@@ -227,7 +227,7 @@ export default {
             task_name: '',
             job_instance_id: '',
             chan_num: 1,
-            is_report: '',
+            is_report: 'no',
             report_string: '',
             env_info: {
               front_url: '',
