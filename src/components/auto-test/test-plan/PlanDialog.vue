@@ -88,7 +88,7 @@
           <el-option v-for="(item, index) in taskTypes" :value="item.tp_en" :label="item.tp_zh" />
         </el-select>
       </el-form-item>
-      <el-form-item label="前端地址" prop="front_url" v-show="form.task_type === 'kg'">
+      <el-form-item label="前端地址" prop="front_url" v-if="form.task_type === 'kg'">
         <el-autocomplete
           v-model="form.task_config.config_kg.env_info.front_url"
           style="display: block; width: 100%;"
@@ -103,7 +103,7 @@
           "
         />
       </el-form-item>
-      <el-form-item label="后端地址" prop="backend_url" v-show="form.task_type === 'kg'">
+      <el-form-item label="后端地址" prop="backend_url" v-if="form.task_type === 'kg'">
         <el-autocomplete
           v-model="form.task_config.config_kg.env_info.backend_url"
           style="display: block; width: 100%;"
@@ -116,19 +116,19 @@
           "
         />
       </el-form-item>
-      <el-form-item label="登录用户" prop="username" v-show="form.task_type === 'kg'">
+      <el-form-item label="登录用户" prop="username" v-if="form.task_type === 'kg'">
         <el-input v-model="form.task_config.config_kg.env_info.username" />
       </el-form-item>
-      <el-form-item label="登录密码" prop="pwd" v-show="form.task_type === 'kg'">
+      <el-form-item label="登录密码" prop="pwd" v-if="form.task_type === 'kg'">
         <el-input v-model="form.task_config.config_kg.env_info.pwd" />
       </el-form-item>
-      <el-form-item label="Token" prop="token" v-show="form.task_type === 'kg'">
+      <el-form-item label="Token" prop="token" v-if="form.task_type === 'kg'">
         <el-input
           v-model="form.task_config.config_kg.env_info.token"
           placeholder="非必填"
         />
       </el-form-item>
-      <el-form-item label="实例ID" prop="job_instance_id" v-show="form.task_type === 'kg'">
+      <el-form-item label="实例ID" prop="job_instance_id" v-if="form.task_type === 'kg'">
         <el-input
           v-model="form.task_config.config_kg.job_instance_id"
           placeholder="非必填"
@@ -136,7 +136,7 @@
       </el-form-item>
       <template v-for="(item, index) in form.task_config.config_kg.spaces">
         <el-form-item
-          v-show="form.task_type === 'kg'"
+          v-if="form.task_type === 'kg'"
           :label="'图空间' + (index+1)"
           :prop="'form.task_config.config_kg.spaces.' + index + '.space_name'"
         >
@@ -160,7 +160,7 @@
         </el-form-item>
       </template>
 
-      <el-form-item label="数据源类型" prop="task_data_source_label" v-show="form.task_type !== ''">
+      <el-form-item label="数据源类型" prop="task_data_source_label" v-if="form.task_type !== ''">
         <el-select
           v-model="form.task_data_source_label"
           placeholder="选择用例来源"
@@ -169,10 +169,10 @@
           <el-option autocomplete="on" v-for="(item, index) in taskTypes[0].data" :value="item.data_en" :label="item.data_zh" />
         </el-select>
       </el-form-item>
-      <el-form-item label="用例总数" prop="case_num" v-show="form.task_data_source_label === 'source_kg'">
+      <el-form-item label="用例总数" prop="case_num" v-if="form.task_data_source_label === 'source_kg'">
         <el-input-number v-model="form.task_data_source.source_kg.case_num" :min="100"/>
       </el-form-item>
-      <el-form-item label="随机用例" prop="is_random" v-show="form.task_data_source_label === 'source_kg'">
+      <el-form-item label="随机用例" prop="is_random" v-if="form.task_data_source_label === 'source_kg'">
         <el-tooltip>
           <el-switch
             v-model="form.task_data_source.source_kg.is_random"
@@ -183,7 +183,7 @@
           />
         </el-tooltip>
       </el-form-item>
-      <el-form-item label="断点续传" prop="is_continue" v-show="form.task_data_source_label === 'source_kg'">
+      <el-form-item label="断点续传" prop="is_continue" v-if="form.task_data_source_label === 'source_kg'">
         <el-tooltip>
           <el-switch
             v-model="form.task_data_source.source_kg.is_continue"
@@ -194,7 +194,7 @@
           />
         </el-tooltip>
       </el-form-item>
-      <el-form-item label="用例来源库" prop="db" v-show="form.task_data_source_label === 'source_kg'">
+      <el-form-item label="用例来源库" prop="db" v-if="form.task_data_source_label === 'source_kg'">
         <el-autocomplete
           v-model="form.task_data_source.source_kg.kg_data_base.db"
           style="display: block; width: 100%;"
@@ -207,7 +207,7 @@
           "
         />
       </el-form-item>
-      <el-form-item label="库连接地址" prop="mongo_connect_url" v-show="form.task_data_source_label === 'source_kg'">
+      <el-form-item label="库连接地址" prop="mongo_connect_url" v-if="form.task_data_source_label === 'source_kg'">
         <el-autocomplete
           v-model="form.task_data_source.source_kg.kg_data_base.mongo_connect_url"
           style="display: block; width: 100%;"
@@ -220,7 +220,7 @@
           "
         />
       </el-form-item>
-      <el-form-item label="单跳/两跳" prop="c_type" v-show="form.task_data_source_label === 'source_kg'">
+      <el-form-item label="单跳/两跳" prop="c_type" v-if="form.task_data_source_label === 'source_kg'">
         <el-radio-group
           v-model="form.task_data_source.source_kg.c_type"
           style="margin-left: 20px">
@@ -228,18 +228,18 @@
           <el-radio :label=2>两跳</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="模板" prop="template_json" v-show="form.task_data_source_label === 'source_kg'">
+      <el-form-item label="模板" prop="template_json" v-if="form.task_data_source_label === 'source_kg'">
         <el-input v-model="form.task_data_source.source_kg.template_json"  type="textarea" :rows="10"/>
       </el-form-item>
 
-      <el-form-item label="用例数据" prop="cases_kg" v-show="form.task_data_source_label === 'cases_kg'">
+      <el-form-item label="用例数据" prop="cases_kg" v-if="form.task_data_source_label === 'cases_kg'">
         <el-input v-model="form.task_data_source.cases_kg" type="textarea" :rows="10"/>
       </el-form-item>
 
-      <el-form-item label="文件地址" prop="file_name" v-show="form.task_data_source_label === 'excel_kg'">
+      <el-form-item label="文件地址" prop="file_name" v-if="form.task_data_source_label === 'excel_kg'">
         <el-input v-model="form.task_data_source.excel_kg.file_name" />
       </el-form-item>
-      <el-form-item label="Sheet页" prop="sheet_name" v-show="form.task_data_source_label === 'excel_kg'">
+      <el-form-item label="Sheet页" prop="sheet_name" v-if="form.task_data_source_label === 'excel_kg'">
         <el-autocomplete
           v-model="form.task_data_source.excel_kg.sheet_name"
           style="display: block; width: 100%;"
@@ -284,7 +284,7 @@ export default {
       }
     },
     title() {
-      if (this.form.id !== null) {
+      if (this.form.id > 0) {
         return '编辑任务'
       }
       return '新增任务'

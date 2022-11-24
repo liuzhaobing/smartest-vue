@@ -23,7 +23,7 @@
       border
       fit
       :highlight-current-row="true"
-      height="750"
+      height="550"
       :row-style="{
         height: '20px'
       }"
