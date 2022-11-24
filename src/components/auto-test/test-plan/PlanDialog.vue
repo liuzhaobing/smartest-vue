@@ -305,36 +305,36 @@ export default {
           this.rules = {
             task_name: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
             task_type: [{ required: true, message: '请选择任务类型', trigger: 'change' }],
-            task_group: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-            is_crontab: [{ required: true, message: '请输入任务名称', trigger: 'change' }],
-            crontab_string: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-            task_data_source_label: [{ required: true, message: '请输入任务名称', trigger: 'change' }]
+            task_group: [{ required: true, message: '请选择任务组', trigger: 'blur' }],
+            is_crontab: [],
+            crontab_string: [],
+            task_data_source_label: [{ required: true, message: '请输入选择数据源类型', trigger: 'change' }]
           }
           if (this.form.task_type === 'kg') {
             const extraRules = {
-              chan_num: [{ required: true, message: '请输入任务名称', trigger: 'change' }],
-              job_instance_id: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-              is_report: [{ required: true, message: '请输入任务名称', trigger: 'change' }],
-              report_string: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-              front_url: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-              backend_url: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-              token: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-              username: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-              pwd: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-              authcode: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-              captchaid: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-              spaces: [{ required: true, message: '请输入任务名称', trigger: 'blur' }]
+              chan_num: [],
+              job_instance_id: [],
+              is_report: [],
+              report_string: [],
+              front_url: [],
+              backend_url: [],
+              token: [],
+              username: [],
+              pwd: [],
+              authcode: [],
+              captchaid: [],
+              spaces: [{ required: true, message: '请输入被测图谱库名en', trigger: 'blur' }]
             }
             this.rules = Object.assign(this.rules, extraRules)
             if (this.form.task_data_source_label === 'source_kg') {
               const extraRules2 = {
-                case_num: [{required: true, message: '请输入任务名称', trigger: 'change'}],
-                c_type: [{required: true, message: '请输入任务名称', trigger: 'change'}],
-                is_continue: [{required: true, message: '请输入任务名称', trigger: 'change'}],
-                is_random: [{required: true, message: '请输入任务名称', trigger: 'change'}],
-                db: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
-                mongo_connect_url: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
-                template_json: [{required: true, message: '请输入任务名称', trigger: 'blur'}]
+                case_num: [],
+                c_type: [],
+                is_continue: [],
+                is_random: [],
+                db: [],
+                mongo_connect_url: [],
+                template_json: []
               }
               this.rules = Object.assign(this.rules, extraRules2)
             }
@@ -349,29 +349,29 @@ export default {
         this.rules = {
           task_name: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
           task_type: [{ required: true, message: '请选择任务类型', trigger: 'change' }],
-          task_group: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          is_crontab: [{ required: true, message: '请输入任务名称', trigger: 'change' }],
-          crontab_string: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          task_data_source_label: [{ required: true, message: '请输入任务名称', trigger: 'change' }],
-          chan_num: [{ required: true, message: '请输入任务名称', trigger: 'change' }],
-          job_instance_id: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          is_report: [{ required: true, message: '请输入任务名称', trigger: 'change' }],
-          report_string: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          front_url: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          backend_url: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          token: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          username: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          pwd: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          authcode: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          captchaid: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          spaces: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          case_num: [{required: true, message: '请输入任务名称', trigger: 'change'}],
-          c_type: [{required: true, message: '请输入任务名称', trigger: 'change'}],
-          is_continue: [{required: true, message: '请输入任务名称', trigger: 'change'}],
-          is_random: [{required: true, message: '请输入任务名称', trigger: 'change'}],
-          db: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
-          mongo_connect_url: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
-          template_json: [{required: true, message: '请输入任务名称', trigger: 'blur'}]
+          task_group: [{ required: true, message: '请选择任务组', trigger: 'blur' }],
+          is_crontab: [],
+          crontab_string: [],
+          task_data_source_label: [{ required: true, message: '请输入选择数据源类型', trigger: 'change' }],
+          chan_num: [],
+          job_instance_id: [],
+          is_report: [],
+          report_string: [],
+          front_url: [],
+          backend_url: [],
+          token: [],
+          username: [],
+          pwd: [],
+          authcode: [],
+          captchaid: [],
+          spaces: [{ required: true, message: '请输入被测图谱库名en', trigger: 'blur' }],
+          case_num: [],
+          c_type: [],
+          is_continue: [],
+          is_random: [],
+          db: [],
+          mongo_connect_url: [],
+          template_json: []
         }
       }
     },
