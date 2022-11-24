@@ -16,35 +16,35 @@ export default {
   name: 'PlanPagination',
   computed: {
     total() {
-      return this.$store.getters['testPlan/planTotal']
+      return this.$store.getters['TestPlan/getTotal']
     },
     pageNum: {
       get() {
-        return this.$store.getters['testPlan/planPn']
+        return this.$store.getters['TestPlan/getPageNum']
       },
       set(val) {
-        this.$store.commit('testPlan/SET_PN', val)
+        this.$store.commit('TestPlan/SET_PN', val)
       }
     },
     pageSize: {
       get() {
-        return this.$store.getters['testPlan/planPz']
+        return this.$store.getters['TestPlan/getPageSize']
       },
       set(val) {
-        this.$store.commit('testPlan/SET_PZ', val)
+        this.$store.commit('TestPlan/SET_PZ', val)
       }
     }
   },
   methods: {
     handleSizeChange(val) {
       this.pageSize = val
-      this.$store.dispatch('testPlan/getPlansData')
-      this.$store.dispatch('testPlan/getCrontabData')
+      this.$store.dispatch('TestPlan/getPlansData')
+      this.$store.dispatch('TestPlan/getCrontabData')
     },
     handleCurrentChange(val) {
       this.pageNum = val
-      this.$store.dispatch('testPlan/getPlansData')
-      this.$store.dispatch('testPlan/getCrontabData')
+      this.$store.dispatch('TestPlan/getPlansData')
+      this.$store.dispatch('TestPlan/getCrontabData')
     }
   }
 }

@@ -14,8 +14,8 @@ export default {
   name: 'TaskPlanTable',
   components: { PlanDialog, PlanTable, PlanPagination },
   mounted() {
-    this.$store.dispatch('testPlan/getPlansData')
-    this.$store.dispatch('testPlan/getCrontabData')
+    this.$store.dispatch('TestPlan/getPlansData')
+    this.$store.dispatch('TestPlan/getCrontabData')
   }
 }
 </script>

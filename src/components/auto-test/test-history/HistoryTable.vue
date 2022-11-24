@@ -5,13 +5,13 @@
         type="text"
         style="font-size: 14px"
         icon="el-icon-refresh"
-        @click="$store.dispatch('testPlan/getHistoriesData')"
+        @click="$store.dispatch('TestPlan/getHistoriesData')"
       >刷新
       </el-button>
     </div>
     <el-table
-      v-loading="Loading"
-      :data="HistoryData"
+      v-loading="loading"
+      :data="historyData"
       element-loading-text="Loading"
       border
       fit
@@ -171,28 +171,28 @@ export default {
     }
   },
   computed: {
-    HistoryData() {
-      return this.$store.getters['testPlan/getHistoriesTable']
+    historyData() {
+      return this.$store.getters['TestPlan/getHistoriesTable']
     },
-    Loading() {
-      return this.$store.getters['testPlan/loading']
+    loading() {
+      return this.$store.getters['TestPlan/loading']
     }
   },
   methods: {
     handleTerminateMission(row) {
-      this.$store.commit('testPlan/SET_STOP', row.task_name)
-      return this.$store.dispatch('testPlan/terminateMission')
+      this.$store.commit('TestPlan/SET_STOP', {task_name: row.task_name})
+      return this.$store.dispatch('TestPlan/terminateMission')
     },
     handleMissionDetail(row) {
       Message.info('敬请期待！')
     },
     handleMissionDownload(row) {
       Message.info('正在导出！')
-      this.$store.commit('testPlan/SET_COLLECTION', `${row.task_type}_results`)
-      this.$store.commit('testPlan/SET_FILTER', { job_instance_id: row.job_instance_id })
-      this.$store.dispatch('testPlan/exportData', this.$store.getters['testPlan/reportRequestParam']).then(() => {
+      this.$store.commit('TestPlan/SET_REPORT_COLLECTION', `${row.task_type}_results`)
+      this.$store.commit('TestPlan/SET_REPORT_FILTER', { job_instance_id: row.job_instance_id })
+      this.$store.dispatch('TestPlan/exportData', this.$store.getters['TestPlan/getReportRequestParams']).then(() => {
         Message.success('导出成功！')
-        const result = this.$store.getters['testPlan/getFileName']
+        const result = this.$store.getters['TestPlan/getFileName']
         const a = document.createElement('a')
         a.href = `${process.env.VUE_APP_BASE_API}/api/v1/download?filename=${result}`
         a.download = result.split('/').pop()

@@ -12,13 +12,13 @@
         type="text"
         style="font-size: 14px"
         icon="el-icon-refresh"
-        @click="$store.dispatch('testPlan/getPlansData')"
+        @click="$store.dispatch('TestPlan/getPlansData')"
       >刷新
       </el-button>
     </div>
     <el-table
-      v-loading="Loading"
-      :data="PlanData"
+      v-loading="loading"
+      :data="planData"
       element-loading-text="Loading"
       border
       fit
@@ -145,9 +145,9 @@
       <json-viewer :expand-depth="3" :value="config" copyable boxed theme="jv-light jv-cus" />
     </el-dialog>
     <el-dialog title="修改定时器" :visible.sync="crontabVisible" append-to-body>
-      <el-form :model="crontabSetting">
+      <el-form :model="updateCrontabSetting">
         <el-form-item label="crontab表达式">
-          <el-input :value="crontabSetting.crontab_string" autocomplete="off" />
+          <el-input :value="updateCrontabSetting.crontab_string" autocomplete="off" />
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -165,18 +165,18 @@ export default {
       configVisible: false,
       config: {},
       crontabVisible: false,
-      crontabSetting: {
-        is_crontab: '',
+      updateCrontabSetting: {
+        is_crontab: 'no',
         crontab_string: ''
       }
     }
   },
   computed: {
-    PlanData() {
-      return this.$store.getters['testPlan/getPlansTable']
+    planData() {
+      return this.$store.getters['TestPlan/getPlansTable']
     },
-    Loading() {
-      return this.$store.getters['testPlan/loading']
+    loading() {
+      return this.$store.getters['TestPlan/loading']
     }
   },
   methods: {
@@ -185,23 +185,23 @@ export default {
       this.configVisible = true
     },
     changeCrontab(row) {
-      this.crontabSetting.is_crontab = row.is_crontab
-      this.crontabSetting.crontab_string = row.crontab_string
-      if (row.crontabSetting === 'yes') {
+      this.updateCrontabSetting.is_crontab = row.is_crontab
+      this.updateCrontabSetting.crontab_string = row.crontab_string
+      if (row.updateCrontabSetting === 'yes') {
         this.crontabVisible = true
       }
-      this.$store.commit('testPlan/SET_CRONTAB_SETTING', this.crontabSetting)
-      return this.$store.dispatch('testPlan/updateOnePlan', row)
+      this.$store.commit('TestPlan/SET_CRONTAB_SETTING', this.updateCrontabSetting)
+      return this.$store.dispatch('TestPlan/updateOnePlanCrontabSetting', row)
     },
     handleStartMission(row) {
-      return this.$store.dispatch('testPlan/runOnePlan', row.id)
+      return this.$store.dispatch('TestPlan/runOnePlan', row.id)
     },
     handleDeleteMission(row) {
-      return this.$store.dispatch('testPlan/deleteOnePlan', row.id)
+      return this.$store.dispatch('TestPlan/deleteOnePlan', row.id)
     },
     editPlan(row) {
-      this.$store.commit('testPlan/SET_ONE_PLAN_VISIBLE', true)
-      this.$store.commit('testPlan/SET_ONE_PLAN_FORM', {
+      this.$store.commit('TestPlan/SET_PLAN_DIALOG_VISIBLE', true)
+      this.$store.commit('TestPlan/SET_ONE_PLAN_FORM', {
         id: row.id,
         task_name: row.task_name,
         task_type: row.task_type,
@@ -214,8 +214,8 @@ export default {
       })
     },
     addPlan() {
-      this.$store.commit('testPlan/SET_ONE_PLAN_VISIBLE', true)
-      this.$store.commit('testPlan/SET_ONE_PLAN_FORM', {
+      this.$store.commit('TestPlan/SET_PLAN_DIALOG_VISIBLE', true)
+      this.$store.commit('TestPlan/SET_ONE_PLAN_FORM', {
         task_name: '',
         task_type: '',
         task_group: '',
@@ -224,12 +224,39 @@ export default {
         task_data_source_label: '',
         task_config: {
           config_kg: {
-
+            task_name: '',
+            job_instance_id: '',
+            chan_num: 1,
+            is_report: '',
+            report_string: '',
+            env_info: {
+              front_url: '',
+              backend_url: '',
+              token: '',
+              username: '',
+              pwd: '',
+              captchaid: '5555',
+              authcode: '5555'
+            },
+            spaces: [{space_name: 'common_kg_v4'}]
           }
         },
         task_data_source: {
           source_kg: {
-
+            case_num: 0,
+            c_type: 1,
+            is_continue: "no",
+            is_random: "yes",
+            kg_data_base: {
+              db: "common_kg_v4",
+              mongo_connect_url: "mongodb://172.16.23.85:30966/common_kg_v4?connect=direct"
+            },
+            template_json: ""
+          },
+          cases_kg: "",
+          excel_kg: {
+            file_name: "",
+            sheet_name: ""
           }
         }
       })

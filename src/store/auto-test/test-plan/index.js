@@ -9,34 +9,37 @@ const getDefaultState = () => {
     pz: 30,
     total: 0,
     plans: [],
-    crontab: [],
+    crontabs: [],
     histories: [],
     loading: false,
-    requestParamsPlan: {
+    stopTaskPayload: {
+      task_name: ''
+    },
+    listPlanParams: {
       task_name: '',
       task_type: '',
       task_group: '',
       is_crontab: ''
     },
-    putData: {
-      task_name: ''
-    },
-    requestParamsHistory: {
+    listHistoryParams: {
       job_instance_id: '',
       task_name: '',
       task_type: '',
       status: 0
     },
-    crontabSetting: {},
-    requestParamReport: {
+    listReportParams: {
       pagenum: 1,
       pagesize: 20000,
       f_database: 'smartest',
       f_collection: '',
       filter: null
     },
-    filterData: {
+    listReportParamFilters: {
       job_instance_id: ''
+    },
+    updateCrontabSetting: {
+      is_crontab: "no",
+      crontab_string: ""
     },
     filename: '',
     planDialogVisible: false,
@@ -52,13 +55,13 @@ function renderTime(date) {
 }
 
 const getters = {
-  planPn(state) {
+  getPageNum(state) {
     return state.pn
   },
-  planPz(state) {
+  getPageSize(state) {
     return state.pz
   },
-  planTotal(state) {
+  getTotal(state) {
     return state.total
   },
   loading(state) {
@@ -67,10 +70,10 @@ const getters = {
   getPlansTable(state) {
     if (state.plans !== undefined && state.plans != null && state.plans.length > 0) {
       for (let i = state.plans.length - 1; i >= 0; i--) {
-        if (state.crontab !== undefined && state.crontab != null && state.crontab.length > 0) {
-          for (let j = state.crontab.length - 1; j >= 0; j--) {
-            if (state.plans[i].task_name === state.crontab[j].task_name) {
-              state.plans[i].next_run_time = renderTime(state.crontab[j].next_run_time)
+        if (state.crontabs !== undefined && state.crontabs != null && state.crontabs.length > 0) {
+          for (let j = state.crontabs.length - 1; j >= 0; j--) {
+            if (state.plans[i].task_name === state.crontabs[j].task_name) {
+              state.plans[i].next_run_time = renderTime(state.crontabs[j].next_run_time)
             }
           }
         }
@@ -78,27 +81,23 @@ const getters = {
       return state.plans
     }
   },
-  historyPn(state) {
-    return state.pn
-  },
-  historyPz(state) {
-    return state.pz
-  },
-  historyTotal(state) {
-    return state.total
-  },
   getHistoriesTable(state) {
     return state.histories
   },
-  planDialogVisible(state) {
+  getCrontabSetting(state) {
+    return state.updateCrontabSetting
+  },
+  getStopPayload(state) {
+    return state.stopTaskPayload
+  },
+  getPlanDialogVisible(state) {
     return state.planDialogVisible
   },
-  planForm(state) {
+  getPlanForm(state) {
     return state.planForm
   },
-  reportRequestParam(state) {
-    state.requestParamReport.filter = state.filterData
-    return state.requestParamReport
+  getReportRequestParams(state) {
+    return state.listReportParams
   },
   getFileName(state) {
     return state.filename
@@ -121,32 +120,32 @@ const mutations = {
   SET_PLANS: (state, data) => {
     state.plans = data
   },
-  SET_CRONTAB: (state, data) => {
-    state.crontab = data
+  SET_CRONTABS: (state, data) => {
+    state.crontabs = data
   },
   SET_STOP: (state, data) => {
-    state.putData.task_name = data
+    state.stopTaskPayload = data
   },
   SET_HISTORIES: (state, data) => {
     state.histories = data
   },
   SET_CRONTAB_SETTING: (state, data) => {
-    state.crontabSetting = data
+    state.updateCrontabSetting = data
   },
-  SET_ONE_PLAN_VISIBLE: (state, data) => {
+  SET_PLAN_DIALOG_VISIBLE: (state, data) => {
     state.planDialogVisible = data
   },
   SET_ONE_PLAN_FORM: (state, data) => {
     state.planForm = data
   },
-  SET_DATABASE: (state, value) => {
-    state.requestParamReport.f_database = value
+  SET_REPORT_DATABASE: (state, value) => {
+    state.listReportParams.f_database = value
   },
-  SET_COLLECTION: (state, value) => {
-    state.requestParamReport.f_collection = value
+  SET_REPORT_COLLECTION: (state, value) => {
+    state.listReportParams.f_collection = value
   },
-  SET_FILTER: (state, value) => {
-    state.filterData = value
+  SET_REPORT_FILTER: (state, value) => {
+    state.listReportParams.filter = value
   },
   SET_FILENAME: (state, value) => {
     state.filename = value
@@ -156,7 +155,7 @@ const mutations = {
 const actions = {
   getHistoriesData: function({ state, commit }) {
     return new Promise((resolve, reject) => {
-      getHistory(state.requestParamsHistory).then(response => {
+      getHistory(state.listHistoryParams).then(response => {
         const { data } = response
         commit('SET_TOTALS', data.count)
         commit('SET_HISTORIES', data.data)
@@ -168,7 +167,7 @@ const actions = {
   },
   getPlansData: function({ state, commit }) {
     return new Promise((resolve, reject) => {
-      getPlans(state.requestParamsPlan).then(response => {
+      getPlans(state.listPlanParams).then(response => {
         const { data } = response
         commit('SET_PLANS', data.data)
         commit('SET_TOTALS', data.count)
@@ -182,16 +181,16 @@ const actions = {
     return new Promise((resolve, reject) => {
       getCrontab().then(response => {
         const { data } = response
-        commit('SET_CRONTAB', data)
+        commit('SET_CRONTABS', data)
         resolve()
       }).catch(error => {
         reject(error)
       })
     })
   },
-  updateOnePlan: function({ state }, row) {
+  updateOnePlanCrontabSetting: function({ state }, row) {
     return new Promise((resolve, reject) => {
-      updatePlan(row.id, state.crontabSetting).then(response => {
+      updatePlan(row.id, state.updateCrontabSetting).then(() => {
         Message.success('修改成功！')
         resolve()
       }).catch(error => {
@@ -202,7 +201,8 @@ const actions = {
   runOnePlan: function({ state }, id) {
     return new Promise((resolve, reject) => {
       runPlan(id).then(response => {
-        if (response.code === 200) {
+        const { code } = response
+        if (code === 200) {
           Message.success('发起成功！')
         } else {
           Message.error('发起失败！')
@@ -215,7 +215,8 @@ const actions = {
   deleteOnePlan: function({ state }, id) {
     return new Promise((resolve, reject) => {
       deletePlan(id).then(response => {
-        if (response.code === 200) {
+        const { code } = response
+        if (code === 200) {
           Message.success('删除成功！')
         } else {
           Message.error('删除失败！')
@@ -227,7 +228,7 @@ const actions = {
   },
   terminateMission: function({ state }) {
     return new Promise((resolve, reject) => {
-      stopPlan(state.putData).then(response => {
+      stopPlan(state.stopTaskPayload).then(response => {
         const { data } = response
         if (data.status !== 128) {
           Message.error(`${data.message}`)
@@ -245,7 +246,8 @@ const actions = {
   exportData: function({ state, commit }, payload) {
     return new Promise((resolve, reject) => {
       exportResults(payload).then(response => {
-        if (response.code === 200) {
+        const { code } = response
+        if (code === 200) {
           const { data } = response
           commit('SET_FILENAME', data.data)
         }
@@ -258,7 +260,8 @@ const actions = {
   downloadFile: function({ state, commit }, file_name) {
     return new Promise((resolve, reject) => {
       downloadFunc(file_name).then(response => {
-        if (response.code === 200) {
+        const { code } = response
+        if (code === 200) {
           Message.success('导出成功！')
         }
         resolve()

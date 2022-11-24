@@ -15,33 +15,33 @@ export default {
   name: 'HistoryPagination',
   computed: {
     total() {
-      return this.$store.getters['testPlan/historyTotal']
+      return this.$store.getters['TestPlan/getTotal']
     },
     pageNum: {
       get() {
-        return this.$store.getters['testPlan/historyPn']
+        return this.$store.getters['TestPlan/getPageNum']
       },
       set(val) {
-        this.$store.commit('testPlan/SET_PN', val)
+        this.$store.commit('TestPlan/SET_PN', val)
       }
     },
     pageSize: {
       get() {
-        return this.$store.getters['testPlan/historyPz']
+        return this.$store.getters['TestPlan/getPageSize']
       },
       set(val) {
-        this.$store.commit('testPlan/SET_PZ', val)
+        this.$store.commit('TestPlan/SET_PZ', val)
       }
     }
   },
   methods: {
     handleSizeChange(val) {
       this.pageSize = val
-      this.$store.dispatch('testPlan/getHistoriesData')
+      this.$store.dispatch('TestPlan/getHistoriesData')
     },
     handleCurrentChange(val) {
       this.pageNum = val
-      this.$store.dispatch('testPlan/getHistoriesData')
+      this.$store.dispatch('TestPlan/getHistoriesData')
     }
   }
 }

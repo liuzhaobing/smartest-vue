@@ -12,7 +12,7 @@ export default {
   name: 'TaskHistoryTable',
   components: { HistoryTable, HistoryPagination },
   mounted() {
-    this.$store.dispatch('testPlan/getHistoriesData')
+    this.$store.dispatch('TestPlan/getHistoriesData')
   }
 }
 </script>

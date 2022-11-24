@@ -4,7 +4,7 @@ import getters from './getters'
 import app from './modules/app'
 import settings from './modules/settings'
 import user from './modules/user'
-import testPlan from './auto-test/test-plan'
+import TestPlan from './auto-test/test-plan'
 import TestResult from './auto-test/test-result'
 import TestCase from './auto-test/test-case'
 
@@ -12,7 +12,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
-    testPlan,
+    TestPlan,
     TestResult,
     TestCase,
     app,

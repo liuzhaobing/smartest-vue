@@ -1,7 +1,7 @@
 <template>
   <el-dialog :title="title" :visible.sync="visible" width="550px" append-to-body>
     <el-form
-      :model="addPlanForm"
+      :model="form"
       :rules="rules"
       ref="ruleForm"
       label-width="150px"
@@ -9,11 +9,11 @@
       size="medium"
     >
       <el-form-item label="任务名称" prop="task_name">
-        <el-input v-model="addPlanForm.task_name" />
+        <el-input v-model="form.task_name" />
       </el-form-item>
       <el-form-item label="任务分组" prop="task_group">
         <el-select
-          v-model="addPlanForm.task_group"
+          v-model="form.task_group"
           placeholder="输入/选择任务需要加入的组"
           filterable
           allow-create
@@ -23,12 +23,12 @@
         </el-select>
       </el-form-item>
       <el-form-item label="并发数" prop="chan_num">
-        <el-input-number v-model="addPlanForm.task_config.config_kg.chan_num" :min="1" />
+        <el-input-number v-model="form.task_config.config_kg.chan_num" :min="1" />
       </el-form-item>
       <el-form-item label="定时任务" prop="is_crontab">
         <el-tooltip>
           <el-switch
-            v-model="addPlanForm.is_crontab"
+            v-model="form.is_crontab"
             active-color="#13ce66"
             active-value="yes"
             inactive-color="#eaeefb"
@@ -38,15 +38,15 @@
       </el-form-item>
       <el-form-item label="定时表达式" prop="crontab_string">
         <el-input
-          v-model="addPlanForm.crontab_string"
+          v-model="form.crontab_string"
           :placeholder="'[分] [时] [天] [月] [星期几]'"
-          :disabled="addPlanForm.is_crontab === 'no'"
+          :disabled="form.is_crontab === 'no'"
         />
       </el-form-item>
       <el-form-item label="测试报告" prop="is_report">
         <el-tooltip>
           <el-switch
-            v-model="addPlanForm.task_config.config_kg.is_report"
+            v-model="form.task_config.config_kg.is_report"
             active-color="#13ce66"
             active-value="yes"
             inactive-color="#eaeefb"
@@ -61,9 +61,9 @@
         >
           <el-input
             v-model="item.value"
-            :disabled="addPlanForm.task_config.config_kg.is_report === 'no'"
+            :disabled="form.task_config.config_kg.is_report === 'no'"
           />
-          <div class="addDelete" disabled="addPlanForm.task_config.config_kg.is_report === 'no'">
+          <div class="addDelete" disabled="form.task_config.config_kg.is_report === 'no'">
             <i
               style="font-size: 20px; color: #2d8cf0"
               v-if="index === report_strings.length - 1"
@@ -80,7 +80,7 @@
         </el-form-item>
       <el-form-item label="任务类型" filterable prop="task_type">
         <el-select
-          v-model="addPlanForm.task_type"
+          v-model="form.task_type"
           placeholder="选择任务类型"
           @change="onTypeChange"
           style="display: block; width: 100%;"
@@ -88,9 +88,9 @@
           <el-option v-for="(item, index) in taskTypes" :value="item.tp_en" :label="item.tp_zh" />
         </el-select>
       </el-form-item>
-      <el-form-item label="前端地址" prop="front_url" v-show="addPlanForm.task_type === 'kg'">
+      <el-form-item label="前端地址" prop="front_url" v-show="form.task_type === 'kg'">
         <el-autocomplete
-          v-model="addPlanForm.task_config.config_kg.env_info.front_url"
+          v-model="form.task_config.config_kg.env_info.front_url"
           style="display: block; width: 100%;"
           autocomplete="off"
           clearable
@@ -103,9 +103,9 @@
           "
         />
       </el-form-item>
-      <el-form-item label="后端地址" prop="backend_url" v-show="addPlanForm.task_type === 'kg'">
+      <el-form-item label="后端地址" prop="backend_url" v-show="form.task_type === 'kg'">
         <el-autocomplete
-          v-model="addPlanForm.task_config.config_kg.env_info.backend_url"
+          v-model="form.task_config.config_kg.env_info.backend_url"
           style="display: block; width: 100%;"
           autocomplete="off"
           clearable
@@ -116,29 +116,29 @@
           "
         />
       </el-form-item>
-      <el-form-item label="登录用户" prop="username" v-show="addPlanForm.task_type === 'kg'">
-        <el-input v-model="addPlanForm.task_config.config_kg.env_info.username" />
+      <el-form-item label="登录用户" prop="username" v-show="form.task_type === 'kg'">
+        <el-input v-model="form.task_config.config_kg.env_info.username" />
       </el-form-item>
-      <el-form-item label="登录密码" prop="pwd" v-show="addPlanForm.task_type === 'kg'">
-        <el-input v-model="addPlanForm.task_config.config_kg.env_info.pwd" />
+      <el-form-item label="登录密码" prop="pwd" v-show="form.task_type === 'kg'">
+        <el-input v-model="form.task_config.config_kg.env_info.pwd" />
       </el-form-item>
-      <el-form-item label="Token" prop="token" v-show="addPlanForm.task_type === 'kg'">
+      <el-form-item label="Token" prop="token" v-show="form.task_type === 'kg'">
         <el-input
-          v-model="addPlanForm.task_config.config_kg.env_info.token"
+          v-model="form.task_config.config_kg.env_info.token"
           placeholder="非必填"
         />
       </el-form-item>
-      <el-form-item label="实例ID" prop="job_instance_id" v-show="addPlanForm.task_type === 'kg'">
+      <el-form-item label="实例ID" prop="job_instance_id" v-show="form.task_type === 'kg'">
         <el-input
-          v-model="addPlanForm.task_config.config_kg.job_instance_id"
+          v-model="form.task_config.config_kg.job_instance_id"
           placeholder="非必填"
         />
       </el-form-item>
-      <template v-for="(item, index) in addPlanForm.task_config.config_kg.spaces">
+      <template v-for="(item, index) in form.task_config.config_kg.spaces">
         <el-form-item
-          v-show="addPlanForm.task_type === 'kg'"
+          v-show="form.task_type === 'kg'"
           :label="'图空间' + (index+1)"
-          :prop="'addPlanForm.task_config.config_kg.spaces.' + index + '.space_name'"
+          :prop="'form.task_config.config_kg.spaces.' + index + '.space_name'"
         >
           <el-input
             v-model="item.space_name"
@@ -146,13 +146,13 @@
           <div class="addSpaceName">
             <i
               style="font-size: 20px; color: #2d8cf0"
-              v-if="index === addPlanForm.task_config.config_kg.spaces.length - 1"
+              v-if="index === form.task_config.config_kg.spaces.length - 1"
               @click="addSpaceName"
               class="el-icon-circle-plus-outline"
             />
             <i
               style="font-size: 20px; color: red"
-              v-if="index !== addPlanForm.task_config.config_kg.spaces.length - 1"
+              v-if="index !== form.task_config.config_kg.spaces.length - 1"
               @click="delSpaceName(item)"
               class="el-icon-remove-outline"
             />
@@ -160,22 +160,22 @@
         </el-form-item>
       </template>
 
-      <el-form-item label="数据源类型" prop="task_data_source_label" v-show="addPlanForm.task_type !== ''">
+      <el-form-item label="数据源类型" prop="task_data_source_label" v-show="form.task_type !== ''">
         <el-select
-          v-model="addPlanForm.task_data_source.task_data_source_label"
+          v-model="form.task_data_source_label"
           placeholder="选择用例来源"
           style="display: block; width: 100%;"
         >
           <el-option autocomplete="on" v-for="(item, index) in taskTypes[0].data" :value="item.data_en" :label="item.data_zh" />
         </el-select>
       </el-form-item>
-      <el-form-item label="用例总数" prop="case_num" v-show="addPlanForm.task_data_source.task_data_source_label === 'source_kg'">
-        <el-input-number v-model="addPlanForm.task_data_source.source_kg.case_num" :min="100"/>
+      <el-form-item label="用例总数" prop="case_num" v-show="form.task_data_source_label === 'source_kg'">
+        <el-input-number v-model="form.task_data_source.source_kg.case_num" :min="100"/>
       </el-form-item>
-      <el-form-item label="随机用例" prop="is_random" v-show="addPlanForm.task_data_source.task_data_source_label === 'source_kg'">
+      <el-form-item label="随机用例" prop="is_random" v-show="form.task_data_source_label === 'source_kg'">
         <el-tooltip>
           <el-switch
-            v-model="addPlanForm.task_data_source.source_kg.is_random"
+            v-model="form.task_data_source.source_kg.is_random"
             active-color="#13ce66"
             active-value="yes"
             inactive-color="#eaeefb"
@@ -183,10 +183,10 @@
           />
         </el-tooltip>
       </el-form-item>
-      <el-form-item label="断点续传" prop="is_continue" v-show="addPlanForm.task_data_source.task_data_source_label === 'source_kg'">
+      <el-form-item label="断点续传" prop="is_continue" v-show="form.task_data_source_label === 'source_kg'">
         <el-tooltip>
           <el-switch
-            v-model="addPlanForm.task_data_source.addPlanForm.task_data_source.source_kg.is_continue"
+            v-model="form.task_data_source.source_kg.is_continue"
             active-color="#13ce66"
             active-value="yes"
             inactive-color="#eaeefb"
@@ -194,9 +194,9 @@
           />
         </el-tooltip>
       </el-form-item>
-      <el-form-item label="用例来源库" prop="db" v-show="addPlanForm.task_data_source.task_data_source_label === 'source_kg'">
+      <el-form-item label="用例来源库" prop="db" v-show="form.task_data_source_label === 'source_kg'">
         <el-autocomplete
-          v-model="addPlanForm.task_data_source.addPlanForm.task_data_source.source_kg.kg_data_base.db"
+          v-model="form.task_data_source.source_kg.kg_data_base.db"
           style="display: block; width: 100%;"
           autocomplete="off"
           clearable
@@ -207,9 +207,9 @@
           "
         />
       </el-form-item>
-      <el-form-item label="库连接地址" prop="mongo_connect_url" v-show="addPlanForm.task_data_source.task_data_source_label === 'source_kg'">
+      <el-form-item label="库连接地址" prop="mongo_connect_url" v-show="form.task_data_source_label === 'source_kg'">
         <el-autocomplete
-          v-model="addPlanForm.task_data_source.addPlanForm.task_data_source.source_kg.kg_data_base.mongo_connect_url"
+          v-model="form.task_data_source.source_kg.kg_data_base.mongo_connect_url"
           style="display: block; width: 100%;"
           autocomplete="off"
           clearable
@@ -220,28 +220,28 @@
           "
         />
       </el-form-item>
-      <el-form-item label="单跳/两跳" prop="c_type" v-show="addPlanForm.task_data_source.task_data_source_label === 'source_kg'">
+      <el-form-item label="单跳/两跳" prop="c_type" v-show="form.task_data_source_label === 'source_kg'">
         <el-radio-group
-          v-model="addPlanForm.task_data_source.source_kg.c_type"
+          v-model="form.task_data_source.source_kg.c_type"
           style="margin-left: 20px">
           <el-radio :label=1>单跳</el-radio>
           <el-radio :label=2>两跳</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="模板" prop="template_json" v-show="addPlanForm.task_data_source.task_data_source_label === 'source_kg'">
-        <el-input v-model="addPlanForm.task_data_source.source_kg.template_json"  type="textarea" :rows="10"/>
+      <el-form-item label="模板" prop="template_json" v-show="form.task_data_source_label === 'source_kg'">
+        <el-input v-model="form.task_data_source.source_kg.template_json"  type="textarea" :rows="10"/>
       </el-form-item>
 
-      <el-form-item label="用例数据" prop="cases_kg" v-show="addPlanForm.task_data_source.task_data_source_label === 'cases_kg'">
-        <el-input v-model="addPlanForm.task_data_source.cases_kg" type="textarea" :rows="10"/>
+      <el-form-item label="用例数据" prop="cases_kg" v-show="form.task_data_source_label === 'cases_kg'">
+        <el-input v-model="form.task_data_source.cases_kg" type="textarea" :rows="10"/>
       </el-form-item>
 
-      <el-form-item label="文件地址" prop="file_name" v-show="addPlanForm.task_data_source.task_data_source_label === 'excel_kg'">
-        <el-input v-model="addPlanForm.task_data_source.excel_kg.file_name" />
+      <el-form-item label="文件地址" prop="file_name" v-show="form.task_data_source_label === 'excel_kg'">
+        <el-input v-model="form.task_data_source.excel_kg.file_name" />
       </el-form-item>
-      <el-form-item label="Sheet页" prop="sheet_name" v-show="addPlanForm.task_data_source.task_data_source_label === 'excel_kg'">
+      <el-form-item label="Sheet页" prop="sheet_name" v-show="form.task_data_source_label === 'excel_kg'">
         <el-autocomplete
-          v-model="addPlanForm.task_data_source.excel_kg.sheet_name"
+          v-model="form.task_data_source.excel_kg.sheet_name"
           style="display: block; width: 100%;"
           autocomplete="off"
           clearable
@@ -263,7 +263,6 @@
 </template>
 
 <script>
-import { Message } from 'element-ui'
 
 export default {
   name: 'PlanDialog',
@@ -275,50 +274,48 @@ export default {
       taskTypes: [{tp_zh: '知识图谱', tp_en: 'kg', data: [{data_zh: '图谱模板', data_en: 'source_kg'},{data_zh: '图谱用例', data_en: 'cases_kg'},{data_zh: '图谱表格', data_en: 'excel_kg'}]}, {tp_zh: '系统技能', tp_en: 'skill'}]
     }
   },
-  layout: 'blank',
   computed: {
     visible: {
       get() {
-        return this.$store.getters['testPlan/planDialogVisible']
+        return this.$store.getters['TestPlan/getPlanDialogVisible']
       },
       set(val) {
-        this.$store.commit('testPlan/SET_ONE_PLAN_VISIBLE', val)
+        this.$store.commit('TestPlan/SET_PLAN_DIALOG_VISIBLE', val)
       }
     },
     title() {
-      if (this.addPlanForm.id !== null) {
+      if (this.form.id !== null) {
         return '编辑任务'
       }
       return '新增任务'
     },
-    addPlanForm: {
+    form: {
       get() {
-        return this.$store.getters['testPlan/planForm']
+        return this.$store.getters['TestPlan/getPlanForm']
       },
       set(val) {
-        this.$store.commit('testPlan/SET_ONE_PLAN_FORM', val)
+        this.$store.commit('TestPlan/SET_ONE_PLAN_FORM', val)
       }
     }
   },
   watch: {
     visible: {
       handler(val) {
-
         if (val) {
           this.rules = {
             task_name: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
             task_type: [{ required: true, message: '请选择任务类型', trigger: 'change' }],
             task_group: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-            is_crontab: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
+            is_crontab: [{ required: true, message: '请输入任务名称', trigger: 'change' }],
             crontab_string: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-            chan_num: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-            job_instance_id: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-            is_report: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-            report_string: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-            task_data_source_label: [{ required: true, message: '请输入任务名称', trigger: 'blur' }]
+            task_data_source_label: [{ required: true, message: '请输入任务名称', trigger: 'change' }]
           }
-          if (this.addPlanForm.task_type === 'kg') {
+          if (this.form.task_type === 'kg') {
             const extraRules = {
+              chan_num: [{ required: true, message: '请输入任务名称', trigger: 'change' }],
+              job_instance_id: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
+              is_report: [{ required: true, message: '请输入任务名称', trigger: 'change' }],
+              report_string: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
               front_url: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
               backend_url: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
               token: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
@@ -329,12 +326,12 @@ export default {
               spaces: [{ required: true, message: '请输入任务名称', trigger: 'blur' }]
             }
             this.rules = Object.assign(this.rules, extraRules)
-            if (this.addPlanForm.task_data_source_label === 'source_kg') {
+            if (this.form.task_data_source_label === 'source_kg') {
               const extraRules2 = {
-                case_num: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
-                c_type: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
-                is_continue: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
-                is_random: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
+                case_num: [{required: true, message: '请输入任务名称', trigger: 'change'}],
+                c_type: [{required: true, message: '请输入任务名称', trigger: 'change'}],
+                is_continue: [{required: true, message: '请输入任务名称', trigger: 'change'}],
+                is_random: [{required: true, message: '请输入任务名称', trigger: 'change'}],
                 db: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
                 mongo_connect_url: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
                 template_json: [{required: true, message: '请输入任务名称', trigger: 'blur'}]
@@ -353,13 +350,13 @@ export default {
           task_name: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
           task_type: [{ required: true, message: '请选择任务类型', trigger: 'change' }],
           task_group: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          is_crontab: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
+          is_crontab: [{ required: true, message: '请输入任务名称', trigger: 'change' }],
           crontab_string: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          chan_num: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
+          task_data_source_label: [{ required: true, message: '请输入任务名称', trigger: 'change' }],
+          chan_num: [{ required: true, message: '请输入任务名称', trigger: 'change' }],
           job_instance_id: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          is_report: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
+          is_report: [{ required: true, message: '请输入任务名称', trigger: 'change' }],
           report_string: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          task_data_source_label: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
           front_url: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
           backend_url: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
           token: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
@@ -368,17 +365,13 @@ export default {
           authcode: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
           captchaid: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
           spaces: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          case_num: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          c_type: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          is_continue: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          is_random: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          db: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          mongo_connect_url: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          template_json: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          cases_kg: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          file_name: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          sheet_name: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-          report_strings: [{ required: true, message: '请输入任务名称', trigger: 'blur' }]
+          case_num: [{required: true, message: '请输入任务名称', trigger: 'change'}],
+          c_type: [{required: true, message: '请输入任务名称', trigger: 'change'}],
+          is_continue: [{required: true, message: '请输入任务名称', trigger: 'change'}],
+          is_random: [{required: true, message: '请输入任务名称', trigger: 'change'}],
+          db: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
+          mongo_connect_url: [{required: true, message: '请输入任务名称', trigger: 'blur'}],
+          template_json: [{required: true, message: '请输入任务名称', trigger: 'blur'}]
         }
       }
     },
@@ -392,36 +385,29 @@ export default {
               report_strings_list.push(this.report_strings[i].value)
             }
           }
-          let taskConfig = {
-            task_config_label: this.form.task_config.task_config_label,
-          }
-          let taskDatasource = {
-            task_data_source_label: this.form.task_data_source.task_data_source_label
+          const payload = {
+            task_name: this.form.task_name,
+            task_type: this.form.task_type,
+            task_group: this.form.task_group,
+            is_crontab: this.form.is_crontab,
+            crontab_string: this.form.crontab_string,
+            task_data_source_label: '',
+            task_config: null,
+            task_data_source: null
           }
           if (this.form.task_type === 'kg') {
-            taskConfig.config_kg = {}
-            if (this.form.task_data_source.task_data_source_label === 'source_kg') {
-              taskDatasource.source_kg = {}
-            }
-
-            if (this.form.task_data_source.task_data_source_label === 'cases_kg') {
-              taskDatasource.cases_kg = {}
-            }
-
-            if (this.form.task_data_source.task_data_source_label === 'excel_kg') {
-              taskDatasource.excel_kg = {}
-            }
-
+            payload.task_config = {config_kg: this.form.task_config.config_kg}
+            payload.task_config.config_kg.report_string = report_strings_list
           }
-          const payload = {
-              task_name: this.form.task_name,
-              task_type: this.form.task_type,
-              task_group: this.form.task_group,
-              is_crontab: this.form.is_crontab,
-              crontab_string: this.form.crontab_string,
-              task_config: taskConfig,
-              task_data_source: taskDatasource
-            }
+          if (this.form.task_data_source_label === 'source_kg') {
+            payload.task_data_source = {source_kg: this.form.task_data_source.source_kg}
+          }
+          if (this.form.task_data_source_label === 'cases_kg') {
+            payload.task_data_source = {cases_kg: this.form.task_data_source.cases_kg}
+          }
+          if (this.form.task_data_source_label === 'excel_kg') {
+            payload.task_data_source = {excel_kg: this.form.task_data_source.excel_kg}
+          }
           console.log(payload)
         }
       })
