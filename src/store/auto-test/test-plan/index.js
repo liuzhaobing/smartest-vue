@@ -38,6 +38,7 @@ const getDefaultState = () => {
     listReportParamFilters: {
       job_instance_id: ''
     },
+    updateCrontabSettingVisible: false,
     updateCrontabSetting: {
       is_crontab: "no",
       crontab_string: ""
@@ -88,6 +89,9 @@ const getters = {
   getHistoriesTable(state) {
     return state.histories
   },
+  getCrontabSettingVisible(state) {
+    return state.updateCrontabSettingVisible
+  },
   getCrontabSetting(state) {
     return state.updateCrontabSetting
   },
@@ -135,6 +139,9 @@ const mutations = {
   },
   SET_HISTORIES: (state, data) => {
     state.histories = data
+  },
+  SET_CRONTAB_SETTING_VISIBLE: (state, data) => {
+    state.updateCrontabSettingVisible = data
   },
   SET_CRONTAB_SETTING: (state, data) => {
     state.updateCrontabSetting = data
@@ -195,9 +202,9 @@ const actions = {
       })
     })
   },
-  updateOnePlanCrontabSetting: function({ state }, row) {
+  updateOnePlanCrontabSetting: function({ state }, payload) {
     return new Promise((resolve, reject) => {
-      updatePlan(row.id, state.updateCrontabSetting).then(() => {
+      updatePlan(payload.id, payload.settings).then(() => {
         Message.success('修改成功！')
         resolve()
       }).catch(error => {

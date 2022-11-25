@@ -147,9 +147,13 @@
     <el-dialog title="修改定时器" :visible.sync="crontabVisible" append-to-body>
       <el-form :model="updateCrontabSetting">
         <el-form-item label="crontab表达式">
-          <el-input :value="updateCrontabSetting.crontab_string" autocomplete="off" />
+          <el-input v-model="updateCrontabSetting.settings.crontab_string" autocomplete="off" :placeholder="'[分] [时] [天] [月] [星期几]'"/>
         </el-form-item>
       </el-form>
+      <div class="footer" align="right" style="padding-top:10px">
+        <el-button @click="crontabVisible = false">取 消</el-button>
+        <el-button type="primary" @click="turnOnCrontab">确 定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -164,14 +168,24 @@ export default {
     return {
       configVisible: false,
       config: {},
-      crontabVisible: false,
       updateCrontabSetting: {
-        is_crontab: 'no',
-        crontab_string: ''
+        id: 0,
+        settings: {
+          is_crontab: 'yes',
+          crontab_string: ''
+        }
       }
     }
   },
   computed: {
+    crontabVisible: {
+      get() {
+        return this.$store.getters['TestPlan/getCrontabSettingVisible']
+      },
+      set(val) {
+        this.$store.commit('TestPlan/SET_CRONTAB_SETTING_VISIBLE', val)
+      }
+    },
     planData() {
       return this.$store.getters['TestPlan/getPlansTable']
     },
@@ -185,13 +199,16 @@ export default {
       this.configVisible = true
     },
     changeCrontab(row) {
-      this.updateCrontabSetting.is_crontab = row.is_crontab
-      this.updateCrontabSetting.crontab_string = row.crontab_string
-      if (row.updateCrontabSetting === 'yes') {
-        this.crontabVisible = true
+      this.updateCrontabSetting.id = row.id
+      if (row.is_crontab === 'yes') {
+        this.$store.commit('TestPlan/SET_CRONTAB_SETTING_VISIBLE', true)
+      } else {
+        return this.$store.dispatch('TestPlan/updateOnePlanCrontabSetting', {id:row.id, settings: {is_crontab: 'no'}})
       }
-      this.$store.commit('TestPlan/SET_CRONTAB_SETTING', this.updateCrontabSetting)
-      return this.$store.dispatch('TestPlan/updateOnePlanCrontabSetting', row)
+    },
+    turnOnCrontab() {
+      this.$store.commit('TestPlan/SET_CRONTAB_SETTING_VISIBLE', false)
+      return this.$store.dispatch('TestPlan/updateOnePlanCrontabSetting', this.updateCrontabSetting)
     },
     handleStartMission(row) {
       return this.$store.dispatch('TestPlan/runOnePlan', row.id)
