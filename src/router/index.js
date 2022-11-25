@@ -134,12 +134,6 @@ export const constantRoutes = [
             meta: { title: '任务类型' }
           }
         ]
-      },
-      {
-        path: 'menu5',
-        component: () => import('@/views/auto-test/test-plan-dialog'),
-        name: 'Menu5',
-        meta: { title: '创建计划' }
       }
     ]
   },

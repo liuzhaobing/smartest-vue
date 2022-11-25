@@ -172,7 +172,10 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="模板" prop="template_json">
-            <el-input v-model="form.task_data_source.source_kg.template_json"  type="textarea" :rows="3"/>
+            <cmEditor :code-value.sync="form.task_data_source.source_kg.template_json"
+                      :cmTheme="cmTheme"
+                      :cmMode="cmMode"
+                      :cmIndentUnit="4" />
           </el-form-item>
         </div>
         <div v-if="form.task_data_source_label === 'cases_kg'">
@@ -298,6 +301,7 @@
 </template>
 
 <script>
+import cmEditor from '@/components/cm-editor/cm-editor'
 
 export default {
   name: 'PlanDialog',
@@ -305,6 +309,8 @@ export default {
     return {
       step: 3,
       rules: {},
+      cmTheme: 'monokai',
+      cmMode: 'python',
       taskGroups: ['知识图谱', 'SmartVoice', '展厅测试'],
       taskTypes: [{tp_zh: '知识图谱', tp_en: 'kg', data: [{data_zh: '图谱模板', data_en: 'source_kg'},{data_zh: '图谱用例', data_en: 'cases_kg'},{data_zh: '图谱表格', data_en: 'excel_kg'}]}, {tp_zh: '系统技能', tp_en: 'skill'}]
     }

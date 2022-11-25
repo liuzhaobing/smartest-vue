@@ -40,8 +40,8 @@ const getDefaultState = () => {
     },
     updateCrontabSettingVisible: false,
     updateCrontabSetting: {
-      is_crontab: "no",
-      crontab_string: ""
+      is_crontab: 'no',
+      crontab_string: ''
     },
     filename: '',
     planDialogVisible: false,

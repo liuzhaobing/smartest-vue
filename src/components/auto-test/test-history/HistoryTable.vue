@@ -36,11 +36,6 @@
           {{ scope.row.task_name }}
         </template>
       </el-table-column>
-      <el-table-column label="任务ID" width="290" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.job_instance_id }}
-        </template>
-      </el-table-column>
       <el-table-column label="任务类型" width="90" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.task_type }}</span>
