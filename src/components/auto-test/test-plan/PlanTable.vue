@@ -228,7 +228,7 @@ export default {
             job_instance_id: '',
             chan_num: 1,
             is_report: 'no',
-            report_string: '',
+            report_string: [{address: ''}],
             env_info: {
               front_url: '',
               backend_url: '',

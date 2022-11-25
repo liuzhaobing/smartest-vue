@@ -265,10 +265,10 @@
                 />
               </el-tooltip>
             </el-form-item>
-            <template v-for="(item, index) in report_strings">
+            <template v-for="(item, index) in report_string">
               <el-form-item
                 :label="'报告地址' + (index+1)"
-                :prop="'report_strings.' + index + '.value'"
+                :prop="'report_string.' + index + '.value'"
               >
                 <el-input
                   v-model="item.value"
@@ -277,13 +277,13 @@
                 <div class="addDelete" disabled="stepOneFrom.is_report === 'no'">
                   <i
                     style="font-size: 20px; color: #2d8cf0"
-                    v-if="index === report_strings.length - 1"
+                    v-if="index === report_string.length - 1"
                     @click="addReportString"
                     class="el-icon-circle-plus-outline"
                   />
                   <i
                     style="font-size: 20px; color: red"
-                    v-if="index !== report_strings.length - 1"
+                    v-if="index !== report_string.length - 1"
                     @click="delReportString(item)"
                     class="el-icon-remove-outline"
                   />

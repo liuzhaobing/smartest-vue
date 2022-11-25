@@ -249,25 +249,25 @@
               />
             </el-tooltip>
           </el-form-item>
-          <template v-for="(item, index) in report_strings">
+          <template v-for="(item, index) in form.task_config.config_kg.report_string">
             <el-form-item
               :label="'报告地址' + (index+1)"
-              :prop="'report_strings.' + index + '.value'"
+              :prop="'form.task_config.config_kg.report_string.' + index + '.address'"
             >
               <el-input
-                v-model="item.value"
+                v-model="item.address"
                 :disabled="form.task_config.config_kg.is_report === 'no'"
               />
               <div class="addDelete" disabled="form.task_config.config_kg.is_report === 'no'">
                 <i
                   style="font-size: 20px; color: #2d8cf0"
-                  v-if="index === report_strings.length - 1"
+                  v-if="index === form.task_config.config_kg.report_string.length - 1"
                   @click="addReportString"
                   class="el-icon-circle-plus-outline"
                 />
                 <i
                   style="font-size: 20px; color: red"
-                  v-if="index !== report_strings.length - 1"
+                  v-if="index !== form.task_config.config_kg.report_string.length - 1"
                   @click="delReportString(item)"
                   class="el-icon-remove-outline"
                 />
@@ -306,7 +306,6 @@ export default {
       step: 3,
       active: 0,
       rules: {},
-      report_strings: [{value: ''}],
       taskGroups: ['知识图谱', 'SmartVoice', '展厅测试'],
       taskTypes: [{tp_zh: '知识图谱', tp_en: 'kg', data: [{data_zh: '图谱模板', data_en: 'source_kg'},{data_zh: '图谱用例', data_en: 'cases_kg'},{data_zh: '图谱表格', data_en: 'excel_kg'}]}, {tp_zh: '系统技能', tp_en: 'skill'}]
     }
@@ -422,13 +421,6 @@ export default {
     submit() {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
-          // 测试报告地址预处理
-          const report_strings_list = []
-          for (let i = this.report_strings.length - 1; i >= 0; i--) {
-            if (this.report_strings[i].value !== '') {
-              report_strings_list.push(this.report_strings[i].value)
-            }
-          }
           const payload = {
             task_name: this.form.task_name,
             task_type: this.form.task_type,
@@ -442,7 +434,6 @@ export default {
           if (this.form.task_type === 'kg') {
             this.form.task_config.config_kg.task_name = this.form.task_name
             payload.task_config = {config_kg: this.form.task_config.config_kg}
-            payload.task_config.config_kg.report_string = report_strings_list
           }
           if (this.form.task_data_source_label === 'source_kg') {
             payload.task_data_source = {source_kg: this.form.task_data_source.source_kg}
@@ -458,14 +449,14 @@ export default {
       })
     },
     delReportString: function (item) {
-      const min_len = this.report_strings.length
-      const index = this.report_strings.indexOf(item)
+      const min_len = this.form.task_config.config_kg.report_string.length
+      const index = this.form.task_config.config_kg.report_string.indexOf(item)
       if (min_len !== 1) {
-        this.report_strings.splice(index, 1)
+        this.form.task_config.config_kg.report_string.splice(index, 1)
       }
     },
     addReportString: function () {
-      this.report_strings.push({value: ""})
+      this.form.task_config.config_kg.report_string.push({address: ""})
     },
     delSpaceName: function (item) {
       const min_len = this.form.task_config.config_kg.spaces.length
