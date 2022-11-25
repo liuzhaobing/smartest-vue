@@ -304,13 +304,20 @@ export default {
   data() {
     return {
       step: 3,
-      active: 0,
       rules: {},
       taskGroups: ['知识图谱', 'SmartVoice', '展厅测试'],
       taskTypes: [{tp_zh: '知识图谱', tp_en: 'kg', data: [{data_zh: '图谱模板', data_en: 'source_kg'},{data_zh: '图谱用例', data_en: 'cases_kg'},{data_zh: '图谱表格', data_en: 'excel_kg'}]}, {tp_zh: '系统技能', tp_en: 'skill'}]
     }
   },
   computed: {
+    active: {
+      get() {
+        return this.$store.getters['TestPlan/getActive']
+      },
+      set(val) {
+        this.$store.commit('TestPlan/SET_ACTIVE', val)
+      }
+    },
     visible: {
       get() {
         return this.$store.getters['TestPlan/getPlanDialogVisible']
@@ -445,6 +452,7 @@ export default {
             payload.task_data_source = {excel_kg: this.form.task_data_source.excel_kg}
           }
           console.log(payload)
+          console.log(this.form.id)
         }
       })
     },

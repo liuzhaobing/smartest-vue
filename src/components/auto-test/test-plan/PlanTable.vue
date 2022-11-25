@@ -200,6 +200,7 @@ export default {
       return this.$store.dispatch('TestPlan/deleteOnePlan', row.id)
     },
     editPlan(row) {
+      this.$store.commit('TestPlan/SET_ACTIVE', 0)
       this.$store.commit('TestPlan/SET_PLAN_DIALOG_VISIBLE', true)
       this.$store.commit('TestPlan/SET_ONE_PLAN_FORM', {
         id: row.id,
@@ -214,6 +215,7 @@ export default {
       })
     },
     addPlan() {
+      this.$store.commit('TestPlan/SET_ACTIVE', 0)
       this.$store.commit('TestPlan/SET_PLAN_DIALOG_VISIBLE', true)
       this.$store.commit('TestPlan/SET_ONE_PLAN_FORM', {
         task_name: '',

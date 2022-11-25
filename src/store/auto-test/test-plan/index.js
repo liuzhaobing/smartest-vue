@@ -8,6 +8,7 @@ const getDefaultState = () => {
     pn: 0,
     pz: 30,
     total: 0,
+    active: 0,
     plans: [],
     crontabs: [],
     histories: [],
@@ -64,6 +65,9 @@ const getters = {
   getTotal(state) {
     return state.total
   },
+  getActive(state) {
+    return state.active
+  },
   loading(state) {
     return state.loading
   },
@@ -113,6 +117,9 @@ const mutations = {
   },
   SET_TOTALS: (state, data) => {
     state.total = data
+  },
+  SET_ACTIVE(state, value) {
+    state.active = value
   },
   SET_LOADING(state, value) {
     state.loading = value
