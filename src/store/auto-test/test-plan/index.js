@@ -45,7 +45,9 @@ const getDefaultState = () => {
     },
     filename: '',
     planDialogVisible: false,
-    planForm: {}
+    planForm: {},
+    jsonDialogVisible: false,
+    jsonDialogValue: null
   }
 }
 
@@ -109,6 +111,12 @@ const getters = {
   },
   getFileName(state) {
     return state.filename
+  },
+  getJsonDialogVisible(state) {
+    return state.jsonDialogVisible
+  },
+  getJsonDialogValue(state) {
+    return state.jsonDialogValue
   }
 }
 
@@ -163,6 +171,12 @@ const mutations = {
   },
   SET_FILENAME: (state, value) => {
     state.filename = value
+  },
+  SET_JSON_DIALOG_VISIBLE: (state, value) => {
+    state.jsonDialogVisible = value
+  },
+  SET_JSON_DIALOG_VALUE: (state, value) => {
+    state.jsonDialogValue = value
   }
 }
 
