@@ -27,7 +27,7 @@
           </el-form-item>
         </div>
         <div v-if="form.task_type === 'kg'">
-          <el-form-item label="前端地址" prop="front_url" v-if="form.task_type === 'kg'">
+          <el-form-item label="前端地址" prop="front_url">
             <el-autocomplete
               v-model="form.task_config.config_kg.env_info.front_url"
               style="display: block; width: 100%;"
@@ -42,7 +42,7 @@
         "
             />
           </el-form-item>
-          <el-form-item label="后端地址" prop="backend_url" v-if="form.task_type === 'kg'">
+          <el-form-item label="后端地址" prop="backend_url">
             <el-autocomplete
               v-model="form.task_config.config_kg.env_info.backend_url"
               style="display: block; width: 100%;"
@@ -55,19 +55,19 @@
         "
             />
           </el-form-item>
-          <el-form-item label="登录用户" prop="username" v-if="form.task_type === 'kg'">
+          <el-form-item label="登录用户" prop="username">
             <el-input v-model="form.task_config.config_kg.env_info.username" />
           </el-form-item>
-          <el-form-item label="登录密码" prop="pwd" v-if="form.task_type === 'kg'">
+          <el-form-item label="登录密码" prop="pwd">
             <el-input v-model="form.task_config.config_kg.env_info.pwd" />
           </el-form-item>
-          <el-form-item label="Token" prop="token" v-if="form.task_type === 'kg'">
+          <el-form-item label="Token" prop="token">
             <el-input
               v-model="form.task_config.config_kg.env_info.token"
               placeholder="非必填"
             />
           </el-form-item>
-          <el-form-item label="实例ID" prop="job_instance_id" v-if="form.task_type === 'kg'">
+          <el-form-item label="实例ID" prop="job_instance_id">
             <el-input
               v-model="form.task_config.config_kg.job_instance_id"
               placeholder="非必填"
@@ -75,7 +75,6 @@
           </el-form-item>
           <template v-for="(item, index) in form.task_config.config_kg.spaces">
             <el-form-item
-              v-if="form.task_type === 'kg'"
               :label="'图空间' + (index+1)"
               :prop="'form.task_config.config_kg.spaces.' + index + '.space_name'"
             >
@@ -173,12 +172,12 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="模板" prop="template_json">
-            <el-input v-model="form.task_data_source.source_kg.template_json"  type="textarea" :rows="10"/>
+            <el-input v-model="form.task_data_source.source_kg.template_json"  type="textarea" :rows="3"/>
           </el-form-item>
         </div>
         <div v-if="form.task_data_source_label === 'cases_kg'">
           <el-form-item label="用例数据" prop="cases_kg">
-            <el-input v-model="form.task_data_source.cases_kg" type="textarea" :rows="10"/>
+            <el-input v-model="form.task_data_source.cases_kg" type="textarea" :rows="3"/>
           </el-form-item>
         </div>
         <div v-if="form.task_data_source_label === 'excel_kg'">
@@ -361,7 +360,7 @@ export default {
               pwd: [],
               authcode: [],
               captchaid: [],
-              spaces: [{ required: true, message: '请输入被测图谱库名en', trigger: 'blur' }]
+              spaces: []
             }
             this.rules = Object.assign(this.rules, extraRules)
             if (this.form.task_data_source_label === 'source_kg') {
@@ -409,7 +408,7 @@ export default {
           pwd: [],
           authcode: [],
           captchaid: [],
-          spaces: [{ required: true, message: '请输入被测图谱库名en', trigger: 'blur' }],
+          spaces: [],
           case_num: [],
           c_type: [],
           is_continue: [],
@@ -436,11 +435,12 @@ export default {
             task_group: this.form.task_group,
             is_crontab: this.form.is_crontab,
             crontab_string: this.form.crontab_string,
-            task_data_source_label: '',
+            task_data_source_label: this.form.task_data_source_label,
             task_config: null,
             task_data_source: null
           }
           if (this.form.task_type === 'kg') {
+            this.form.task_config.config_kg.task_name = this.form.task_name
             payload.task_config = {config_kg: this.form.task_config.config_kg}
             payload.task_config.config_kg.report_string = report_strings_list
           }
@@ -468,14 +468,14 @@ export default {
       this.report_strings.push({value: ""})
     },
     delSpaceName: function (item) {
-      const min_len = this.config_kg.spaces.length
-      const index = this.config_kg.spaces.indexOf(item)
+      const min_len = this.form.task_config.config_kg.spaces.length
+      const index = this.form.task_config.config_kg.spaces.indexOf(item)
       if (min_len !== 1) {
-        this.config_kg.spaces.splice(index, 1)
+        this.form.task_config.config_kg.spaces.splice(index, 1)
       }
     },
     addSpaceName: function () {
-      this.config_kg.spaces.push({space_name: ""})
+      this.form.task_config.config_kg.spaces.push({space_name: ""})
     }
   }
 }
