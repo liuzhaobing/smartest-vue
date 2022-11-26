@@ -51,9 +51,14 @@
           <span>{{ scope.row.task_group }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="类型" width="100" align="center">
+      <el-table-column label="任务类型" width="100" align="center">
         <template slot-scope="scope">
           <span>{{ preData[scope.row.task_type].name }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="数据源类型" width="100" align="center">
+        <template slot-scope="scope">
+          <span>{{ preData[scope.row.task_type].source[scope.row.task_data_source_label].name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="定时任务" width="100" align="center">
