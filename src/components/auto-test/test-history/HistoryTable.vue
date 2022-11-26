@@ -38,7 +38,7 @@
       </el-table-column>
       <el-table-column label="任务类型" width="90" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.task_type }}</span>
+          <span>{{ preData[scope.row.task_type].name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="执行进度" width="190" align="center">
@@ -171,6 +171,9 @@ export default {
     },
     loading() {
       return this.$store.getters['TestPlan/loading']
+    },
+    preData() {
+      return this.$store.getters['TestPlan/getPreData']
     }
   },
   methods: {

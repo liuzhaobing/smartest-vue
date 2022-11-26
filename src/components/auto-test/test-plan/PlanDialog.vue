@@ -23,7 +23,7 @@
               @change="onTypeChange"
               style="display: block; width: 100%;"
             >
-              <el-option v-for="(item, index) in taskTypes" :value="item.tp_en" :label="item.tp_zh" />
+              <el-option v-for="(value, key, index) in preData" :value="key" :label="value.name" />
             </el-select>
           </el-form-item>
         </div>
@@ -108,7 +108,7 @@
               placeholder="选择用例来源"
               style="display: block; width: 100%;"
             >
-              <el-option autocomplete="on" v-for="(item, index) in taskTypes[0].data" :value="item.data_en" :label="item.data_zh" />
+              <el-option v-for="(value, key, index) in preData[form.task_type]['source']" :value="key" :label="value.name" />
             </el-select>
           </el-form-item>
         </div>
@@ -310,13 +310,7 @@ export default {
     return {
       step: 3,
       rules: {},
-      taskGroups: ['知识图谱', 'SmartVoice', '展厅测试'],
-      taskTypes: [
-        {tp_zh: '知识图谱', tp_en: 'kg', data: [
-          {data_zh: '图谱模板', data_en: 'source_kg'},
-            {data_zh: '图谱用例', data_en: 'cases_kg'},
-            {data_zh: '图谱表格', data_en: 'excel_kg'}]},
-        {tp_zh: '系统技能', tp_en: 'skill'}]
+      taskGroups: ['知识图谱', 'SmartVoice', '展厅测试']
     }
   },
   computed: {
@@ -337,7 +331,7 @@ export default {
       }
     },
     title() {
-      if (this.form.id > 0) {
+      if (this.form.id !== null) {
         return '编辑任务'
       }
       return '新增任务'
@@ -349,6 +343,9 @@ export default {
       set(val) {
         this.$store.commit('TestPlan/SET_ONE_PLAN_FORM', val)
       }
+    },
+    preData() {
+      return this.$store.getters['TestPlan/getPreData']
     }
   },
   watch: {
@@ -470,8 +467,8 @@ export default {
           }
 
           this.$store.commit('TestPlan/SET_PLAN_DIALOG_VISIBLE', false)
-          if (this.form.id > 0) {
-            return this.$store.dispatch('TestPlan/updateOnePlanSetting', {id: this.row.id, settings: payload})
+          if (this.form.id !== null) {
+            return this.$store.dispatch('TestPlan/updateOnePlanSetting', {id: this.form.id, settings: payload})
           }
           return this.$store.dispatch('TestPlan/addOnePlanSetting', payload)
         }

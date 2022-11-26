@@ -56,7 +56,49 @@ const getDefaultState = () => {
     planDialogVisible: false,
     planForm: {},
     jsonDialogVisible: false,
-    jsonDialogValue: null
+    jsonDialogValue: null,
+    preData: {
+      kg: {
+        name: '知识图谱',
+        source: {
+          source_kg: {name: '图谱模板'},
+          cases_kg: {name: '图谱用例'},
+          excel_kg: {name: '图谱表格'}
+        }
+      },
+      skill: {
+        name: '系统技能',
+        source: {
+          source_skill: {name: '技能模板'},
+          cases_skill: {name: '技能用例'},
+          excel_skill: {name: '技能表格'}
+        }
+      },
+      qa: {
+        name: '通用QA',
+        source: {
+          source_qa: {name: 'QA模板'},
+          cases_qa: {name: 'QA用例'},
+          excel_qa: {name: 'QA表格'}
+        }
+      },
+      tts: {
+        name: '自研TTS',
+        source: {
+          source_tts: {name: 'TTS模板'},
+          cases_tts: {name: 'TTS用例'},
+          excel_tts: {name: 'TTS表格'}
+        }
+      },
+      asr: {
+        name: '自研ASR',
+        source: {
+          source_asr: {name: 'ASR模板'},
+          cases_asr: {name: 'ASR用例'},
+          excel_asr: {name: 'ASR表格'}
+        }
+      }
+    }
   }
 }
 
@@ -126,6 +168,9 @@ const getters = {
   },
   getJsonDialogValue(state) {
     return state.jsonDialogValue
+  },
+  getPreData(state) {
+    return state.preData
   }
 }
 
