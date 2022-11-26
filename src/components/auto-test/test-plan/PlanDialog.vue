@@ -1,6 +1,6 @@
 <template>
-  <el-dialog :title="title" :visible.sync="visible" width="650px" append-to-body>
-    <el-steps :active="active" finish-status="success">
+  <el-dialog :title="title" :visible.sync="visible" width="750px" append-to-body>
+    <el-steps :active="active" finish-status="success" align-center style="margin-bottom: 30px">
       <el-step title="环境配置" />
       <el-step title="数据源选择" />
       <el-step title="基础信息" />
@@ -9,9 +9,10 @@
       :model="form"
       :rules="rules"
       ref="ruleForm"
-      label-width="150px"
+      label-width="100px"
       autocomplete="off"
       size="medium"
+      style="margin-right: 30px"
     >
       <div v-if="active === 0">
         <div>
@@ -172,8 +173,9 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="模板" prop="template_json">
-            <el-input v-model="form.task_data_source.source_kg.template_json" type="textarea" :rows="3" disabled></el-input>
-            <el-button type="text" @click="enterEditorMode">进入编辑模式</el-button>
+<!--            <el-input v-model="form.task_data_source.source_kg.template_json" type="textarea" :rows="3" disabled></el-input>-->
+<!--            <el-button type="text" @click="enterEditorMode">进入编辑模式</el-button>-->
+            <json-editor ref="form" v-model="form.task_data_source.source_kg.template_json" />
           </el-form-item>
         </div>
         <div v-if="form.task_data_source_label === 'cases_kg'">
@@ -259,7 +261,7 @@
                 v-model="item.address"
                 :disabled="form.task_config.config_kg.is_report === 'no'"
               />
-              <div class="addDelete" disabled="form.task_config.config_kg.is_report === 'no'">
+              <div class="addDelete">
                 <i
                   style="font-size: 20px; color: #2d8cf0"
                   v-if="index === form.task_config.config_kg.report_string.length - 1"
@@ -299,15 +301,22 @@
 </template>
 
 <script>
+import JsonEditor from '@/components/JsonEditor'
 
 export default {
   name: 'PlanDialog',
+  components: { JsonEditor },
   data() {
     return {
       step: 3,
       rules: {},
       taskGroups: ['知识图谱', 'SmartVoice', '展厅测试'],
-      taskTypes: [{tp_zh: '知识图谱', tp_en: 'kg', data: [{data_zh: '图谱模板', data_en: 'source_kg'},{data_zh: '图谱用例', data_en: 'cases_kg'},{data_zh: '图谱表格', data_en: 'excel_kg'}]}, {tp_zh: '系统技能', tp_en: 'skill'}]
+      taskTypes: [
+        {tp_zh: '知识图谱', tp_en: 'kg', data: [
+          {data_zh: '图谱模板', data_en: 'source_kg'},
+            {data_zh: '图谱用例', data_en: 'cases_kg'},
+            {data_zh: '图谱表格', data_en: 'excel_kg'}]},
+        {tp_zh: '系统技能', tp_en: 'skill'}]
     }
   },
   computed: {
@@ -448,6 +457,9 @@ export default {
             payload.task_config = {config_kg: this.form.task_config.config_kg}
           }
           if (this.form.task_data_source_label === 'source_kg') {
+            if (typeof(this.form.task_data_source.source_kg.template_json) === 'string') {
+              this.form.task_data_source.source_kg.template_json = JSON.parse(this.form.task_data_source.source_kg.template_json)
+            }
             payload.task_data_source = {source_kg: this.form.task_data_source.source_kg}
           }
           if (this.form.task_data_source_label === 'cases_kg') {
@@ -456,8 +468,12 @@ export default {
           if (this.form.task_data_source_label === 'excel_kg') {
             payload.task_data_source = {excel_kg: this.form.task_data_source.excel_kg}
           }
-          console.log(payload)
-          console.log(this.form.id)
+
+          this.$store.commit('TestPlan/SET_PLAN_DIALOG_VISIBLE', false)
+          if (this.form.id > 0) {
+            return this.$store.dispatch('TestPlan/updateOnePlanSetting', {id: this.row.id, settings: payload})
+          }
+          return this.$store.dispatch('TestPlan/addOnePlanSetting', payload)
         }
       })
     },

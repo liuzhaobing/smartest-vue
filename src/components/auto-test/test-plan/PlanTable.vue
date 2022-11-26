@@ -203,12 +203,12 @@ export default {
       if (row.is_crontab === 'yes') {
         this.$store.commit('TestPlan/SET_CRONTAB_SETTING_VISIBLE', true)
       } else {
-        return this.$store.dispatch('TestPlan/updateOnePlanCrontabSetting', {id:row.id, settings: {is_crontab: 'no'}})
+        return this.$store.dispatch('TestPlan/updateOnePlanSetting', {id:row.id, settings: {is_crontab: 'no'}})
       }
     },
     turnOnCrontab() {
       this.$store.commit('TestPlan/SET_CRONTAB_SETTING_VISIBLE', false)
-      return this.$store.dispatch('TestPlan/updateOnePlanCrontabSetting', this.updateCrontabSetting)
+      return this.$store.dispatch('TestPlan/updateOnePlanSetting', this.updateCrontabSetting)
     },
     handleStartMission(row) {
       return this.$store.dispatch('TestPlan/runOnePlan', row.id)

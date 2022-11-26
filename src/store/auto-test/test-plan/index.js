@@ -1,4 +1,13 @@
-import { deletePlan, getCrontab, getHistory, getPlans, runPlan, stopPlan, updatePlan } from '@/api/auto-test/test-plan'
+import {
+  addPlan,
+  deletePlan,
+  getCrontab,
+  getHistory,
+  getPlans,
+  runPlan,
+  stopPlan,
+  updatePlan
+} from '@/api/auto-test/test-plan'
 import { Message } from 'element-ui'
 import { exportResults } from '@/api/auto-test/test-report'
 import { downloadFunc } from '@/api/auto-test/common'
@@ -216,10 +225,30 @@ const actions = {
       })
     })
   },
-  updateOnePlanCrontabSetting: function({ state }, payload) {
+  updateOnePlanSetting: function({ state }, payload) {
     return new Promise((resolve, reject) => {
-      updatePlan(payload.id, payload.settings).then(() => {
-        Message.success('修改成功！')
+      updatePlan(payload.id, payload.settings).then(response => {
+        const { code } = response
+        if (code === 200) {
+          Message.success('修改成功！')
+        } else {
+          Message.error('修改失败！')
+        }
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  addOnePlanSetting: function({ state }, payload) {
+    return new Promise((resolve, reject) => {
+      addPlan(payload).then(response => {
+        const { code } = response
+        if (code === 200) {
+          Message.success('创建成功！')
+        } else {
+          Message.error('创建失败！')
+        }
         resolve()
       }).catch(error => {
         reject(error)
