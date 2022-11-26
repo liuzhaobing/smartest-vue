@@ -98,7 +98,8 @@ const getDefaultState = () => {
           excel_asr: {name: 'ASR表格'}
         }
       }
-    }
+    },
+    taskGroups: []
   }
 }
 
@@ -134,6 +135,9 @@ const getters = {
               state.plans[i].next_run_time = renderTime(state.crontabs[j].next_run_time)
             }
           }
+        }
+        if (!state.taskGroups.includes(state.plans[i].task_group)) {
+          state.taskGroups.push(state.plans[i].task_group)
         }
       }
       return state.plans
@@ -171,6 +175,9 @@ const getters = {
   },
   getPreData(state) {
     return state.preData
+  },
+  getTaskGroups(state) {
+    return state.taskGroups
   }
 }
 

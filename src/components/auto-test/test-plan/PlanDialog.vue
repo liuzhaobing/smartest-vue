@@ -309,11 +309,13 @@ export default {
   data() {
     return {
       step: 3,
-      rules: {},
-      taskGroups: ['知识图谱', 'SmartVoice', '展厅测试']
+      rules: {}
     }
   },
   computed: {
+    taskGroups() {
+      return this.$store.getters['TestPlan/getTaskGroups']
+    },
     active: {
       get() {
         return this.$store.getters['TestPlan/getActive']
