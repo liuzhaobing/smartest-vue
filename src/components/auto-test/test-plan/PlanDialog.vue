@@ -114,7 +114,7 @@
         </div>
         <div v-if="form.task_data_source_label === 'source_kg'">
           <el-form-item label="用例总数" prop="case_num">
-            <el-input-number v-model="form.task_data_source.source_kg.case_num" :min="100"/>
+            <el-input-number v-model="form.task_data_source.source_kg.case_num" :min="1"/>
           </el-form-item>
           <el-form-item label="随机用例" prop="is_random">
             <el-tooltip>
@@ -333,7 +333,7 @@ export default {
       }
     },
     title() {
-      if (this.form.id !== null) {
+      if (this.form.id > 0) {
         return '编辑任务'
       }
       return '新增任务'
@@ -469,7 +469,7 @@ export default {
           }
 
           this.$store.commit('TestPlan/SET_PLAN_DIALOG_VISIBLE', false)
-          if (this.form.id !== null) {
+          if (this.form.id > 0) {
             return this.$store.dispatch('TestPlan/updateOnePlanSetting', {id: this.form.id, settings: payload})
           }
           return this.$store.dispatch('TestPlan/addOnePlanSetting', payload)

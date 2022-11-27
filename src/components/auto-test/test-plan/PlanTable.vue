@@ -276,7 +276,7 @@ export default {
         },
         task_data_source: {
           source_kg: {
-            case_num: 0,
+            case_num: 10,
             c_type: 1,
             is_continue: 'no',
             is_random: 'yes',
