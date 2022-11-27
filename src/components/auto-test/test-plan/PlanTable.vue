@@ -154,7 +154,7 @@
         <el-form-item label="crontab表达式">
           <el-input v-model="updateCrontabSetting.settings.crontab_string" autocomplete="off" :placeholder="'[分] [时] [天] [月] [星期几]      例如每周四早上9点30分执行：30 9 * * 4'" />
         </el-form-item>
-        <vue-cron-linux ref="vue-cron-linux" v-model="updateCrontabSetting.settings.crontab_string" @submit="onCronChange" />
+        <vue-cron-linux ref="vue-cron-linux" :data="updateCrontabSetting.settings.crontab_string" @submit="onCronChange" />
       </el-form>
       <div class="footer" align="right" style="padding-top:10px">
         <el-button @click="crontabVisible = false">取 消</el-button>
