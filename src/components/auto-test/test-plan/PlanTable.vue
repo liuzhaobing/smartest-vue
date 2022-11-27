@@ -152,7 +152,7 @@
     <el-dialog title="修改定时器" :visible.sync="crontabVisible" append-to-body>
       <el-form :model="updateCrontabSetting">
         <el-form-item label="crontab表达式">
-          <el-input v-model="updateCrontabSetting.settings.crontab_string" autocomplete="off" :placeholder="'[分] [时] [天] [月] [星期几]      例如每周四早上9点30分执行：30 9 * * 4'"/>
+          <el-input v-model="updateCrontabSetting.settings.crontab_string" autocomplete="off" :placeholder="'[分] [时] [天] [月] [星期几]      例如每周四早上9点30分执行：30 9 * * 4'" />
         </el-form-item>
         <vue-cron-linux ref="vue-cron-linux" v-model="updateCrontabSetting.settings.crontab_string" @submit="onCronChange" />
       </el-form>
@@ -170,7 +170,7 @@ import VueCronLinux from '@/components/Cron'
 
 export default {
   name: 'PlanTable',
-  components: {VueCronLinux},
+  components: { VueCronLinux },
   data() {
     return {
       configVisible: false,
@@ -216,7 +216,7 @@ export default {
       if (row.is_crontab === 'yes') {
         this.$store.commit('TestPlan/SET_CRONTAB_SETTING_VISIBLE', true)
       } else {
-        return this.$store.dispatch('TestPlan/updateOnePlanSetting', {id:row.id, settings: {is_crontab: 'no'}})
+        return this.$store.dispatch('TestPlan/updateOnePlanSetting', { id: row.id, settings: { is_crontab: 'no' }})
       }
     },
     turnOnCrontab() {
@@ -261,7 +261,7 @@ export default {
             job_instance_id: '',
             chan_num: 1,
             is_report: 'no',
-            report_string: [{address: ''}],
+            report_string: [{ address: '' }],
             env_info: {
               front_url: '',
               backend_url: '',
@@ -271,25 +271,25 @@ export default {
               captchaid: '5555',
               authcode: '5555'
             },
-            spaces: [{space_name: 'common_kg_v4'}]
+            spaces: [{ space_name: 'common_kg_v4' }]
           }
         },
         task_data_source: {
           source_kg: {
             case_num: 0,
             c_type: 1,
-            is_continue: "no",
-            is_random: "yes",
+            is_continue: 'no',
+            is_random: 'yes',
             kg_data_base: {
-              db: "common_kg_v4",
-              mongo_connect_url: "mongodb://172.16.23.85:30966/common_kg_v4?connect=direct"
+              db: 'common_kg_v4',
+              mongo_connect_url: 'mongodb://172.16.23.85:30966/common_kg_v4?connect=direct'
             },
-            template_json: ""
+            template_json: null
           },
-          cases_kg: "",
+          cases_kg: '',
           excel_kg: {
-            file_name: "",
-            sheet_name: ""
+            file_name: '',
+            sheet_name: ''
           }
         }
       })
