@@ -180,7 +180,8 @@
         </div>
         <div v-if="form.task_data_source_label === 'cases_kg'">
           <el-form-item label="用例数据" prop="cases_kg">
-            <el-input v-model="form.task_data_source.cases_kg" type="textarea" :rows="3"/>
+<!--            <el-input v-model="form.task_data_source.cases_kg" type="textarea" :rows="3"/>-->
+            <json-editor ref="form" v-model="form.task_data_source.cases_kg" />
           </el-form-item>
         </div>
         <div v-if="form.task_data_source_label === 'excel_kg'">
@@ -534,6 +535,9 @@ export default {
             payload.task_data_source = {source_kg: this.form.task_data_source.source_kg}
           }
           if (this.form.task_data_source_label === 'cases_kg') {
+            if (typeof(this.form.task_data_source.source_kg.template_json) === 'string') {
+              this.form.task_data_source.cases_kg = JSON.parse(this.form.task_data_source.cases_kg)
+            }
             payload.task_data_source = {cases_kg: this.form.task_data_source.cases_kg}
           }
           if (this.form.task_data_source_label === 'excel_kg') {
