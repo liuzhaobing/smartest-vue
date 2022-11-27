@@ -232,7 +232,7 @@
           <el-form-item label="定时表达式" prop="crontab_string">
             <el-input
               v-model="form.crontab_string"
-              :placeholder="'[分] [时] [天] [月] [星期几]'"
+              :placeholder="'[分] [时] [天] [月] [星期几]      例如每周四早上9点30分执行：30 9 * * 4'"
               :disabled="form.is_crontab === 'no'"
             />
           </el-form-item>

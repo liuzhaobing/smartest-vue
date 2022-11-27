@@ -152,8 +152,9 @@
     <el-dialog title="修改定时器" :visible.sync="crontabVisible" append-to-body>
       <el-form :model="updateCrontabSetting">
         <el-form-item label="crontab表达式">
-          <el-input v-model="updateCrontabSetting.settings.crontab_string" autocomplete="off" :placeholder="'[分] [时] [天] [月] [星期几]'"/>
+          <el-input v-model="updateCrontabSetting.settings.crontab_string" autocomplete="off" :placeholder="'[分] [时] [天] [月] [星期几]      例如每周四早上9点30分执行：30 9 * * 4'"/>
         </el-form-item>
+        <vue-cron-linux ref="vue-cron-linux" v-model="updateCrontabSetting.settings.crontab_string" @submit="onCronChange" />
       </el-form>
       <div class="footer" align="right" style="padding-top:10px">
         <el-button @click="crontabVisible = false">取 消</el-button>
@@ -165,10 +166,11 @@
 
 <script>
 
-import { Message } from 'element-ui'
+import VueCronLinux from '@/components/Cron'
 
 export default {
   name: 'PlanTable',
+  components: {VueCronLinux},
   data() {
     return {
       configVisible: false,
@@ -206,6 +208,9 @@ export default {
       this.config = row
       this.configVisible = true
     },
+    onCronChange(value) {
+      this.$set(this.updateCrontabSetting.settings, 'crontab_string', value)
+    },
     changeCrontab(row) {
       this.updateCrontabSetting.id = row.id
       if (row.is_crontab === 'yes') {
@@ -215,6 +220,7 @@ export default {
       }
     },
     turnOnCrontab() {
+      this.$refs['vue-cron-linux'].submit()
       this.$store.commit('TestPlan/SET_CRONTAB_SETTING_VISIBLE', false)
       return this.$store.dispatch('TestPlan/updateOnePlanSetting', this.updateCrontabSetting)
     },
