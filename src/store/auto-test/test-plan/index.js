@@ -10,7 +10,7 @@ import {
 } from '@/api/auto-test/test-plan'
 import { Message } from 'element-ui'
 import { exportResults } from '@/api/auto-test/test-report'
-import { downloadFunc } from '@/api/auto-test/common'
+import {downloadFunc, listFileFunc} from '@/api/auto-test/common'
 
 const getDefaultState = () => {
   return {
@@ -99,7 +99,8 @@ const getDefaultState = () => {
         }
       }
     },
-    taskGroups: []
+    taskGroups: [],
+    uploadedFiles: []
   }
 }
 
@@ -178,6 +179,13 @@ const getters = {
   },
   getTaskGroups(state) {
     return state.taskGroups
+  },
+  getUploadedFiles(state) {
+    const files = []
+    for (let i = 0; i < state.uploadedFiles.length; i++) {
+      files.push({ file_name: state.uploadedFiles[i].split('/').pop(), file_path: state.uploadedFiles[i] })
+    }
+    return files
   }
 }
 
@@ -238,6 +246,9 @@ const mutations = {
   },
   SET_JSON_DIALOG_VALUE: (state, value) => {
     state.jsonDialogValue = value
+  },
+  SET_UPLOADED_FILES: (state, value) => {
+    state.uploadedFiles = value
   }
 }
 
@@ -347,7 +358,6 @@ const actions = {
         resolve()
       })
         .catch((error) => {
-          console.log(error)
           reject(error)
         })
     })
@@ -373,6 +383,17 @@ const actions = {
         if (code === 200) {
           Message.success('导出成功！')
         }
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  listUploadedFiles: function({ state, commit }, path) {
+    return new Promise((resolve, reject) => {
+      listFileFunc(path).then(response => {
+        const { data } = response
+        commit('SET_UPLOADED_FILES', data)
         resolve()
       }).catch(error => {
         reject(error)

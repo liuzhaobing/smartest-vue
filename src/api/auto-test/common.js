@@ -15,3 +15,11 @@ export function downloadFunc(file_name) {
     params: { filename: file_name }
   })
 }
+
+export function listFileFunc(dir_name) {
+  return request({
+    url: '/api/v1/files',
+    method: 'get',
+    params: { path: dir_name }
+  })
+}

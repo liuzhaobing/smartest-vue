@@ -184,9 +184,6 @@
           </el-form-item>
         </div>
         <div v-if="form.task_data_source_label === 'excel_kg'">
-          <el-form-item label="文件地址" prop="file_name">
-            <el-input v-model="form.task_data_source.excel_kg.file_name" />
-          </el-form-item>
           <el-form-item label="Sheet页" prop="sheet_name">
             <el-autocomplete
               v-model="form.task_data_source.excel_kg.sheet_name"
@@ -199,6 +196,49 @@
             }
           "
             />
+          </el-form-item>
+          <el-form-item label="任务文件" prop="file_name">
+            <div style="width: 100%; display: flex; justify-content: space-between">
+              <el-select
+                style="width: 70%"
+                v-model="form.task_data_source.excel_kg.file_name"
+                filterable
+                placeholder="请选择"
+                v-show="fileType === 'select'"
+              >
+                <el-option
+                  v-for="item in remoteFiles"
+                  :key="item.file_path"
+                  :label="item.file_name"
+                  :value="item.file_path"
+                >
+                  <span style="float: left">{{ item.file_name }}</span>
+                  <span
+                    style="float: right; color: #8492a6; font-size: 13px; margin-left: 5px"
+                    @click="deleteFile(item.id)"
+                  >删除</span
+                  >
+                </el-option>
+              </el-select>
+              <el-upload
+                v-show="fileType === 'upload'"
+                class="upload"
+                action="/abp/test3/api/v1/common/upload"
+                :on-success="onFileUpload"
+                :on-remove="onRemoveFile"
+                accept=".xlsx"
+              >
+                <el-button size="small" type="primary" slot="trigger">点击上传</el-button>
+                <a
+                  href="${process.env.VUE_APP_BASE_API}/api/v1/download?filename=./templates/demo_kg.xlsx"
+                  download="demo_kg.xlsx"
+                  style="margin-left: 20px"
+                >下载模板</a>
+                <div class="el-upload__tip" slot="tip">只能上传xlsx文件</div>
+              </el-upload>
+              <el-button @click="changeFileType" type="success" style="height: 36px">{{ fileType === 'select' ? '我要上传文件' : '选择已有文件' }}
+              </el-button>
+            </div>
           </el-form-item>
         </div>
       </div>
@@ -309,10 +349,17 @@ export default {
   data() {
     return {
       step: 3,
-      rules: {}
+      rules: {},
+      fileType: 'select'
     }
   },
+  mounted() {
+    this.$store.dispatch('TestPlan/listUploadedFiles', "./upload")
+  },
   computed: {
+    remoteFiles() {
+      return this.$store.getters['TestPlan/getUploadedFiles']
+    },
     taskGroups() {
       return this.$store.getters['TestPlan/getTaskGroups']
     },
@@ -406,6 +453,31 @@ export default {
     enterEditorMode: function () {
       this.$store.commit('TestPlan/SET_JSON_DIALOG_VALUE', this.form.task_data_source.source_kg.template_json)
       this.$store.commit('TestPlan/SET_JSON_DIALOG_VISIBLE', true)
+    },
+    onFileUpload(response) {
+      if (response.code === 200) {
+        this.form.task_data_source.excel_kg.file_name = response.data
+        this.$refs.ruleForm.validateField('file_name', () => {})
+      }
+    },
+    onRemoveFile() {
+      this.form.task_data_source.excel_kg.file_name = ''
+      this.$refs.ruleForm.validateField('file_name', () => {})
+    },
+    getUploadedFiles() {
+      this.$store.dispatch('TestPlan/listUploadedFiles', "./upload")
+    },
+    deleteFile(id) {
+      this.onRemoveFile()
+      this.getUploadedFiles()
+    },
+    changeFileType() {
+      if (this.fileType === 'select') {
+        this.fileType = 'upload'
+      } else {
+        this.fileType = 'select'
+      }
+      this.form.task_data_source.excel_kg.file_name = ''
     },
     onTypeChange(type) {
       if (type === 'kg') {
