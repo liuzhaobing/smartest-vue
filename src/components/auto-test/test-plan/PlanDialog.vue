@@ -69,8 +69,12 @@
               :label="'图空间' + (index+1)"
               :prop="'form.task_config.config_kg.spaces.' + index + '.space_name'"
             >
-              <el-input
+              <el-autocomplete
                 v-model="item.space_name"
+                style="display: block; width: 100%;"
+                autocomplete="off"
+                clearable
+                :fetch-suggestions="spacesNameSearch"
               />
               <div class="addSpaceName">
                 <i
@@ -325,6 +329,8 @@
 
 <script>
 import JsonEditor from '@/components/JsonEditor'
+import axios from 'axios'
+import { Message } from 'element-ui'
 
 export default {
   name: 'PlanDialog',
@@ -577,7 +583,7 @@ export default {
     async frontUrlSearch(queryString, cb) {
       const results = [
         { value: 'https://mmue-dit87.harix.iamidata.com' },
-        { value: 'https://mmue-dit86.harix.iamidata.com' },
+        { value: 'https://mmue-fit86.harix.iamidata.com' },
         { value: 'https://mmue-sit134.harix.iamidata.com' },
         { value: 'https://mmue.harix.iamidata.com' },
         { value: 'https://mmue.uit85.harix.iamidata.com' },
@@ -587,6 +593,42 @@ export default {
     async backendUrlSearch(queryString, cb) {
       const results = [{ value: 'http://172.16.23.85:31917' }]
       cb(results)
+    },
+    async spacesNameSearch(queryString, cb) {
+      const results = []
+      let reqInstance = axios.create({
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8'
+        }
+      })
+
+      reqInstance
+        .post(`${this.form.task_config.config_kg.env_info.front_url}/mmue/api/login`, this.form.task_config.config_kg.env_info)
+        .then((response) => {
+          const { data } = response
+          reqInstance = axios.create({
+            headers: {
+              Authorization: `${data.data.token}`
+            }
+          })
+
+          reqInstance.post(`${this.form.task_config.config_kg.env_info.front_url}/graph/kg/v1/graph/list`, { spaceName: '' })
+            .then((response) => {
+              const { data } = response
+              const { infos } = data.data
+              for (let i = 0; i < infos.length; i++) {
+                results.push({ value: infos[i].dbName })
+              }
+            })
+            .catch((error) => {
+              Message.error(error)
+            })
+          cb(results)
+        })
+        .catch((error) => {
+          Message.error(error)
+          Message.error('请填写正确的登录信息！')
+      })
     }
   }
 }

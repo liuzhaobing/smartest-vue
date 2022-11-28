@@ -270,7 +270,7 @@ export default {
               captchaid: '5555',
               authcode: '5555'
             },
-            spaces: [{ space_name: 'common_kg_v4' }]
+            spaces: [{ space_name: '' }]
           }
         },
         task_data_source: {
