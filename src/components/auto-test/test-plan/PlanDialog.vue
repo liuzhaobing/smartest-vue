@@ -116,17 +116,6 @@
           <el-form-item label="用例总数" prop="case_num">
             <el-input-number v-model="form.task_data_source.source_kg.case_num" :min="1"/>
           </el-form-item>
-          <el-form-item label="随机用例" prop="is_random">
-            <el-tooltip>
-              <el-switch
-                v-model="form.task_data_source.source_kg.is_random"
-                active-color="#13ce66"
-                active-value="yes"
-                inactive-color="#eaeefb"
-                inactive-value="no"
-              />
-            </el-tooltip>
-          </el-form-item>
           <el-form-item label="断点续传" prop="is_continue">
             <el-tooltip>
               <el-switch
@@ -144,11 +133,7 @@
               style="display: block; width: 100%;"
               autocomplete="off"
               clearable
-              :fetch-suggestions="
-            (queryString, cb) => {
-              cb([{ value: 'common_kg_v4' }])
-            }
-          "
+              :fetch-suggestions="dbSearch"
             />
           </el-form-item>
           <el-form-item label="库连接地址" prop="mongo_connect_url">
@@ -157,11 +142,7 @@
               style="display: block; width: 100%;"
               autocomplete="off"
               clearable
-              :fetch-suggestions="
-            (queryString, cb) => {
-              cb([{ value: 'mongodb://172.16.23.85:30966/common_kg_v4?connect=direct' }])
-            }
-          "
+              :fetch-suggestions="dbConnectionSearch"
             />
           </el-form-item>
           <el-form-item label="单跳/两跳" prop="c_type">
@@ -171,6 +152,17 @@
               <el-radio :label=1>单跳</el-radio>
               <el-radio :label=2>两跳</el-radio>
             </el-radio-group>
+          </el-form-item>
+          <el-form-item label="随机用例" prop="is_random">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_data_source.source_kg.is_random"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
           </el-form-item>
           <el-form-item label="模板" prop="template_json">
 <!--            <el-input v-model="form.task_data_source.source_kg.template_json" type="textarea" :rows="3" disabled></el-input>-->
@@ -422,11 +414,11 @@ export default {
               job_instance_id: [],
               is_report: [],
               report_string: [],
-              front_url: [],
+              front_url: [{ required: true, message: '请输入前端地址', trigger: 'blur' }],
               backend_url: [],
               token: [],
-              username: [],
-              pwd: [],
+              username: [{ required: true, message: '请输入登录用户名', trigger: 'blur' }],
+              pwd: [{ required: true, message: '请输入登录密码', trigger: 'blur' }],
               authcode: [],
               captchaid: [],
               spaces: []
@@ -499,11 +491,11 @@ export default {
           job_instance_id: [],
           is_report: [],
           report_string: [],
-          front_url: [],
+          front_url: [{ required: true, message: '请输入前端地址', trigger: 'blur' }],
           backend_url: [],
           token: [],
-          username: [],
-          pwd: [],
+          username: [{ required: true, message: '请输入登录用户名', trigger: 'blur' }],
+          pwd: [{ required: true, message: '请输入登录密码', trigger: 'blur' }],
           authcode: [],
           captchaid: [],
           spaces: [],
@@ -577,6 +569,20 @@ export default {
     },
     addSpaceName: function() {
       this.form.task_config.config_kg.spaces.push({ space_name: '' })
+    },
+    async dbSearch(queryString, cb) {
+      const results = []
+      for (let i = 0; i < this.form.task_config.config_kg.spaces.length; i++) {
+        results.push({ value: this.form.task_config.config_kg.spaces[i].space_name })
+      }
+      cb(results)
+    },
+    async dbConnectionSearch(queryString, cb) {
+      const results = []
+      for (let i = 0; i < this.form.task_config.config_kg.spaces.length; i++) {
+        results.push({ value: `mongodb://172.16.23.85:30966/${this.form.task_config.config_kg.spaces[i].space_name}?connect=direct` })
+      }
+      cb(results)
     }
   }
 }

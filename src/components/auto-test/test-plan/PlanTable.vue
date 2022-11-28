@@ -279,10 +279,10 @@ export default {
             case_num: 10,
             c_type: 1,
             is_continue: 'no',
-            is_random: 'yes',
+            is_random: 'no',
             kg_data_base: {
-              db: 'common_kg_v4',
-              mongo_connect_url: 'mongodb://172.16.23.85:30966/common_kg_v4?connect=direct'
+              db: '',
+              mongo_connect_url: ''
             },
             template_json: null
           },
