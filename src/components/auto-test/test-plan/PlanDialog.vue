@@ -336,10 +336,34 @@ export default {
   name: 'PlanDialog',
   components: { JsonEditor },
   data() {
+    const checkFrontUrl = (rule, value, callback) => {
+      if (!this.form.task_config.config_kg.env_info.front_url) {
+        callback(new Error('请输入正确的前端地址！'))
+        return
+      }
+      callback()
+    }
+    const checkUserName = (rule, value, callback) => {
+      if (!this.form.task_config.config_kg.env_info.username) {
+        callback(new Error('请输入登录用户名！'))
+        return
+      }
+      callback()
+    }
+    const checkUserPass = (rule, value, callback) => {
+      if (!this.form.task_config.config_kg.env_info.pwd) {
+        callback(new Error('请输入登录用户密码！'))
+        return
+      }
+      callback()
+    }
     return {
       step: 3,
       rules: {},
-      fileType: 'select'
+      fileType: 'select',
+      checkFrontUrl,
+      checkUserName,
+      checkUserPass
     }
   },
   mounted() {
@@ -410,11 +434,11 @@ export default {
               job_instance_id: [],
               is_report: [],
               report_string: [],
-              front_url: [{ required: true, message: '请输入前端地址', trigger: 'blur' }],
+              front_url: [{ required: true, trigger: 'blur', validator: this.checkFrontUrl }],
               backend_url: [],
               token: [],
-              username: [{ required: true, message: '请输入登录用户名', trigger: 'blur' }],
-              pwd: [{ required: true, message: '请输入登录密码', trigger: 'blur' }],
+              username: [{ required: true, trigger: 'blur', validator: this.checkUserName }],
+              pwd: [{ required: true, trigger: 'blur', validator: this.checkUserPass }],
               authcode: [],
               captchaid: [],
               spaces: []
@@ -487,11 +511,11 @@ export default {
           job_instance_id: [],
           is_report: [],
           report_string: [],
-          front_url: [{ required: true, message: '请输入前端地址', trigger: 'blur' }],
+          front_url: [{ required: true, trigger: 'blur', validator: this.checkFrontUrl }],
           backend_url: [],
           token: [],
-          username: [{ required: true, message: '请输入登录用户名', trigger: 'blur' }],
-          pwd: [{ required: true, message: '请输入登录密码', trigger: 'blur' }],
+          username: [{ required: true, trigger: 'blur', validator: this.checkUserName }],
+          pwd: [{ required: true, trigger: 'blur', validator: this.checkUserPass }],
           authcode: [],
           captchaid: [],
           spaces: [],
@@ -620,14 +644,13 @@ export default {
                 results.push({ value: infos[i].dbName })
               }
             })
-            .catch((error) => {
-              Message.error(error)
+            .catch(() => {
+              Message.error('访问图数据库列表失败，请检查登录信息！')
             })
           cb(results)
         })
-        .catch((error) => {
-          Message.error(error)
-          Message.error('请填写正确的登录信息！')
+        .catch(() => {
+          Message.error('登录失败，请检查登录信息！')
       })
     }
   }

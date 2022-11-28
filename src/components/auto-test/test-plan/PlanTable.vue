@@ -285,35 +285,35 @@ export default {
             },
             template_json: [
               {
-                "relation": "母亲",
-                "model": [
+                relation: '母亲',
+                model: [
                   {
-                    "query": "{A}的妈妈是谁",
-                    "expect_answer": "{B}"
+                    query: '{A}的妈妈是谁',
+                    expect_answer: '{B}'
                   },
                   {
-                    "query": "你知道{A}的母亲叫什么吗",
-                    "expect_answer": "{B}"
+                    query: '你知道{A}的母亲叫什么吗',
+                    expect_answer: '{B}'
                   },
                   {
-                    "query": "谁的母亲是{B}",
-                    "expect_answer": "{A}"
+                    query: '谁的母亲是{B}',
+                    expect_answer: '{A}'
                   }
                 ]
               },
               {
-                "relation": "母亲",
-                "model": [
+                relation: '母亲',
+                model: [
                   {
-                    "relation": "职业",
-                    "model": [
+                    relation: '职业',
+                    model: [
                       {
-                        "query": "{A}的妈妈的职业是什么",
-                        "expect_answer": "{C}"
+                        query: '{A}的妈妈的职业是什么',
+                        expect_answer: '{C}'
                       },
                       {
-                        "query": "你知道{A}的母亲是做什么工作的吗",
-                        "expect_answer": "{C}"
+                        query: '你知道{A}的母亲是做什么工作的吗',
+                        expect_answer: '{C}'
                       }
                     ]
                   }
