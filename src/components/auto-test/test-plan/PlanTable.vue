@@ -23,7 +23,6 @@
       border
       fit
       :highlight-current-row="true"
-      height="550"
       :row-style="{
         height: '20px'
       }"
@@ -75,7 +74,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column align="left" label="下次执行时间" width="220">
+      <el-table-column align="left" label="下次执行时间" width="170">
         <template slot-scope="scope">
           <i class="el-icon-time" />
           <span>{{ scope.row.next_run_time }}</span>

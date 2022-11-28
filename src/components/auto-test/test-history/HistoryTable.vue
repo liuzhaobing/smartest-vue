@@ -16,7 +16,6 @@
       border
       fit
       highlight-current-row
-      height="550"
       :cell-style="{
         padding: '1px'
       }"
