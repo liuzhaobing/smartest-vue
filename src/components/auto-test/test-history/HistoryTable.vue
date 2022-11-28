@@ -201,3 +201,28 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.app-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px 10px 10px 10px;
+  color: rgba(16, 16, 16, 100);
+  background: #fff;
+  border: 1px solid #dcdfe6;
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%), 0 0 6px 0 rgb(0 0 0 / 4%);
+}
+
+.top-btn {
+  display: flex;
+  width: calc(100% - 10px);
+  justify-content: flex-end;
+  padding: 5px;
+}
+
+.configJson {
+  ::v-deep .el-dialog__body {
+    padding: 5px;
+  }
+}
+</style>
