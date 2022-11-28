@@ -34,13 +34,7 @@
               style="display: block; width: 100%;"
               autocomplete="off"
               clearable
-              :fetch-suggestions="
-          (queryString, cb) => {
-            cb([{ value: 'https://mmue-dit87.harix.iamidata.com' },
-             { value: 'https://mmue-sit134.harix.iamidata.com' },
-              { value: 'https://mmue.harix.iamidata.com' }])
-          }
-        "
+              :fetch-suggestions="frontUrlSearch"
             />
           </el-form-item>
           <el-form-item label="后端地址" prop="backend_url">
@@ -49,11 +43,7 @@
               style="display: block; width: 100%;"
               autocomplete="off"
               clearable
-              :fetch-suggestions="
-          (queryString, cb) => {
-            cb([{ value: 'http://172.16.23.85:31917' }])
-          }
-        "
+              :fetch-suggestions="backendUrlSearch"
             />
           </el-form-item>
           <el-form-item label="登录用户" prop="username">
@@ -582,6 +572,20 @@ export default {
       for (let i = 0; i < this.form.task_config.config_kg.spaces.length; i++) {
         results.push({ value: `mongodb://172.16.23.85:30966/${this.form.task_config.config_kg.spaces[i].space_name}?connect=direct` })
       }
+      cb(results)
+    },
+    async frontUrlSearch(queryString, cb) {
+      const results = [
+        { value: 'https://mmue-dit87.harix.iamidata.com' },
+        { value: 'https://mmue-dit86.harix.iamidata.com' },
+        { value: 'https://mmue-sit134.harix.iamidata.com' },
+        { value: 'https://mmue.harix.iamidata.com' },
+        { value: 'https://mmue.uit85.harix.iamidata.com' },
+      ]
+      cb(results)
+    },
+    async backendUrlSearch(queryString, cb) {
+      const results = [{ value: 'http://172.16.23.85:31917' }]
       cb(results)
     }
   }
