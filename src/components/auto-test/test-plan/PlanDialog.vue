@@ -224,14 +224,14 @@
               <el-upload
                 v-show="fileType === 'upload'"
                 class="upload"
-                action="/abp/test3/api/v1/common/upload"
+                :action="uploadAddress"
                 :on-success="onFileUpload"
                 :on-remove="onRemoveFile"
                 accept=".xlsx"
               >
                 <el-button size="small" type="primary" slot="trigger">点击上传</el-button>
                 <a
-                  href="${process.env.VUE_APP_BASE_API}/api/v1/download?filename=./templates/demo_kg.xlsx"
+                  :href="kgTemplateAddress"
                   download="demo_kg.xlsx"
                   style="margin-left: 20px"
                 >下载模板</a>
@@ -358,6 +358,12 @@ export default {
     this.$store.dispatch('TestPlan/listUploadedFiles', "./upload")
   },
   computed: {
+    uploadAddress() {
+      return process.env.VUE_APP_BASE_API + '/api/v1/upload'
+    },
+    kgTemplateAddress() {
+      return process.env.VUE_APP_BASE_API + '/api/v1/download?filename=./templates/demo_kg.xlsx'
+    },
     remoteFiles() {
       return this.$store.getters['TestPlan/getUploadedFiles']
     },
