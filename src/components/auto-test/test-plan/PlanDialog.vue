@@ -6,9 +6,9 @@
       <el-step title="基础信息" />
     </el-steps>
     <el-form
+      ref="ruleForm"
       :model="form"
       :rules="rules"
-      ref="ruleForm"
       label-width="100px"
       autocomplete="off"
       size="medium"
@@ -20,8 +20,8 @@
             <el-select
               v-model="form.task_type"
               placeholder="选择任务类型"
-              @change="onTypeChange"
               style="display: block; width: 100%;"
+              @change="onTypeChange"
             >
               <el-option v-for="(value, key, index) in preData" :value="key" :label="value.name" />
             </el-select>
@@ -552,25 +552,25 @@ export default {
         }
       })
     },
-    delReportString: function (item) {
+    delReportString: function(item) {
       const min_len = this.form.task_config.config_kg.report_string.length
       const index = this.form.task_config.config_kg.report_string.indexOf(item)
       if (min_len !== 1) {
         this.form.task_config.config_kg.report_string.splice(index, 1)
       }
     },
-    addReportString: function () {
+    addReportString: function() {
       this.form.task_config.config_kg.report_string.push({address: ""})
     },
-    delSpaceName: function (item) {
+    delSpaceName: function(item) {
       const min_len = this.form.task_config.config_kg.spaces.length
       const index = this.form.task_config.config_kg.spaces.indexOf(item)
       if (min_len !== 1) {
         this.form.task_config.config_kg.spaces.splice(index, 1)
       }
     },
-    addSpaceName: function () {
-      this.form.task_config.config_kg.spaces.push({space_name: ""})
+    addSpaceName: function() {
+      this.form.task_config.config_kg.spaces.push({ space_name: '' })
     }
   }
 }

@@ -10,7 +10,7 @@ import {
 } from '@/api/auto-test/test-plan'
 import { Message } from 'element-ui'
 import { exportResults } from '@/api/auto-test/test-report'
-import {downloadFunc, listFileFunc} from '@/api/auto-test/common'
+import { downloadFunc, listFileFunc } from '@/api/auto-test/common'
 
 const getDefaultState = () => {
   return {
