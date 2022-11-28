@@ -23,3 +23,11 @@ export function listFileFunc(dir_name) {
     params: { path: dir_name }
   })
 }
+
+export function listServerFunc(types) {
+  return request({
+    url: '/api/v1/server',
+    method: 'get',
+    params: { types: types }
+  })
+}

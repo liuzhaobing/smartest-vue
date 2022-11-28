@@ -10,7 +10,7 @@ import {
 } from '@/api/auto-test/test-plan'
 import { Message } from 'element-ui'
 import { exportResults } from '@/api/auto-test/test-report'
-import { downloadFunc, listFileFunc } from '@/api/auto-test/common'
+import {downloadFunc, listFileFunc, listServerFunc} from '@/api/auto-test/common'
 
 const getDefaultState = () => {
   return {
@@ -18,6 +18,7 @@ const getDefaultState = () => {
     pz: 30,
     total: 0,
     active: 0,
+    servers: [],
     plans: [],
     crontabs: [],
     histories: [],
@@ -186,6 +187,9 @@ const getters = {
       files.push({ file_name: state.uploadedFiles[i].split('/').pop(), file_path: state.uploadedFiles[i] })
     }
     return files
+  },
+  getServers(state) {
+    return state.servers
   }
 }
 
@@ -249,6 +253,9 @@ const mutations = {
   },
   SET_UPLOADED_FILES: (state, value) => {
     state.uploadedFiles = value
+  },
+  SET_SERVERS: (state, value) => {
+    state.servers = value
   }
 }
 
@@ -394,12 +401,12 @@ const actions = {
       })
     })
   },
-  downloadFile: function({ state, commit }, file_name) {
+  listServers: function({ state, commit }, types) {
     return new Promise((resolve, reject) => {
-      downloadFunc(file_name).then(response => {
+      listServerFunc(types).then(response => {
         const { code } = response
         if (code === 200) {
-          Message.success('导出成功！')
+          commit('SET_SERVERS', response.data.data)
         }
         resolve()
       }).catch(error => {

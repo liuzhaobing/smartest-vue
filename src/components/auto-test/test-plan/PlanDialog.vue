@@ -29,22 +29,28 @@
         </div>
         <div v-if="form.task_type === 'kg'">
           <el-form-item label="前端地址" prop="front_url">
-            <el-autocomplete
+            <el-select
               v-model="form.task_config.config_kg.env_info.front_url"
+              placeholder="请选择图谱前端地址"
+              filterable
+              allow-create
               style="display: block; width: 100%;"
               autocomplete="off"
-              clearable
-              :fetch-suggestions="frontUrlSearch"
-            />
+            >
+              <el-option v-for="(item, index) in Servers" :value="item.address" :label="item.name + ': ' + item.address" />
+            </el-select>
           </el-form-item>
           <el-form-item label="后端地址" prop="backend_url">
-            <el-autocomplete
+            <el-select
               v-model="form.task_config.config_kg.env_info.backend_url"
+              placeholder="请选择图谱后端地址"
+              filterable
+              allow-create
               style="display: block; width: 100%;"
               autocomplete="off"
-              clearable
-              :fetch-suggestions="backendUrlSearch"
-            />
+            >
+              <el-option v-for="(item, index) in Servers" :value="item.address" :label="item.name + ': ' + item.address" />
+            </el-select>
           </el-form-item>
           <el-form-item label="登录用户" prop="username">
             <el-input v-model="form.task_config.config_kg.env_info.username" />
@@ -414,6 +420,9 @@ export default {
     },
     preData() {
       return this.$store.getters['TestPlan/getPreData']
+    },
+    Servers() {
+      return this.$store.getters['TestPlan/getServers']
     }
   },
   watch: {
@@ -499,6 +508,7 @@ export default {
       this.form.task_data_source.excel_kg.file_name = ''
     },
     onTypeChange(type) {
+      this.$store.dispatch('TestPlan/listServers', type)
       if (type === 'kg') {
         this.rules = {
           task_name: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
@@ -602,20 +612,6 @@ export default {
       for (let i = 0; i < this.form.task_config.config_kg.spaces.length; i++) {
         results.push({ value: `mongodb://172.16.23.85:30966/${this.form.task_config.config_kg.spaces[i].space_name}?connect=direct` })
       }
-      cb(results)
-    },
-    async frontUrlSearch(queryString, cb) {
-      const results = [
-        { value: 'https://mmue-dit87.harix.iamidata.com' },
-        { value: 'https://mmue-fit86.harix.iamidata.com' },
-        { value: 'https://mmue-sit134.harix.iamidata.com' },
-        { value: 'https://mmue.harix.iamidata.com' },
-        { value: 'https://mmue.uit85.harix.iamidata.com' },
-      ]
-      cb(results)
-    },
-    async backendUrlSearch(queryString, cb) {
-      const results = [{ value: 'http://172.16.23.85:31917' }]
       cb(results)
     },
     async spacesNameSearch(queryString, cb) {
