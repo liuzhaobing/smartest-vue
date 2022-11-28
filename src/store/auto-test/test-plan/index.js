@@ -254,6 +254,7 @@ const mutations = {
 
 const actions = {
   getHistoriesData: function({ state, commit }) {
+    commit('SET_LOADING', true)
     return new Promise((resolve, reject) => {
       getHistory(state.listHistoryParams).then(response => {
         const { data } = response
@@ -262,10 +263,13 @@ const actions = {
         resolve()
       }).catch(error => {
         reject(error)
+      }).finally(() => {
+        commit('SET_LOADING', false)
       })
     })
   },
   getPlansData: function({ state, commit }) {
+    commit('SET_LOADING', true)
     return new Promise((resolve, reject) => {
       getPlans(state.listPlanParams).then(response => {
         const { data } = response
@@ -274,10 +278,13 @@ const actions = {
         resolve()
       }).catch(error => {
         reject(error)
+      }).finally(() => {
+        commit('SET_LOADING', false)
       })
     })
   },
   getCrontabData: function({ commit }) {
+    commit('SET_LOADING', true)
     return new Promise((resolve, reject) => {
       getCrontab().then(response => {
         const { data } = response
@@ -285,10 +292,12 @@ const actions = {
         resolve()
       }).catch(error => {
         reject(error)
+      }).finally(() => {
+        commit('SET_LOADING', false)
       })
     })
   },
-  updateOnePlanSetting: function({ state }, payload) {
+  updateOnePlanSetting: function({ state, dispatch }, payload) {
     return new Promise((resolve, reject) => {
       updatePlan(payload.id, payload.settings).then(response => {
         const { code } = response
@@ -300,10 +309,13 @@ const actions = {
         resolve()
       }).catch(error => {
         reject(error)
+      }).finally(() => {
+        dispatch('getCrontabData')
+        dispatch('getPlansData')
       })
     })
   },
-  addOnePlanSetting: function({ state }, payload) {
+  addOnePlanSetting: function({ state, dispatch }, payload) {
     return new Promise((resolve, reject) => {
       addPlan(payload).then(response => {
         const { code } = response
@@ -315,6 +327,9 @@ const actions = {
         resolve()
       }).catch(error => {
         reject(error)
+      }).finally(() => {
+        dispatch('getCrontabData')
+        dispatch('getPlansData')
       })
     })
   },
@@ -332,7 +347,7 @@ const actions = {
       })
     })
   },
-  deleteOnePlan: function({ state }, id) {
+  deleteOnePlan: function({ state, dispatch }, id) {
     return new Promise((resolve, reject) => {
       deletePlan(id).then(response => {
         const { code } = response
@@ -343,6 +358,9 @@ const actions = {
         }
       }).catch(error => {
         reject(error)
+      }).finally(() => {
+        dispatch('getCrontabData')
+        dispatch('getPlansData')
       })
     })
   },
