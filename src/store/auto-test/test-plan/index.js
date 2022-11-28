@@ -70,7 +70,7 @@ const getDefaultState = () => {
       skill: {
         name: '系统技能',
         source: {
-          source_skill: { name: '技能模板' },
+          source_skill: { name: '技能基线' },
           cases_skill: { name: '技能用例' },
           excel_skill: { name: '技能表格' }
         }
@@ -78,7 +78,7 @@ const getDefaultState = () => {
       qa: {
         name: '通用QA',
         source: {
-          source_qa: { name: 'QA模板' },
+          source_qa: { name: 'QA基线' },
           cases_qa: { name: 'QA用例' },
           excel_qa: { name: 'QA表格' }
         }
@@ -86,7 +86,7 @@ const getDefaultState = () => {
       tts: {
         name: '自研TTS',
         source: {
-          source_tts: { name: 'TTS模板' },
+          source_tts: { name: 'TTS基线' },
           cases_tts: { name: 'TTS用例' },
           excel_tts: { name: 'TTS表格' }
         }
@@ -94,7 +94,7 @@ const getDefaultState = () => {
       asr: {
         name: '自研ASR',
         source: {
-          source_asr: { name: 'ASR模板' },
+          source_asr: { name: 'ASR基线' },
           cases_asr: { name: 'ASR用例' },
           excel_asr: { name: 'ASR表格' }
         }

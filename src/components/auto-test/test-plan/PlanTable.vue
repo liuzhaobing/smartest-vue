@@ -271,7 +271,33 @@ export default {
               authcode: '5555'
             },
             spaces: [{ space_name: '' }]
-          }
+          },
+          config_skill: {
+            front_url: '',
+            agent_id: 666,
+            chan_num: 1,
+            robot_id: '',
+            tenant_code: '',
+            version: '',
+            is_nlu: 'no',
+            is_test: 'yes'
+          },
+          config_qa: {
+            front_url: '',
+            agent_id: 666,
+            chan_num: 1,
+            robot_id: '',
+            tenant_code: '',
+            version: '',
+            is_group: 'no',
+            is_test: 'yes'
+          },
+          config_tts: {
+            chan_num: 1
+          },
+          config_asr: {
+            chan_num: 1
+          },
         },
         task_data_source: {
           source_kg: {
@@ -323,6 +349,30 @@ export default {
           },
           cases_kg: '',
           excel_kg: {
+            file_name: '',
+            sheet_name: ''
+          },
+          source_qa: {
+            filter: 'usetest=1'
+          },
+          cases_qa: '',
+          excel_qa: {
+            file_name: '',
+            sheet_name: ''
+          },
+          source_tts: {
+            filter: 'usetest=1'
+          },
+          cases_tts: '',
+          excel_tts: {
+            file_name: '',
+            sheet_name: ''
+          },
+          source_asr: {
+            filter: 'usetest=1'
+          },
+          cases_asr: '',
+          excel_asr: {
             file_name: '',
             sheet_name: ''
           }

@@ -99,6 +99,164 @@
             </el-form-item>
           </template>
         </div>
+        <div v-if="form.task_type === 'skill'">
+          <el-form-item label="请求地址" prop="front_url">
+            <el-select
+              v-model="form.task_config.config_skill.front_url"
+              placeholder="请选择测试地址"
+              filterable
+              allow-create
+              style="display: block; width: 100%;"
+              autocomplete="off"
+            >
+              <el-option v-for="(item, index) in Servers" :value="item.address" :label="item.name + ': ' + item.address" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Agent ID" prop="agent_id">
+            <el-input-number v-model="form.task_config.config_skill.agent_id" :min="1" />
+          </el-form-item>
+          <el-form-item label="测试模式" prop="is_test">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_config.config_skill.is_test"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
+          </el-form-item>
+          <el-form-item label="Robot ID" prop="robot_id">
+            <el-autocomplete
+              v-model="form.task_config.config_skill.robot_id"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
+            (queryString, cb) => {
+              cb([{ value: '5C1AEC03573747D' }])
+            }
+          "
+            />
+          </el-form-item>
+          <el-form-item label="Tenant Code" prop="tenant_code">
+            <el-autocomplete
+              v-model="form.task_config.config_skill.tenant_code"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
+            (queryString, cb) => {
+              cb([{ value: 'testTenantId' }])
+            }
+          "
+            />
+          </el-form-item>
+          <el-form-item label="版本号" prop="version">
+            <el-autocomplete
+              v-model="form.task_config.config_skill.version"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
+            (queryString, cb) => {
+              cb([{ value: 'V3' }])
+            }
+          "
+            />
+          </el-form-item>
+          <el-form-item label="Debug模式" prop="is_nlu">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_config.config_skill.is_nlu"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
+          </el-form-item>
+        </div>
+        <div v-if="form.task_type === 'qa'">
+          <el-form-item label="请求地址" prop="front_url">
+            <el-select
+              v-model="form.task_config.config_qa.front_url"
+              placeholder="请选择测试地址"
+              filterable
+              allow-create
+              style="display: block; width: 100%;"
+              autocomplete="off"
+            >
+              <el-option v-for="(item, index) in Servers" :value="item.address" :label="item.name + ': ' + item.address" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Agent ID" prop="agent_id">
+            <el-input-number v-model="form.task_config.config_qa.agent_id" :min="1" />
+          </el-form-item>
+          <el-form-item label="测试模式" prop="is_test">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_config.config_qa.is_test"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
+          </el-form-item>
+          <el-form-item label="Robot ID" prop="robot_id">
+            <el-autocomplete
+              v-model="form.task_config.config_qa.robot_id"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
+            (queryString, cb) => {
+              cb([{ value: '5C1AEC03573747D' }])
+            }
+          "
+            />
+          </el-form-item>
+          <el-form-item label="Tenant Code" prop="tenant_code">
+            <el-autocomplete
+              v-model="form.task_config.config_qa.tenant_code"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
+            (queryString, cb) => {
+              cb([{ value: 'testTenantId' }])
+            }
+          "
+            />
+          </el-form-item>
+          <el-form-item label="版本号" prop="version">
+            <el-autocomplete
+              v-model="form.task_config.config_qa.version"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
+            (queryString, cb) => {
+              cb([{ value: 'V3' }])
+            }
+          "
+            />
+          </el-form-item>
+          <el-form-item label="GroupID判断" prop="is_group">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_config.config_qa.is_nlu"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
+          </el-form-item>
+        </div>
+        <div v-if="form.task_type === 'tts'"></div>
+        <div v-if="form.task_type === 'asr'"></div>
       </div>
       <div v-if="active === 1">
         <div>
@@ -234,6 +392,278 @@
             </div>
           </el-form-item>
         </div>
+        <div v-if="form.task_data_source_label === 'source_skill'">
+          <el-form-item label="过滤条件" prop="filter">
+            <el-input v-model="form.task_data_source.source_skill.filter"></el-input>
+          </el-form-item>
+        </div>
+        <div v-if="form.task_data_source_label === 'cases_skill'">
+          <el-form-item label="用例数据" prop="cases_kg">
+            <json-editor ref="form" v-model="form.task_data_source.cases_skill" />
+          </el-form-item>
+        </div>
+        <div v-if="form.task_data_source_label === 'excel_skill'">
+          <el-form-item label="Sheet页" prop="sheet_name">
+            <el-autocomplete
+              v-model="form.task_data_source.excel_skill.sheet_name"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
+            (queryString, cb) => {
+              cb([{ value: 'Sheet1' }])
+            }
+          "
+            />
+          </el-form-item>
+          <el-form-item label="任务文件" prop="file_name">
+            <div style="width: 100%; display: flex; justify-content: space-between">
+              <el-select
+                style="width: 70%"
+                v-model="form.task_data_source.excel_skill.file_name"
+                filterable
+                placeholder="请选择"
+                v-show="fileType === 'select'"
+              >
+                <el-option
+                  v-for="item in remoteFiles"
+                  :key="item.file_path"
+                  :label="item.file_name"
+                  :value="item.file_path"
+                >
+                  <span style="float: left">{{ item.file_name }}</span>
+                  <span
+                    style="float: right; color: #8492a6; font-size: 13px; margin-left: 5px"
+                    @click="deleteFile(item.id)"
+                  >删除</span
+                  >
+                </el-option>
+              </el-select>
+              <el-upload
+                v-show="fileType === 'upload'"
+                class="upload"
+                :action="uploadAddress"
+                :on-success="onFileUpload"
+                :on-remove="onRemoveFile"
+                accept=".xlsx"
+              >
+                <el-button size="small" type="primary" slot="trigger">点击上传</el-button>
+                <a
+                  :href="kgTemplateAddress"
+                  download="demo_kg.xlsx"
+                  style="margin-left: 20px"
+                >下载模板</a>
+                <div class="el-upload__tip" slot="tip">只能上传xlsx文件</div>
+              </el-upload>
+              <el-button @click="changeFileType" type="success" style="height: 36px">{{ fileType === 'select' ? '我要上传文件' : '选择已有文件' }}
+              </el-button>
+            </div>
+          </el-form-item>
+        </div>
+        <div v-if="form.task_data_source_label === 'source_qa'">
+          <el-form-item label="过滤条件" prop="filter">
+            <el-input v-model="form.task_data_source.source_qa.filter"></el-input>
+          </el-form-item>
+        </div>
+        <div v-if="form.task_data_source_label === 'cases_qa'">
+          <el-form-item label="用例数据" prop="cases_kg">
+            <json-editor ref="form" v-model="form.task_data_source.cases_qa" />
+          </el-form-item>
+        </div>
+        <div v-if="form.task_data_source_label === 'excel_qa'">
+          <el-form-item label="Sheet页" prop="sheet_name">
+            <el-autocomplete
+              v-model="form.task_data_source.excel_qa.sheet_name"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
+            (queryString, cb) => {
+              cb([{ value: 'Sheet1' }])
+            }
+          "
+            />
+          </el-form-item>
+          <el-form-item label="任务文件" prop="file_name">
+            <div style="width: 100%; display: flex; justify-content: space-between">
+              <el-select
+                style="width: 70%"
+                v-model="form.task_data_source.excel_qa.file_name"
+                filterable
+                placeholder="请选择"
+                v-show="fileType === 'select'"
+              >
+                <el-option
+                  v-for="item in remoteFiles"
+                  :key="item.file_path"
+                  :label="item.file_name"
+                  :value="item.file_path"
+                >
+                  <span style="float: left">{{ item.file_name }}</span>
+                  <span
+                    style="float: right; color: #8492a6; font-size: 13px; margin-left: 5px"
+                    @click="deleteFile(item.id)"
+                  >删除</span
+                  >
+                </el-option>
+              </el-select>
+              <el-upload
+                v-show="fileType === 'upload'"
+                class="upload"
+                :action="uploadAddress"
+                :on-success="onFileUpload"
+                :on-remove="onRemoveFile"
+                accept=".xlsx"
+              >
+                <el-button size="small" type="primary" slot="trigger">点击上传</el-button>
+                <a
+                  :href="kgTemplateAddress"
+                  download="demo_kg.xlsx"
+                  style="margin-left: 20px"
+                >下载模板</a>
+                <div class="el-upload__tip" slot="tip">只能上传xlsx文件</div>
+              </el-upload>
+              <el-button @click="changeFileType" type="success" style="height: 36px">{{ fileType === 'select' ? '我要上传文件' : '选择已有文件' }}
+              </el-button>
+            </div>
+          </el-form-item>
+        </div>
+        <div v-if="form.task_data_source_label === 'source_tts'">
+          <el-form-item label="过滤条件" prop="filter">
+            <el-input v-model="form.task_data_source.source_tts.filter"></el-input>
+          </el-form-item>
+        </div>
+        <div v-if="form.task_data_source_label === 'cases_tts'">
+          <el-form-item label="用例数据" prop="cases_kg">
+            <json-editor ref="form" v-model="form.task_data_source.cases_tts" />
+          </el-form-item>
+        </div>
+        <div v-if="form.task_data_source_label === 'excel_tts'">
+          <el-form-item label="Sheet页" prop="sheet_name">
+            <el-autocomplete
+              v-model="form.task_data_source.excel_tts.sheet_name"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
+            (queryString, cb) => {
+              cb([{ value: 'Sheet1' }])
+            }
+          "
+            />
+          </el-form-item>
+          <el-form-item label="任务文件" prop="file_name">
+            <div style="width: 100%; display: flex; justify-content: space-between">
+              <el-select
+                style="width: 70%"
+                v-model="form.task_data_source.excel_tts.file_name"
+                filterable
+                placeholder="请选择"
+                v-show="fileType === 'select'"
+              >
+                <el-option
+                  v-for="item in remoteFiles"
+                  :key="item.file_path"
+                  :label="item.file_name"
+                  :value="item.file_path"
+                >
+                  <span style="float: left">{{ item.file_name }}</span>
+                  <span
+                    style="float: right; color: #8492a6; font-size: 13px; margin-left: 5px"
+                    @click="deleteFile(item.id)"
+                  >删除</span
+                  >
+                </el-option>
+              </el-select>
+              <el-upload
+                v-show="fileType === 'upload'"
+                class="upload"
+                :action="uploadAddress"
+                :on-success="onFileUpload"
+                :on-remove="onRemoveFile"
+                accept=".xlsx"
+              >
+                <el-button size="small" type="primary" slot="trigger">点击上传</el-button>
+                <a
+                  :href="kgTemplateAddress"
+                  download="demo_kg.xlsx"
+                  style="margin-left: 20px"
+                >下载模板</a>
+                <div class="el-upload__tip" slot="tip">只能上传xlsx文件</div>
+              </el-upload>
+              <el-button @click="changeFileType" type="success" style="height: 36px">{{ fileType === 'select' ? '我要上传文件' : '选择已有文件' }}
+              </el-button>
+            </div>
+          </el-form-item>
+        </div>
+        <div v-if="form.task_data_source_label === 'source_asr'">
+          <el-form-item label="过滤条件" prop="filter">
+            <el-input v-model="form.task_data_source.source_asr.filter"></el-input>
+          </el-form-item>
+        </div>
+        <div v-if="form.task_data_source_label === 'cases_asr'">
+          <el-form-item label="用例数据" prop="cases_kg">
+            <json-editor ref="form" v-model="form.task_data_source.cases_asr" />
+          </el-form-item>
+        </div>
+        <div v-if="form.task_data_source_label === 'excel_asr'">
+          <el-form-item label="Sheet页" prop="sheet_name">
+            <el-autocomplete
+              v-model="form.task_data_source.excel_asr.sheet_name"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
+            (queryString, cb) => {
+              cb([{ value: 'Sheet1' }])
+            }
+          "
+            />
+          </el-form-item>
+          <el-form-item label="任务文件" prop="file_name">
+            <div style="width: 100%; display: flex; justify-content: space-between">
+              <el-select
+                style="width: 70%"
+                v-model="form.task_data_source.excel_asr.file_name"
+                filterable
+                placeholder="请选择"
+                v-show="fileType === 'select'"
+              >
+                <el-option
+                  v-for="item in remoteFiles"
+                  :key="item.file_path"
+                  :label="item.file_name"
+                  :value="item.file_path"
+                >
+                  <span style="float: left">{{ item.file_name }}</span>
+                  <span
+                    style="float: right; color: #8492a6; font-size: 13px; margin-left: 5px"
+                    @click="deleteFile(item.id)"
+                  >删除</span
+                  >
+                </el-option>
+              </el-select>
+              <el-upload
+                v-show="fileType === 'upload'"
+                class="upload"
+                :action="uploadAddress"
+                :on-success="onFileUpload"
+                :on-remove="onRemoveFile"
+                accept=".xlsx"
+              >
+                <el-button size="small" type="primary" slot="trigger">点击上传</el-button>
+                <a
+                  :href="kgTemplateAddress"
+                  download="demo_kg.xlsx"
+                  style="margin-left: 20px"
+                >下载模板</a>
+                <div class="el-upload__tip" slot="tip">只能上传xlsx文件</div>
+              </el-upload>
+              <el-button @click="changeFileType" type="success" style="height: 36px">{{ fileType === 'select' ? '我要上传文件' : '选择已有文件' }}
+              </el-button>
+            </div>
+          </el-form-item>
+        </div>
       </div>
       <div v-if="active === 2">
         <div>
@@ -268,6 +698,26 @@
               :placeholder="'[分] [时] [天] [月] [星期几]      例如每周四早上9点30分执行：30 9 * * 4'"
               :disabled="form.is_crontab === 'no'"
             />
+          </el-form-item>
+        </div>
+        <div v-if="form.task_type === 'skill'">
+          <el-form-item label="并发数" prop="chan_num">
+            <el-input-number v-model="form.task_config.config_skill.chan_num" :min="1" />
+          </el-form-item>
+        </div>
+        <div v-if="form.task_type === 'qa'">
+          <el-form-item label="并发数" prop="chan_num">
+            <el-input-number v-model="form.task_config.config_qa.chan_num" :min="1" />
+          </el-form-item>
+        </div>
+        <div v-if="form.task_type === 'tts'">
+          <el-form-item label="并发数" prop="chan_num">
+            <el-input-number v-model="form.task_config.config_tts.chan_num" :min="1" />
+          </el-form-item>
+        </div>
+        <div v-if="form.task_type === 'asr'">
+          <el-form-item label="并发数" prop="chan_num">
+            <el-input-number v-model="form.task_config.config_asr.chan_num" :min="1" />
           </el-form-item>
         </div>
         <div v-if="form.task_type === 'kg'">
