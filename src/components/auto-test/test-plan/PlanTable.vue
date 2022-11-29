@@ -381,7 +381,17 @@ export default {
           source_skill: {
             filter: 'usetest=1'
           },
-          cases_skill: '',
+          cases_skill: [
+            {
+              id: 400,
+              query: '姚明是什么星座',
+              expect_answer: '处女座',
+            },{
+              id: 401,
+              query: '你知道姚明的血型吗',
+              expect_answer: 'B型',
+            },
+          ],
           excel_skill: {
             file_name: '',
             sheet_name: ''
@@ -389,7 +399,29 @@ export default {
           source_qa: {
             filter: 'usetest=1'
           },
-          cases_qa: '',
+          cases_qa: [
+            {
+              id: 2001,
+              question: '很高兴见到你',
+              answer_list: [
+                'nice to meet you！在这里遇见你，我觉得可能是命中注定',
+                'nice to meet you！今天是我的幸运日，因为见到了你。'
+              ],
+              qa_group_id: 1039578,
+              robot_type: 'ginger'
+            },
+            {
+              id: 2002,
+              question: '小达在吗',
+              answer_list: [
+                '诶，来啰~',
+                '是叫我吗，啥事',
+                '在呢在呢，您有什么需要吗'
+              ],
+              qa_group_id: 778540,
+              robot_type: 'ginger'
+            }
+          ],
           excel_qa: {
             file_name: '',
             sheet_name: ''
