@@ -1,5 +1,5 @@
 <template>
-  <div id="skill-bug-review-chart" class="skill-bug-review-chart" @click="updateBUGReviewPortionData" />
+  <div id="skill-bug-review-chart" class="skill-bug-review-chart" @click="updateBUGReviewPortionData" style="height: 350px;width: 100%" />
 </template>
 
 <script>

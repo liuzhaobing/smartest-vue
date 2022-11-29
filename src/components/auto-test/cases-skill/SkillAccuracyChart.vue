@@ -1,5 +1,5 @@
 <template>
-  <div id="skill-accuracy-chart" class="skill-accuracy-chart" @click="updateSkillAccuracyData" />
+  <div id="skill-accuracy-chart" class="skill-accuracy-chart" @click="updateSkillAccuracyData" style="height: 350px;width: 100%" />
 </template>
 
 <script>

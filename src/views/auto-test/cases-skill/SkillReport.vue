@@ -1,18 +1,28 @@
 <template>
-  <div class="skill-report" style="width:100%; margin: auto">
-    <div id="skill-cases" style="width:100%; height: 400px;  display: table">
-      <SkillCasesTendency style="width:30%;display: table-cell" />
-      <SkillDomainPortion style="width:30%;display: table-cell" />
-      <SkillIntentPortion style="width:40%;display: table-cell" />
-    </div>
-
-    <div id="skill-accuracy" style="width:100%; height: 400px;  display: table">
-      <SkillAccuracyChart style="width:100%;display: table-cell" />
-    </div>
-
-    <div id="skill-bug-review" style="width:100%; height: 400px;  display: table">
-      <SkillBUGReviewChart style="width:100%;display: table-cell" />
-    </div>
+  <div class="dashboard-editor-container">
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <SkillAccuracyChart />
+    </el-row>
+    <el-row :gutter="32">
+      <el-col :xs="24" :sm="24" :lg="8">
+        <div class="chart-wrapper">
+          <SkillCasesTendency />
+        </div>
+      </el-col>
+      <el-col :xs="24" :sm="24" :lg="8">
+        <div class="chart-wrapper">
+          <SkillDomainPortion />
+        </div>
+      </el-col>
+      <el-col :xs="24" :sm="24" :lg="8">
+        <div class="chart-wrapper">
+          <SkillIntentPortion />
+        </div>
+      </el-col>
+    </el-row>
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <SkillBUGReviewChart />
+    </el-row>
   </div>
 </template>
 
@@ -35,6 +45,30 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.dashboard-editor-container {
+  padding: 32px;
+  background-color: rgb(240, 242, 245);
+  position: relative;
 
+  .github-corner {
+    position: absolute;
+    top: 0px;
+    border: 0;
+    right: 0;
+  }
+
+  .chart-wrapper {
+    background: #fff;
+    padding: 16px 16px 0;
+    margin-bottom: 32px;
+  }
+}
+
+@media (max-width:1024px) {
+  .chart-wrapper {
+    padding: 8px;
+  }
+}
 </style>
+

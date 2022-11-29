@@ -319,7 +319,7 @@ export default {
             asr_ctrl_url: '',
             agent_id: 2259,
             robot_id: ''
-          },
+          }
         },
         task_data_source: {
           source_kg: {

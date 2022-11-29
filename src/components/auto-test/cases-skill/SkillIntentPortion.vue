@@ -1,5 +1,5 @@
 <template>
-  <div id="skill-intent-portion" class="skill-intent-portion" @click="updateSkillIntentPortionData" />
+  <div id="skill-intent-portion" class="skill-intent-portion" @click="updateSkillIntentPortionData" style="height: 300px;width: 100%" />
 </template>
 
 <script>

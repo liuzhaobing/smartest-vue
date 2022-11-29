@@ -1,5 +1,5 @@
 <template>
-  <div id="skill-domain-portion" class="skill-domain-portion" @click="updateSkillDomainPortionData" />
+  <div id="skill-domain-portion" class="skill-domain-portion" @click="updateSkillDomainPortionData" style="height: 300px;width: 100%" />
 </template>
 
 <script>

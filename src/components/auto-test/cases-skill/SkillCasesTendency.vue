@@ -1,5 +1,5 @@
 <template>
-  <div id="skill-cases-tendency" class="skill-cases-tendency" @click="updateSkillCasesTendencyData" />
+  <div id="skill-cases-tendency" class="skill-cases-tendency" @click="updateSkillCasesTendencyData" style="height: 300px;width: 100%" />
 </template>
 
 <script>
