@@ -44,7 +44,7 @@ export default {
   watch: {
     skill_domain_portion: {
       handler() {
-        let data = []
+        const data = []
         const tmp = this.skill_domain_portion
         let other = 0
         for (let i = 0; i < tmp.length; i++) {
@@ -54,7 +54,7 @@ export default {
             other = other + tmp[i].value
           }
         }
-        data.push({ name: 'other', value: other})
+        data.push({ name: 'other', value: other })
         this.skill_domain_portion_chart_option.series[0].data = data
         this.skill_domain_portion_chart.setOption(this.skill_domain_portion_chart_option)
       }

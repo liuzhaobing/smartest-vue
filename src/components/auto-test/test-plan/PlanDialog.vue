@@ -84,16 +84,16 @@
               />
               <div class="addSpaceName">
                 <i
-                  style="font-size: 20px; color: #2d8cf0"
                   v-if="index === form.task_config.config_kg.spaces.length - 1"
-                  @click="addSpaceName"
+                  style="font-size: 20px; color: #2d8cf0"
                   class="el-icon-circle-plus-outline"
+                  @click="addSpaceName"
                 />
                 <i
-                  style="font-size: 20px; color: red"
                   v-if="index !== form.task_config.config_kg.spaces.length - 1"
-                  @click="delSpaceName(item)"
+                  style="font-size: 20px; color: red"
                   class="el-icon-remove-outline"
+                  @click="delSpaceName(item)"
                 />
               </div>
             </el-form-item>
@@ -133,7 +133,7 @@
               autocomplete="off"
               clearable
               :fetch-suggestions="
-            (queryString, cb) => {
+                (queryString, cb) => {
               cb([{ value: '5C1AEC03573747D' }])
             }
           "
@@ -146,7 +146,7 @@
               autocomplete="off"
               clearable
               :fetch-suggestions="
-            (queryString, cb) => {
+                (queryString, cb) => {
               cb([{ value: 'testTenantId' }])
             }
           "
@@ -159,7 +159,7 @@
               autocomplete="off"
               clearable
               :fetch-suggestions="
-            (queryString, cb) => {
+                (queryString, cb) => {
               cb([{ value: 'V3' }])
             }
           "
@@ -211,7 +211,7 @@
               autocomplete="off"
               clearable
               :fetch-suggestions="
-            (queryString, cb) => {
+                (queryString, cb) => {
               cb([{ value: '5C1AEC03573747D' }])
             }
           "
@@ -224,7 +224,7 @@
               autocomplete="off"
               clearable
               :fetch-suggestions="
-            (queryString, cb) => {
+                (queryString, cb) => {
               cb([{ value: 'testTenantId' }])
             }
           "
@@ -237,7 +237,7 @@
               autocomplete="off"
               clearable
               :fetch-suggestions="
-            (queryString, cb) => {
+                (queryString, cb) => {
               cb([{ value: 'V3' }])
             }
           "
@@ -303,7 +303,7 @@
               autocomplete="off"
               clearable
               :fetch-suggestions="
-            (queryString, cb) => {
+                (queryString, cb) => {
               cb([{ value: '5C1AEC03573747D' }])
             }
           "
@@ -313,7 +313,7 @@
       </div>
       <div v-if="active === 1">
         <div>
-          <el-form-item label="数据源类型" prop="task_data_source_label" v-if="form.task_type !== ''">
+          <el-form-item v-if="form.task_type !== ''" label="数据源类型" prop="task_data_source_label">
             <el-select
               v-model="form.task_data_source_label"
               placeholder="选择用例来源"
@@ -325,7 +325,7 @@
         </div>
         <div v-if="form.task_data_source_label === 'source_kg'">
           <el-form-item label="用例总数" prop="case_num">
-            <el-input-number v-model="form.task_data_source.source_kg.case_num" :min="1"/>
+            <el-input-number v-model="form.task_data_source.source_kg.case_num" :min="1" />
           </el-form-item>
           <el-form-item label="断点续传" prop="is_continue">
             <el-tooltip>
@@ -359,7 +359,8 @@
           <el-form-item label="单跳/两跳" prop="c_type">
             <el-radio-group
               v-model="form.task_data_source.source_kg.c_type"
-              style="margin-left: 20px">
+              style="margin-left: 20px"
+            >
               <el-radio :label=1>单跳</el-radio>
               <el-radio :label=2>两跳</el-radio>
             </el-radio-group>
@@ -395,7 +396,7 @@
               autocomplete="off"
               clearable
               :fetch-suggestions="
-            (queryString, cb) => {
+                (queryString, cb) => {
               cb([{ value: 'Sheet1' }])
             }
           "
@@ -463,7 +464,7 @@
               autocomplete="off"
               clearable
               :fetch-suggestions="
-            (queryString, cb) => {
+                (queryString, cb) => {
               cb([{ value: 'Sheet1' }])
             }
           "
@@ -531,7 +532,7 @@
               autocomplete="off"
               clearable
               :fetch-suggestions="
-            (queryString, cb) => {
+                (queryString, cb) => {
               cb([{ value: 'Sheet1' }])
             }
           "
@@ -599,7 +600,7 @@
               autocomplete="off"
               clearable
               :fetch-suggestions="
-            (queryString, cb) => {
+                (queryString, cb) => {
               cb([{ value: 'Sheet1' }])
             }
           "
@@ -667,7 +668,7 @@
               autocomplete="off"
               clearable
               :fetch-suggestions="
-            (queryString, cb) => {
+                (queryString, cb) => {
               cb([{ value: 'Sheet1' }])
             }
           "
