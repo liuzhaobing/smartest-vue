@@ -100,9 +100,9 @@
           </template>
         </div>
         <div v-if="form.task_type === 'skill'">
-          <el-form-item label="请求地址" prop="front_url">
+          <el-form-item label="请求地址" prop="backend_url">
             <el-select
-              v-model="form.task_config.config_skill.front_url"
+              v-model="form.task_config.config_skill.backend_url"
               placeholder="请选择测试地址"
               filterable
               allow-create
@@ -178,9 +178,9 @@
           </el-form-item>
         </div>
         <div v-if="form.task_type === 'qa'">
-          <el-form-item label="请求地址" prop="front_url">
+          <el-form-item label="请求地址" prop="backend_url">
             <el-select
-              v-model="form.task_config.config_qa.front_url"
+              v-model="form.task_config.config_qa.backend_url"
               placeholder="请选择测试地址"
               filterable
               allow-create
@@ -256,7 +256,60 @@
           </el-form-item>
         </div>
         <div v-if="form.task_type === 'tts'"></div>
-        <div v-if="form.task_type === 'asr'"></div>
+        <div v-if="form.task_type === 'asr'">
+          <el-form-item label="前端地址" prop="front_url">
+            <el-select
+              v-model="form.task_config.config_asr.front_url"
+              placeholder="请选择前端地址"
+              filterable
+              allow-create
+              style="display: block; width: 100%;"
+              autocomplete="off"
+            >
+              <el-option v-for="(item, index) in Servers" :value="item.address" :label="item.name + ': ' + item.address" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="ASR地址" prop="asr_url">
+            <el-select
+              v-model="form.task_config.config_asr.asr_url"
+              placeholder="请选择ASR测试地址"
+              filterable
+              allow-create
+              style="display: block; width: 100%;"
+              autocomplete="off"
+            >
+              <el-option v-for="(item, index) in Servers" :value="item.address" :label="item.name + ': ' + item.address" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Control地址" prop="asr_ctrl_url">
+            <el-select
+              v-model="form.task_config.config_asr.asr_ctrl_url"
+              placeholder="请选择ASR Control测试地址"
+              filterable
+              allow-create
+              style="display: block; width: 100%;"
+              autocomplete="off"
+            >
+              <el-option v-for="(item, index) in Servers" :value="item.address" :label="item.name + ': ' + item.address" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Agent ID" prop="agent_id">
+            <el-input-number v-model="form.task_config.config_asr.agent_id" :min="1" />
+          </el-form-item>
+          <el-form-item label="Robot ID" prop="robot_id">
+            <el-autocomplete
+              v-model="form.task_config.config_asr.robot_id"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :fetch-suggestions="
+            (queryString, cb) => {
+              cb([{ value: '5C1AEC03573747D' }])
+            }
+          "
+            />
+          </el-form-item>
+        </div>
       </div>
       <div v-if="active === 1">
         <div>
@@ -398,7 +451,7 @@
           </el-form-item>
         </div>
         <div v-if="form.task_data_source_label === 'cases_skill'">
-          <el-form-item label="用例数据" prop="cases_kg">
+          <el-form-item label="用例数据" prop="cases_skill">
             <json-editor ref="form" v-model="form.task_data_source.cases_skill" />
           </el-form-item>
         </div>
@@ -885,14 +938,14 @@ export default {
             task_group: [{ required: true, message: '请选择任务组', trigger: 'blur' }],
             is_crontab: [],
             crontab_string: [],
-            task_data_source_label: [{ required: true, message: '请输入选择数据源类型', trigger: 'change' }]
+            task_data_source_label: [{ required: true, message: '请输入选择数据源类型', trigger: 'change' }],
+            chan_num: [],
+            is_report: [],
+            report_string: []
           }
           if (this.form.task_type === 'kg') {
             const extraRules = {
-              chan_num: [],
               job_instance_id: [],
-              is_report: [],
-              report_string: [],
               front_url: [{ required: true, trigger: 'blur', validator: this.checkFrontUrl }],
               backend_url: [],
               token: [],
@@ -914,6 +967,25 @@ export default {
                 template_json: []
               }
               this.rules = Object.assign(this.rules, extraRules2)
+            }
+          }
+          if (this.form.task_type === 'skill' || this.form.task_type === 'qa' ) {
+            const extraRules3 = {
+              backend_url: [],
+              agent_id: [],
+              robot_id: [],
+              tenant_code: [],
+              version: [],
+              is_test: [],
+              is_group: [],
+              is_nlu: []
+            }
+            this.rules = Object.assign(this.rules, extraRules3)
+            if (this.form.task_data_source_label === 'source_skill' || this.form.task_data_source_label === 'source_qa') {
+              const extraRules4 = {
+                filter: []
+              }
+              this.rules = Object.assign(this.rules, extraRules4)
             }
           }
         }

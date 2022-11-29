@@ -273,30 +273,52 @@ export default {
             spaces: [{ space_name: '' }]
           },
           config_skill: {
-            front_url: '',
+            backend_url: '',
             agent_id: 666,
             chan_num: 1,
             robot_id: '',
             tenant_code: '',
             version: '',
             is_nlu: 'no',
-            is_test: 'yes'
+            is_test: 'yes',
+            is_report: 'no',
+            report_string: [{ address: '' }]
           },
           config_qa: {
-            front_url: '',
+            backend_url: '',
             agent_id: 666,
             chan_num: 1,
             robot_id: '',
             tenant_code: '',
             version: '',
             is_group: 'no',
-            is_test: 'yes'
+            is_test: 'yes',
+            is_report: 'no',
+            report_string: [{ address: '' }]
           },
           config_tts: {
-            chan_num: 1
+            chan_num: 1,
+            backend_url: '',
+            location: '',
+            type: '',
+            speaker: '',
+            speed: '',
+            volume: '',
+            pitch: '',
+            stream_enable: '',
+            test_pre_handle: '',
+            voice_tuning: '',
+            emotions: '',
+            ParameterSpeakerName: '',
+            IsContext: ''
           },
           config_asr: {
-            chan_num: 1
+            chan_num: 1,
+            front_url: '',
+            asr_url: '',
+            asr_ctrl_url: '',
+            agent_id: 2259,
+            robot_id: ''
           },
         },
         task_data_source: {
@@ -349,6 +371,14 @@ export default {
           },
           cases_kg: '',
           excel_kg: {
+            file_name: '',
+            sheet_name: ''
+          },
+          source_skill: {
+            filter: 'usetest=1'
+          },
+          cases_skill: '',
+          excel_skill: {
             file_name: '',
             sheet_name: ''
           },
