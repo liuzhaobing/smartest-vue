@@ -310,7 +310,9 @@ export default {
             voice_tuning: '',
             emotions: '',
             ParameterSpeakerName: '',
-            IsContext: ''
+            IsContext: '',
+            is_report: 'no',
+            report_string: [{ address: '' }]
           },
           config_asr: {
             chan_num: 1,
@@ -318,7 +320,9 @@ export default {
             asr_url: '',
             asr_ctrl_url: '',
             agent_id: 2259,
-            robot_id: ''
+            robot_id: '',
+            is_report: 'no',
+            report_string: [{ address: '' }]
           }
         },
         task_data_source: {

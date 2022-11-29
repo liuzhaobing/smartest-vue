@@ -758,21 +758,166 @@
           <el-form-item label="并发数" prop="chan_num">
             <el-input-number v-model="form.task_config.config_skill.chan_num" :min="1" />
           </el-form-item>
+          <el-form-item label="测试报告" prop="is_report">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_config.config_skill.is_report"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
+          </el-form-item>
+          <template v-for="(item, index) in form.task_config.config_skill.report_string">
+            <el-form-item
+              :label="'报告地址' + (index+1)"
+              :prop="'form.task_config.config_skill.report_string.' + index + '.address'"
+            >
+              <el-input
+                v-model="item.address"
+                :disabled="form.task_config.config_skill.is_report === 'no'"
+              />
+              <div class="addDelete">
+                <i
+                  style="font-size: 20px; color: #2d8cf0"
+                  v-if="index === form.task_config.config_skill.report_string.length - 1"
+                  @click="addReportString"
+                  class="el-icon-circle-plus-outline"
+                />
+                <i
+                  style="font-size: 20px; color: red"
+                  v-if="index !== form.task_config.config_skill.report_string.length - 1"
+                  @click="delReportString(item)"
+                  class="el-icon-remove-outline"
+                />
+              </div>
+            </el-form-item>
+          </template>
         </div>
         <div v-if="form.task_type === 'qa'">
           <el-form-item label="并发数" prop="chan_num">
             <el-input-number v-model="form.task_config.config_qa.chan_num" :min="1" />
           </el-form-item>
+          <el-form-item label="测试报告" prop="is_report">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_config.config_qa.is_report"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
+          </el-form-item>
+          <template v-for="(item, index) in form.task_config.config_qa.report_string">
+            <el-form-item
+              :label="'报告地址' + (index+1)"
+              :prop="'form.task_config.config_qa.report_string.' + index + '.address'"
+            >
+              <el-input
+                v-model="item.address"
+                :disabled="form.task_config.config_qa.is_report === 'no'"
+              />
+              <div class="addDelete">
+                <i
+                  style="font-size: 20px; color: #2d8cf0"
+                  v-if="index === form.task_config.config_qa.report_string.length - 1"
+                  @click="addReportString"
+                  class="el-icon-circle-plus-outline"
+                />
+                <i
+                  style="font-size: 20px; color: red"
+                  v-if="index !== form.task_config.config_qa.report_string.length - 1"
+                  @click="delReportString(item)"
+                  class="el-icon-remove-outline"
+                />
+              </div>
+            </el-form-item>
+          </template>
         </div>
         <div v-if="form.task_type === 'tts'">
           <el-form-item label="并发数" prop="chan_num">
             <el-input-number v-model="form.task_config.config_tts.chan_num" :min="1" />
           </el-form-item>
+
+          <el-form-item label="测试报告" prop="is_report">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_config.config_tts.is_report"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
+          </el-form-item>
+          <template v-for="(item, index) in form.task_config.config_tts.report_string">
+            <el-form-item
+              :label="'报告地址' + (index+1)"
+              :prop="'form.task_config.config_tts.report_string.' + index + '.address'"
+            >
+              <el-input
+                v-model="item.address"
+                :disabled="form.task_config.config_tts.is_report === 'no'"
+              />
+              <div class="addDelete">
+                <i
+                  style="font-size: 20px; color: #2d8cf0"
+                  v-if="index === form.task_config.config_tts.report_string.length - 1"
+                  @click="addReportString"
+                  class="el-icon-circle-plus-outline"
+                />
+                <i
+                  style="font-size: 20px; color: red"
+                  v-if="index !== form.task_config.config_tts.report_string.length - 1"
+                  @click="delReportString(item)"
+                  class="el-icon-remove-outline"
+                />
+              </div>
+            </el-form-item>
+          </template>
         </div>
         <div v-if="form.task_type === 'asr'">
           <el-form-item label="并发数" prop="chan_num">
             <el-input-number v-model="form.task_config.config_asr.chan_num" :min="1" />
           </el-form-item>
+          <el-form-item label="测试报告" prop="is_report">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_config.config_asr.is_report"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
+          </el-form-item>
+          <template v-for="(item, index) in form.task_config.config_asr.report_string">
+            <el-form-item
+              :label="'报告地址' + (index+1)"
+              :prop="'form.task_config.config_asr.report_string.' + index + '.address'"
+            >
+              <el-input
+                v-model="item.address"
+                :disabled="form.task_config.config_asr.is_report === 'no'"
+              />
+              <div class="addDelete">
+                <i
+                  style="font-size: 20px; color: #2d8cf0"
+                  v-if="index === form.task_config.config_asr.report_string.length - 1"
+                  @click="addReportString"
+                  class="el-icon-circle-plus-outline"
+                />
+                <i
+                  style="font-size: 20px; color: red"
+                  v-if="index !== form.task_config.config_asr.report_string.length - 1"
+                  @click="delReportString(item)"
+                  class="el-icon-remove-outline"
+                />
+              </div>
+            </el-form-item>
+          </template>
         </div>
         <div v-if="form.task_type === 'kg'">
           <el-form-item label="并发数" prop="chan_num">
@@ -1095,6 +1240,24 @@ export default {
             payload.task_data_source = {excel_kg: this.form.task_data_source.excel_kg}
           }
 
+          if (this.form.task_type === 'qa') {
+            this.form.task_config.config_qa.task_name = this.form.task_name
+            payload.task_config = {config_qa: this.form.task_config.config_qa}
+          }
+
+          if (this.form.task_data_source_label === 'source_qa') {
+            payload.task_data_source = {source_qa: this.form.task_data_source.source_qa}
+          }
+          if (this.form.task_data_source_label === 'cases_qa') {
+            if (typeof(this.form.task_data_source.source_kg.template_json) === 'string') {
+              this.form.task_data_source.cases_qa = JSON.parse(this.form.task_data_source.cases_qa)
+            }
+            payload.task_data_source = {cases_qa: this.form.task_data_source.cases_qa}
+          }
+          if (this.form.task_data_source_label === 'excel_qa') {
+            payload.task_data_source = {excel_qa: this.form.task_data_source.excel_qa}
+          }
+
           this.$store.commit('TestPlan/SET_PLAN_DIALOG_VISIBLE', false)
           if (this.form.id > 0) {
             return this.$store.dispatch('TestPlan/updateOnePlanSetting', {id: this.form.id, settings: payload})
@@ -1104,14 +1267,59 @@ export default {
       })
     },
     delReportString: function(item) {
-      const min_len = this.form.task_config.config_kg.report_string.length
-      const index = this.form.task_config.config_kg.report_string.indexOf(item)
-      if (min_len !== 1) {
-        this.form.task_config.config_kg.report_string.splice(index, 1)
+      if (this.form.task_type === 'kg') {
+        const min_len = this.form.task_config.config_kg.report_string.length
+        const index = this.form.task_config.config_kg.report_string.indexOf(item)
+        if (min_len !== 1) {
+          this.form.task_config.config_kg.report_string.splice(index, 1)
+        }
       }
+      if (this.form.task_type === 'qa') {
+        const min_len = this.form.task_config.config_qa.report_string.length
+        const index = this.form.task_config.config_qa.report_string.indexOf(item)
+        if (min_len !== 1) {
+          this.form.task_config.config_qa.report_string.splice(index, 1)
+        }
+      }
+      if (this.form.task_type === 'skill') {
+        const min_len = this.form.task_config.config_skill.report_string.length
+        const index = this.form.task_config.config_skill.report_string.indexOf(item)
+        if (min_len !== 1) {
+          this.form.task_config.config_skill.report_string.splice(index, 1)
+        }
+      }
+      if (this.form.task_type === 'tts') {
+        const min_len = this.form.task_config.config_tts.report_string.length
+        const index = this.form.task_config.config_tts.report_string.indexOf(item)
+        if (min_len !== 1) {
+          this.form.task_config.config_tts.report_string.splice(index, 1)
+        }
+      }
+      if (this.form.task_type === 'asr') {
+        const min_len = this.form.task_config.config_asr.report_string.length
+        const index = this.form.task_config.config_asr.report_string.indexOf(item)
+        if (min_len !== 1) {
+          this.form.task_config.config_asr.report_string.splice(index, 1)
+        }
+      }
+
     },
     addReportString: function() {
-      this.form.task_config.config_kg.report_string.push({address: ""})
+      if (this.form.task_type === 'kg') {
+        this.form.task_config.config_kg.report_string.push({address: ""})
+      }
+      if (this.form.task_type === 'qa') {
+        this.form.task_config.config_qa.report_string.push({address: ""})
+      }
+      if (this.form.task_type === 'skill') {
+        this.form.task_config.config_skill.report_string.push({address: ""})
+      }
+      if (this.form.task_type === 'tts') {
+        this.form.task_config.config_tts.report_string.push({address: ""})
+      }
+      if (this.form.task_type === 'asr') {
+        this.form.task_config.config_asr.report_string.push({address: ""})
+      }
     },
     delSpaceName: function(item) {
       const min_len = this.form.task_config.config_kg.spaces.length
