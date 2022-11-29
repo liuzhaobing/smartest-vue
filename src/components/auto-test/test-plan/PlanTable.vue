@@ -373,15 +373,7 @@ export default {
               }
             ]
           },
-          cases_kg: '',
-          excel_kg: {
-            file_name: '',
-            sheet_name: ''
-          },
-          source_skill: {
-            filter: 'usetest=1'
-          },
-          cases_skill: [
+          cases_kg: [
             {
               id: 400,
               query: '姚明是什么星座',
@@ -392,6 +384,14 @@ export default {
               expect_answer: 'B型',
             },
           ],
+          excel_kg: {
+            file_name: '',
+            sheet_name: ''
+          },
+          source_skill: {
+            filter: 'usetest=1'
+          },
+          cases_skill: '',
           excel_skill: {
             file_name: '',
             sheet_name: ''
