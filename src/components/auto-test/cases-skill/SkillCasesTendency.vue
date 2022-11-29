@@ -33,6 +33,7 @@ export default {
         containLabel: true
       },
       yAxis: {
+        scale: true,
         type: 'value'
       },
       xAxis: {
