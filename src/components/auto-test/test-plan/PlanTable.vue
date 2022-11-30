@@ -391,7 +391,41 @@ export default {
           source_skill: {
             filter: 'usetest=1'
           },
-          cases_skill: '',
+          cases_skill: [
+            {
+              id: 479,
+              question: '李白的诗',
+              source: 'system_service',
+              domain: 'poetry',
+              intent: 'GetOnePoetry',
+              paraminfo: '[{"BeforeValue":"诗","EntityType":"sys.entity.poetry-category","Name":"category","Value":"诗"},{"BeforeValue":"李白","EntityType":"sys.entity.poetry-authorname","Name":"authorname","Value":"李白"}]',
+              robot_id: 'e31ca8c0-4cca-75ba-39e4-5e07a285a6b2@cloudminds-test.com',
+              robot_type: 'ginger',
+              case_version: 11
+            },
+            {
+              id: 480,
+              question: '换一个',
+              source: 'system_service',
+              domain: 'poetry',
+              intent: 'oneMorePoetry',
+              paraminfo: '[{"BeforeValue":"诗","EntityType":"sys.entity.poetry-category","Name":"category","Value":"诗"},{"BeforeValue":"李白","EntityType":"sys.entity.poetry-authorname","Name":"authorname","Value":"李白"}]',
+              robot_id: 'e31ca8c0-4cca-75ba-39e4-5e07a285a6b2@cloudminds-test.com',
+              robot_type: 'ginger',
+              case_version: 11
+            },
+            {
+              id: 481,
+              question: '换首杜甫的',
+              source: 'system_service',
+              domain: 'poetry',
+              intent: 'GetOnePoetry',
+              paraminfo: '[{"BeforeValue":"诗","EntityType":"sys.entity.poetry-category","Name":"category","Value":"诗"},{"BeforeValue":"杜甫","EntityType":"sys.entity.poetry-authorname","Name":"authorname","Value":"杜甫"}]',
+              robot_id: 'e31ca8c0-4cca-75ba-39e4-5e07a285a6b2@cloudminds-test.com',
+              robot_type: 'ginger',
+              case_version: 11
+            }
+          ],
           excel_skill: {
             file_name: '',
             sheet_name: ''

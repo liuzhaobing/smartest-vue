@@ -1249,13 +1249,31 @@ export default {
             payload.task_data_source = {source_qa: this.form.task_data_source.source_qa}
           }
           if (this.form.task_data_source_label === 'cases_qa') {
-            if (typeof(this.form.task_data_source.source_kg.template_json) === 'string') {
+            if (typeof(this.form.task_data_source.cases_qa) === 'string') {
               this.form.task_data_source.cases_qa = JSON.parse(this.form.task_data_source.cases_qa)
             }
             payload.task_data_source = {cases_qa: this.form.task_data_source.cases_qa}
           }
           if (this.form.task_data_source_label === 'excel_qa') {
             payload.task_data_source = {excel_qa: this.form.task_data_source.excel_qa}
+          }
+
+          if (this.form.task_type === 'skill') {
+            this.form.task_config.config_skill.task_name = this.form.task_name
+            payload.task_config = {config_skill: this.form.task_config.config_skill}
+          }
+
+          if (this.form.task_data_source_label === 'source_skill') {
+            payload.task_data_source = {source_skill: this.form.task_data_source.source_skill}
+          }
+          if (this.form.task_data_source_label === 'cases_skill') {
+            if (typeof(this.form.task_data_source.cases_skill) === 'string') {
+              this.form.task_data_source.cases_skill = JSON.parse(this.form.task_data_source.cases_skill)
+            }
+            payload.task_data_source = {cases_skill: this.form.task_data_source.cases_skill}
+          }
+          if (this.form.task_data_source_label === 'excel_skill') {
+            payload.task_data_source = {excel_skill: this.form.task_data_source.excel_skill}
           }
 
           this.$store.commit('TestPlan/SET_PLAN_DIALOG_VISIBLE', false)
