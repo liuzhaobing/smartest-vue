@@ -176,6 +176,19 @@
               />
             </el-tooltip>
           </el-form-item>
+          <el-form-item label="Debug地址" prop="nlu_url">
+            <el-select
+              v-model="form.task_config.config_skill.nlu_url"
+              placeholder="请选择NLU测试地址"
+              filterable
+              allow-create
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              :disabled="form.task_config.config_skill.is_nlu === 'no'"
+            >
+              <el-option v-for="(item, index) in Servers" :value="item.address" :label="item.name + ': ' + item.address" />
+            </el-select>
+          </el-form-item>
         </div>
         <div v-if="form.task_type === 'qa'">
           <el-form-item label="请求地址" prop="backend_url">

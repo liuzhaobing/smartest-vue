@@ -280,6 +280,7 @@ export default {
             tenant_code: '',
             version: '',
             is_nlu: 'no',
+            nlu_url: '',
             is_test: 'yes',
             is_report: 'no',
             report_string: [{ address: '' }]
