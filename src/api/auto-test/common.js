@@ -31,3 +31,26 @@ export function listServerFunc(types) {
     params: { types: types }
   })
 }
+
+export function removeServerFunc(id) {
+  return request({
+    url: `/api/v1/server/${id}`,
+    method: 'delete'
+  })
+}
+
+export function updateServerFunc(id, payload) {
+  return request({
+    url: `/api/v1/server/${id}`,
+    method: 'put',
+    data: payload
+  })
+}
+
+export function addServerFunc(payload) {
+  return request({
+    url: `/api/v1/server`,
+    method: 'post',
+    data: payload
+  })
+}

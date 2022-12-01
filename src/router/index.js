@@ -81,59 +81,13 @@ export const constantRoutes = [
         path: 'menu3',
         component: () => import('@/views/auto-test/test-data'),
         name: 'Menu3',
-        meta: { title: '用例管理' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/auto-test/test-data/nlp-common-kg'),
-            name: 'Menu1-1',
-            meta: { title: '知识图谱' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/auto-test/test-data/nlp-skill'),
-            name: 'Menu1-2',
-            meta: { title: '系统技能' }
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/auto-test/test-data/nlp-qa'),
-            name: 'Menu1-3',
-            meta: { title: '通用QA' }
-          },
-          {
-            path: 'menu1-4',
-            component: () => import('@/views/auto-test/test-data/nlp-asr'),
-            name: 'Menu1-4',
-            meta: { title: '自研ASR' }
-          },
-          {
-            path: 'menu1-5',
-            component: () => import('@/views/auto-test/test-data/nlp-tts'),
-            name: 'Menu1-5',
-            meta: { title: '自研TTS' }
-          }
-        ]
+        meta: { title: '用例管理' }
       },
       {
         path: 'menu4',
-        component: () => import('@/views/auto-test/test-env'),
+        component: () => import('@/views/auto-test/test-env/test-address'),
         name: 'Menu4',
-        meta: { title: '环境配置' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/auto-test/test-env/test-address'),
-            name: 'Menu1-1',
-            meta: { title: '测试环境' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/auto-test/test-env/test-type'),
-            name: 'Menu1-2',
-            meta: { title: '任务类型' }
-          }
-        ]
+        meta: { title: '环境配置' }
       },
       {
         path: 'menu5',

@@ -10,7 +10,7 @@ import {
 } from '@/api/auto-test/test-plan'
 import { Message } from 'element-ui'
 import { exportResults } from '@/api/auto-test/test-report'
-import { listFileFunc, listServerFunc } from '@/api/auto-test/common'
+import { addServerFunc, removeServerFunc, updateServerFunc, listFileFunc, listServerFunc } from '@/api/auto-test/common'
 
 const getDefaultState = () => {
   return {
@@ -410,6 +410,48 @@ const actions = {
         }
         resolve()
       }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  addServers: function({ state, commit }, payload) {
+    return new Promise((resolve, reject) => {
+      addServerFunc(payload).then(response => {
+        const { code } = response
+        if (code === 200) {
+          Message.success('创建成功！')
+        }
+        resolve()
+      }).catch(error => {
+        Message.success('创建失败！')
+        reject(error)
+      })
+    })
+  },
+  delServers: function({ state, commit }, id) {
+    return new Promise((resolve, reject) => {
+      removeServerFunc(id).then(response => {
+        const { code } = response
+        if (code === 200) {
+          Message.success('删除成功！')
+        }
+        resolve()
+      }).catch(error => {
+        Message.success('删除失败！')
+        reject(error)
+      })
+    })
+  },
+  updateServers: function({ state, commit }, payload) {
+    return new Promise((resolve, reject) => {
+      updateServerFunc(payload.id, payload.payload).then(response => {
+        const { code } = response
+        if (code === 200) {
+          Message.success('更新成功！')
+        }
+        resolve()
+      }).catch(error => {
+        Message.success('更新失败！')
         reject(error)
       })
     })
