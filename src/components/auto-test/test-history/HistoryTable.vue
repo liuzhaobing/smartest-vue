@@ -136,7 +136,7 @@
                 icon="el-icon-download"
                 style="margin-left: 10px"
                 circle
-                :disabled="scope.row.status > 32"
+                :disabled="scope.row.result_file === ''"
                 @click="handleMissionDownload(scope.row)"
               />
             </el-tooltip>
@@ -184,18 +184,25 @@ export default {
       Message.info('敬请期待！')
     },
     handleMissionDownload(row) {
-      Message.info('正在导出！')
-      this.$store.commit('TestPlan/SET_REPORT_COLLECTION', `${row.task_type}_results`)
-      this.$store.commit('TestPlan/SET_REPORT_FILTER', { job_instance_id: row.job_instance_id })
-      this.$store.dispatch('TestPlan/exportData', this.$store.getters['TestPlan/getReportRequestParams']).then(() => {
-        Message.success('导出成功！')
-        const result = this.$store.getters['TestPlan/getFileName']
-        const a = document.createElement('a')
-        a.href = `${process.env.VUE_APP_BASE_API}/api/v1/download?filename=${result}`
-        a.download = result.split('/').pop()
-        a.click()
-        window.URL.revokeObjectURL(a.href)
-      })
+      // Message.info('正在导出！')
+      // this.$store.commit('TestPlan/SET_REPORT_COLLECTION', `${row.task_type}_results`)
+      // this.$store.commit('TestPlan/SET_REPORT_FILTER', { job_instance_id: row.job_instance_id })
+      // this.$store.dispatch('TestPlan/exportData', this.$store.getters['TestPlan/getReportRequestParams']).then(() => {
+      //   Message.success('导出成功！')
+      //   const result = this.$store.getters['TestPlan/getFileName']
+      //   const a = document.createElement('a')
+      //   a.href = `${process.env.VUE_APP_BASE_API}/api/v1/download?filename=${result}`
+      //   a.download = result.split('/').pop()
+      //   a.click()
+      //   window.URL.revokeObjectURL(a.href)
+      // })
+      const result = row.result_file
+      const a = document.createElement('a')
+      a.href = `${process.env.VUE_APP_BASE_API}/api/v1/download?filename=${result}`
+      a.download = result.split('/').pop()
+      a.click()
+      window.URL.revokeObjectURL(a.href)
+      Message.success('导出成功！')
     }
   }
 }
