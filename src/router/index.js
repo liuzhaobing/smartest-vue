@@ -46,9 +46,9 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/overview',
     children: [{
-      path: 'dashboard',
+      path: 'overview',
       name: 'SmartTalk',
       component: () => import('@/views/auto-test/cases-skill/SkillReport'),
       meta: { title: 'SmartTalk', icon: 'dashboard' }
@@ -56,43 +56,43 @@ export const constantRoutes = [
   },
 
   {
-    path: '/nested',
+    path: '/smartest',
     component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
+    redirect: '/smartest/test-plan',
+    name: 'smartest',
     meta: {
       title: '自动化测试',
       icon: 'nested'
     },
     children: [
       {
-        path: 'menu1',
+        path: 'test-plan',
         component: () => import('@/views/auto-test/test-plan'),
-        name: 'Menu1',
+        name: 'test-plan',
         meta: { title: '测试计划' }
       },
       {
-        path: 'menu2',
+        path: 'test-history',
         component: () => import('@/views/auto-test/test-history'),
-        name: 'Menu2',
+        name: 'test-history',
         meta: { title: '执行历史' }
       },
       {
-        path: 'menu3',
+        path: 'test-data',
         component: () => import('@/views/auto-test/test-data'),
-        name: 'Menu3',
+        name: 'test-data',
         meta: { title: '用例管理' }
       },
       {
-        path: 'menu4',
+        path: 'test-env',
         component: () => import('@/views/auto-test/test-env/test-address'),
-        name: 'Menu4',
+        name: 'test-env',
         meta: { title: '环境配置' }
       },
       {
-        path: 'menu5',
+        path: 'data-analysis',
         component: () => import('@/views/auto-test/test-table'),
-        name: 'Menu5',
+        name: 'data-analysis',
         meta: { title: '调试页面' }
       }
     ]
