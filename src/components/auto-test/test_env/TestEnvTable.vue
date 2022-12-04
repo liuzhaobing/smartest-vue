@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="table-wrapper" style="height: 410px;width: 100%">
     <div class="top-btn">
       <el-button
         type="text"
@@ -22,6 +22,7 @@
       element-loading-text="Loading"
       border
       fit
+      max-height="350px"
       highlight-current-row
       :cell-style="{
         padding: '1px'
@@ -39,21 +40,12 @@
       </el-table-column>
       <el-table-column label="名称">
         <template slot-scope="scope">
-          {{ scope.row.name }}
+          <i popper-class="cell-popover" trigger="hover" placement="top" :title="scope.row.address">
+            {{ scope.row.name }}
+          </i>
         </template>
       </el-table-column>
-      <el-table-column label="类型">
-        <template slot-scope="scope">
-          <span>{{ scope.row.types }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="地址">
-        <template slot-scope="scope">
-          <span>{{ scope.row.address }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" label="操作" width="150">
+      <el-table-column align="center" label="操作" width="90px">
         <template slot-scope="scope">
           <el-row>
             <el-tooltip
@@ -66,7 +58,7 @@
                 type="warning"
                 size="mini"
                 icon="el-icon-edit"
-                style="margin-left: 10px"
+                style="margin-right: 8px"
                 circle
                 @click="handleEditServer(scope.row)"
               />
@@ -81,7 +73,6 @@
                 type="danger"
                 size="mini"
                 icon="el-icon-delete"
-                style="margin-left: 10px"
                 circle
               />
             </el-popconfirm>
@@ -119,7 +110,7 @@
 
 <script>
 export default {
-  name: "TestEnvTable",
+  name: 'TestEnvTable',
   data() {
     return {
       load_status: false,
@@ -160,7 +151,7 @@ export default {
       set(val) {
         this.server_info = val
       }
-    },
+    }
   },
   methods: {
     handleEditServer(row) {
@@ -192,8 +183,8 @@ export default {
           types: this.form.types,
           address: this.form.address
         }
-        if (this.form.id >0) {
-          this.$store.dispatch('TestPlan/updateServers', {id: this.form.id, payload: payload})
+        if (this.form.id > 0) {
+          this.$store.dispatch('TestPlan/updateServers', { id: this.form.id, payload: payload })
         } else {
           this.$store.dispatch('TestPlan/addServers', payload)
         }
@@ -203,7 +194,6 @@ export default {
   }
 }
 </script>
-
 
 <style  rel="stylesheet/scss" lang="scss">
 .table-wrapper {
@@ -220,71 +210,7 @@ export default {
   display: flex;
   width: calc(100% - 10px);
   justify-content: flex-end;
-  padding: 5px;
 }
 
-.configJson {
-  ::v-deep .el-dialog__body {
-    padding: 5px;
-  }
-}
-.page-register {
-  .header {
-    //border-bottom: 2px solid rgb(235, 232, 232);
-    min-width: 980px;
-    color: #666;
-
-    header {
-      margin: 0 auto;
-      padding: 10px 0;
-      width: 980px;
-
-      .login {
-        float: right;
-      }
-
-      .bold {
-        font-style: normal;
-      }
-    }
-  }
-
-  .register {
-    color: #1890ff;
-  }
-
-  a {
-    color: #1890ff;
-    text-decoration: none;
-    background-color: transparent;
-    outline: none;
-    cursor: pointer;
-    transition: color 0.3s;
-  }
-
-  > section {
-    margin: 0 auto 30px;
-    padding-top: 30px;
-    width: 980px;
-    min-height: 300px;
-    padding-right: 100px;
-    box-sizing: border-box;
-
-    .status {
-      font-size: 12px;
-      margin-left: 20px;
-      color: #e6a23c;
-    }
-
-    .error {
-      color: red;
-    }
-  }
-
-  .footer {
-    text-align: center;
-    padding-right: 100px;
-  }
-}
 </style>
 

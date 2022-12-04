@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="table-wrapper">
     <div class="top-btn">
       <el-button
         type="text"
@@ -16,6 +16,9 @@
       border
       fit
       highlight-current-row
+      :row-style="{
+        height: '20px'
+      }"
       :cell-style="{
         padding: '1px'
       }"
@@ -45,7 +48,7 @@
           <el-progress :text-inside="true" :stroke-width="18" :percentage="scope.row.progress_percent" status="success" />
         </template>
       </el-table-column>
-      <el-table-column label="用例进度" width="110" align="center">
+      <el-table-column label="用例进度" width="120" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.progress }}</span>
         </template>
@@ -103,7 +106,7 @@
                 type="danger"
                 size="mini"
                 icon="el-icon-switch-button"
-                style="margin-left: 10px"
+                style="margin-right: 8px"
                 circle
                 :disabled="scope.row.status <= 128"
               />
@@ -118,7 +121,6 @@
                 type="success"
                 size="mini"
                 icon="el-icon-data-analysis"
-                style="margin-left: 10px"
                 circle
                 :disabled="scope.row.status > 32"
                 @click="handleMissionDetail(scope.row)"
@@ -134,7 +136,6 @@
                 type="info"
                 size="mini"
                 icon="el-icon-download"
-                style="margin-left: 10px"
                 circle
                 :disabled="scope.row.result_file === ''"
                 @click="handleMissionDownload(scope.row)"
@@ -177,7 +178,7 @@ export default {
   },
   methods: {
     handleTerminateMission(row) {
-      this.$store.commit('TestPlan/SET_STOP', {task_name: row.task_name})
+      this.$store.commit('TestPlan/SET_STOP', { task_name: row.task_name })
       return this.$store.dispatch('TestPlan/terminateMission')
     },
     handleMissionDetail(row) {
@@ -209,7 +210,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.app-container {
+.table-wrapper {
   width: 100%;
   height: 100%;
   border-radius: 10px 10px 10px 10px;
@@ -223,7 +224,6 @@ export default {
   display: flex;
   width: calc(100% - 10px);
   justify-content: flex-end;
-  padding: 5px;
 }
 
 .configJson {

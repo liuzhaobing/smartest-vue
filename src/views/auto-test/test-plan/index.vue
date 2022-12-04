@@ -1,6 +1,6 @@
 <template>
   <div class="s-content">
-    <PlanTable style="padding:30px;"/>
+    <PlanTable />
     <PlanPagination />
     <PlanDialog />
     <JsonDialog />

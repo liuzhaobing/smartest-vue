@@ -1,6 +1,6 @@
 <template>
   <div class="s-content">
-    <HistoryTable style="padding:30px;"/>
+    <HistoryTable />
     <HistoryPagination />
   </div>
 </template>

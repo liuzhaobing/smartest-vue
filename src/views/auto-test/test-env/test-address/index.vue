@@ -1,6 +1,12 @@
 <template>
   <div style="padding:30px;">
-    <ServerTable />
+    <el-row :gutter="32">
+      <el-col :xs="24" :sm="24" :lg="8">
+        <div class="chart-wrapper">
+          <ServerTable />
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>

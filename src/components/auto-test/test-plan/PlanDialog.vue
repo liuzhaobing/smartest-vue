@@ -449,7 +449,7 @@
                 <el-button size="small" type="primary" slot="trigger">点击上传</el-button>
                 <a
                   :href="kgTemplateAddress"
-                  download="demo_kg.xlsx"
+                  :download="kgTemplateFile"
                   style="margin-left: 20px"
                 >下载模板</a>
                 <div class="el-upload__tip" slot="tip">只能上传xlsx文件</div>
@@ -1035,14 +1035,17 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('TestPlan/listUploadedFiles', "./upload")
+    this.$store.dispatch('TestPlan/listUploadedFiles', './upload')
   },
   computed: {
     uploadAddress() {
       return process.env.VUE_APP_BASE_API + '/api/v1/upload'
     },
     kgTemplateAddress() {
-      return process.env.VUE_APP_BASE_API + '/api/v1/download?filename=./templates/demo_kg.xlsx'
+      return process.env.VUE_APP_BASE_API + '/api/v1/download?filename=./templates/' + this.kgTemplateFile
+    },
+    kgTemplateFile() {
+      return 'demo_' + this.form.task_type + '.xlsx'
     },
     remoteFiles() {
       return this.$store.getters['TestPlan/getUploadedFiles']

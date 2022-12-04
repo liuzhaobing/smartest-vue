@@ -378,12 +378,13 @@ export default {
             {
               id: 400,
               query: '姚明是什么星座',
-              expect_answer: '处女座',
-            },{
+              expect_answer: '处女座'
+            },
+            {
               id: 401,
               query: '你知道姚明的血型吗',
-              expect_answer: 'B型',
-            },
+              expect_answer: 'B型'
+            }
           ],
           excel_kg: {
             file_name: '',
@@ -498,7 +499,6 @@ export default {
   display: flex;
   width: calc(100% - 10px);
   justify-content: flex-end;
-  padding: 5px;
 }
 
 .configJson {
