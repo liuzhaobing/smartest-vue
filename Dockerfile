@@ -1,10 +1,12 @@
-FROM harbor.cloudminds.com/library/node
+FROM node:14.19.1
 
 MAINTAINER liuzhaobing
 
 ADD . /opt/smartest-vue/
 
 WORKDIR /opt/smartest-vue/
+
+RUN npm install -g npm@6.14.16
 
 RUN npm install
 
