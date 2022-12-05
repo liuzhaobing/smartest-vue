@@ -1,0 +1,19 @@
+FROM harbor.cloudminds.com/library/node
+
+MAINTAINER liuzhaobing
+
+ADD . /opt/smartest-vue/
+
+WORKDIR /opt/smartest-vue/
+
+RUN npm install
+
+RUN npm rebuild node-sass --force
+
+ENV HOST 0.0.0.0
+
+ENV PORT 27996
+
+EXPOSE 27996
+
+CMD ["npm", "run", "dev"]
