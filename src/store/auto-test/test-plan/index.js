@@ -38,7 +38,9 @@ const getDefaultState = () => {
       job_instance_id: '',
       task_name: '',
       task_type: '',
-      status: 0
+      status: 0,
+      page_num: 1,
+      page_size: 30
     },
     listReportParams: {
       pagenum: 1,
@@ -201,6 +203,12 @@ const getters = {
   },
   getListPlanParamsPz(state) {
     return state.listPlanParams.page_size
+  },
+  getListHistoryParamsPn(state) {
+    return state.listHistoryParams.page_num
+  },
+  getListHistoryParamsPz(state) {
+    return state.listHistoryParams.page_size
   }
 }
 
@@ -276,6 +284,12 @@ const mutations = {
   },
   SET_LIST_PLAN_PARAMS_PZ: (state, value) => {
     state.listPlanParams.page_size = value
+  },
+  SET_LIST_HISTORY_PARAMS_PN: (state, value) => {
+    state.listHistoryParams.page_num = value
+  },
+  SET_LIST_HISTORY_PARAMS_PZ: (state, value) => {
+    state.listHistoryParams.page_size = value
   }
 }
 
