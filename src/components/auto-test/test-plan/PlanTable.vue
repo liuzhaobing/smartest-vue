@@ -1,20 +1,29 @@
 <template>
   <div class="table-wrapper">
-    <div class="top-btn">
-      <el-button
-        type="text"
-        icon="el-icon-document"
-        style="font-size: 14px"
-        @click="addPlan"
-      >新增任务
-      </el-button>
-      <el-button
-        type="text"
-        style="font-size: 14px"
-        icon="el-icon-refresh"
-        @click="$store.dispatch('TestPlan/getPlansData')"
-      >刷新
-      </el-button>
+    <div class="filter-container">
+      <el-select
+        v-model="filterPlanParams.task_group"
+        clearable
+        filterable
+        placeholder="任务分组搜索"
+        round
+        size="mini"
+        style="height: 20px; width: 150px; margin-right: 10px">
+        <el-option v-for="g in taskGroups" :value="g" :label="g" />
+      </el-select>
+      <el-select
+        v-model="filterPlanParams.task_type"
+        clearable
+        placeholder="任务类型搜索"
+        round
+        size="mini"
+        style="height: 20px; width: 150px; margin-right: 10px">
+        <el-option v-for="(value, key, index) in preData" :value="key" :label="value.name" />
+      </el-select>
+      <el-input v-model="filterPlanParams.task_name" clearable placeholder="计划名称搜索" round size="mini" style="height: 20px; width: 200px; margin-right: 10px" />
+      <el-button type="primary" icon="el-icon-search" @click="handleFilter" size="mini">查询</el-button>
+      <el-button type="primary" icon="el-icon-document" size="mini" @click="addPlan">新增计划</el-button>
+      <el-button type="primary" icon="el-icon-refresh" size="mini" @click="$store.dispatch('TestPlan/getPlansData')">刷新</el-button>
     </div>
     <el-table
       v-loading="loading"
@@ -151,7 +160,7 @@
     <el-dialog title="修改定时器" :visible.sync="crontabVisible" append-to-body>
       <el-form :model="updateCrontabSetting">
         <el-form-item label="crontab表达式">
-          <el-input v-model="updateCrontabSetting.settings.crontab_string" autocomplete="off" :placeholder="'[分] [时] [天] [月] [星期几]      例如每周四早上9点30分执行：30 9 * * 4'" />
+          <el-input clearable v-model="updateCrontabSetting.settings.crontab_string" autocomplete="off" :placeholder="'[分] [时] [天] [月] [星期几]      例如每周四早上9点30分执行：30 9 * * 4'" />
         </el-form-item>
         <vue-cron-linux ref="vue-cron-linux" :data="updateCrontabSetting.settings.crontab_string" @submit="onCronChange" />
       </el-form>
@@ -180,7 +189,14 @@ export default {
           is_crontab: 'yes',
           crontab_string: ''
         }
-      }
+      },
+      filterPlanParams: {
+        task_name: '',
+        task_type: '',
+        task_group: '',
+        is_crontab: ''
+      },
+
     }
   },
   computed: {
@@ -200,6 +216,9 @@ export default {
     },
     preData() {
       return this.$store.getters['TestPlan/getPreData']
+    },
+    taskGroups() {
+      return this.$store.getters['TestPlan/getTaskGroups']
     }
   },
   methods: {
@@ -391,7 +410,7 @@ export default {
             sheet_name: ''
           },
           source_skill: {
-            filter: 'usetest=1'
+            filter: 'is_smoke=1'
           },
           cases_skill: [
             {
@@ -480,7 +499,14 @@ export default {
           }
         }
       })
+    },
+    handleFilter() {
+      this.$store.commit('TestPlan/SET_LIST_PLAN_PARAMS', this.filterPlanParams)
+      return this.$store.dispatch('TestPlan/getPlansData')
     }
+  },
+  mounted() {
+    this.filterPlanParams = this.$store.getters['TestPlan/getListPlanParams']
   }
 }
 </script>
@@ -495,10 +521,10 @@ export default {
   box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%), 0 0 6px 0 rgb(0 0 0 / 4%);
 }
 
-.top-btn {
+.filter-container {
   display: flex;
   width: calc(100% - 10px);
-  justify-content: flex-end;
+  margin: 15px 100px 5px 15px;
 }
 
 .configJson {

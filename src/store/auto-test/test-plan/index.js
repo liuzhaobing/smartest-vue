@@ -30,7 +30,9 @@ const getDefaultState = () => {
       task_name: '',
       task_type: '',
       task_group: '',
-      is_crontab: ''
+      is_crontab: '',
+      page_num: 1,
+      page_size: 30
     },
     listHistoryParams: {
       job_instance_id: '',
@@ -190,6 +192,15 @@ const getters = {
   },
   getServers(state) {
     return state.servers
+  },
+  getListPlanParams(state) {
+    return state.listPlanParams
+  },
+  getListPlanParamsPn(state) {
+    return state.listPlanParams.page_num
+  },
+  getListPlanParamsPz(state) {
+    return state.listPlanParams.page_size
   }
 }
 
@@ -256,6 +267,15 @@ const mutations = {
   },
   SET_SERVERS: (state, value) => {
     state.servers = value
+  },
+  SET_LIST_PLAN_PARAMS: (state, value) => {
+    state.listPlanParams = value
+  },
+  SET_LIST_PLAN_PARAMS_PN: (state, value) => {
+    state.listPlanParams.page_num = value
+  },
+  SET_LIST_PLAN_PARAMS_PZ: (state, value) => {
+    state.listPlanParams.page_size = value
   }
 }
 

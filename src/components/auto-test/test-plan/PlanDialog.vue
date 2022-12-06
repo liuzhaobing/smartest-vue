@@ -33,6 +33,7 @@
               v-model="form.task_config.config_kg.env_info.front_url"
               placeholder="请选择图谱前端地址"
               filterable
+              clearable
               allow-create
               style="display: block; width: 100%;"
               autocomplete="off"
@@ -45,6 +46,7 @@
               v-model="form.task_config.config_kg.env_info.backend_url"
               placeholder="请选择图谱后端地址"
               filterable
+              clearable
               allow-create
               style="display: block; width: 100%;"
               autocomplete="off"
@@ -53,21 +55,23 @@
             </el-select>
           </el-form-item>
           <el-form-item label="登录用户" prop="username">
-            <el-input v-model="form.task_config.config_kg.env_info.username" />
+            <el-input clearable v-model="form.task_config.config_kg.env_info.username" />
           </el-form-item>
           <el-form-item label="登录密码" prop="pwd">
-            <el-input v-model="form.task_config.config_kg.env_info.pwd" />
+            <el-input clearable v-model="form.task_config.config_kg.env_info.pwd" />
           </el-form-item>
           <el-form-item label="Token" prop="token">
             <el-input
               v-model="form.task_config.config_kg.env_info.token"
               placeholder="非必填"
+              clearable
             />
           </el-form-item>
           <el-form-item label="实例ID" prop="job_instance_id">
             <el-input
               v-model="form.task_config.config_kg.job_instance_id"
               placeholder="非必填"
+              clearable
             />
           </el-form-item>
           <template v-for="(item, index) in form.task_config.config_kg.spaces">
@@ -80,6 +84,7 @@
                 style="display: block; width: 100%;"
                 autocomplete="off"
                 clearable
+                placeholder="请选择或输入待测试图空间"
                 :fetch-suggestions="spacesNameSearch"
               />
               <div class="addSpaceName">
@@ -105,6 +110,7 @@
               v-model="form.task_config.config_skill.backend_url"
               placeholder="请选择测试地址"
               filterable
+              clearable
               allow-create
               style="display: block; width: 100%;"
               autocomplete="off"
@@ -181,6 +187,7 @@
               v-model="form.task_config.config_skill.nlu_url"
               placeholder="请选择NLU测试地址"
               filterable
+              clearable
               allow-create
               style="display: block; width: 100%;"
               autocomplete="off"
@@ -196,6 +203,7 @@
               v-model="form.task_config.config_qa.backend_url"
               placeholder="请选择测试地址"
               filterable
+              clearable
               allow-create
               style="display: block; width: 100%;"
               autocomplete="off"
@@ -407,6 +415,7 @@
               v-model="form.task_data_source.excel_kg.sheet_name"
               style="display: block; width: 100%;"
               autocomplete="off"
+              placeholder="请输入用例所在的Sheet页标签"
               clearable
               :fetch-suggestions="
                 (queryString, cb) => {
@@ -421,6 +430,7 @@
                 style="width: 70%"
                 v-model="form.task_data_source.excel_kg.file_name"
                 filterable
+                clearable
                 placeholder="请选择"
                 v-show="fileType === 'select'"
               >
@@ -450,9 +460,9 @@
                 <a
                   :href="kgTemplateAddress"
                   :download="kgTemplateFile"
-                  style="margin-left: 20px"
+                  style="margin-left: 20px;color: #2d8cf0"
                 >下载模板</a>
-                <div class="el-upload__tip" slot="tip">只能上传xlsx文件</div>
+                <div class="el-upload__tip" slot="tip" style="color: crimson">只能上传xlsx文件</div>
               </el-upload>
               <el-button @click="changeFileType" type="success" style="height: 36px">{{ fileType === 'select' ? '我要上传文件' : '选择已有文件' }}
               </el-button>
@@ -461,7 +471,22 @@
         </div>
         <div v-if="form.task_data_source_label === 'source_skill'">
           <el-form-item label="过滤条件" prop="filter">
-            <el-input v-model="form.task_data_source.source_skill.filter"></el-input>
+            <el-autocomplete
+              v-model="form.task_data_source.source_skill.filter"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              placeholder="请输入基线用例筛选条件"
+              clearable
+              :fetch-suggestions="
+                (queryString, cb) => {
+              cb([{ value: 'usetest=1' },
+              { value: 'is_smoke=1' },
+              { value: `domain in ('poetry', 'story')` },
+              { value: `usetest=1 and case_version < (select max(case_version) from skill_base_test)` }])
+            }
+          "
+            />
+
           </el-form-item>
         </div>
         <div v-if="form.task_data_source_label === 'cases_skill'">
@@ -475,6 +500,7 @@
               v-model="form.task_data_source.excel_skill.sheet_name"
               style="display: block; width: 100%;"
               autocomplete="off"
+              placeholder="请输入用例所在的Sheet页标签"
               clearable
               :fetch-suggestions="
                 (queryString, cb) => {
@@ -489,6 +515,7 @@
                 style="width: 70%"
                 v-model="form.task_data_source.excel_skill.file_name"
                 filterable
+                clearable
                 placeholder="请选择"
                 v-show="fileType === 'select'"
               >
@@ -518,9 +545,9 @@
                 <a
                   :href="kgTemplateAddress"
                   download="demo_kg.xlsx"
-                  style="margin-left: 20px"
+                  style="margin-left: 20px;color: #2d8cf0"
                 >下载模板</a>
-                <div class="el-upload__tip" slot="tip">只能上传xlsx文件</div>
+                <div class="el-upload__tip" slot="tip" style="color: crimson">只能上传xlsx文件</div>
               </el-upload>
               <el-button @click="changeFileType" type="success" style="height: 36px">{{ fileType === 'select' ? '我要上传文件' : '选择已有文件' }}
               </el-button>
@@ -529,7 +556,19 @@
         </div>
         <div v-if="form.task_data_source_label === 'source_qa'">
           <el-form-item label="过滤条件" prop="filter">
-            <el-input v-model="form.task_data_source.source_qa.filter"></el-input>
+            <el-autocomplete
+              v-model="form.task_data_source.source_qa.filter"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              placeholder="请输入基线用例筛选条件"
+              clearable
+              :fetch-suggestions="
+                (queryString, cb) => {
+              cb([{ value: 'usetest=1' },
+              { value: 'is_smoke=1' }])
+            }
+          "
+            />
           </el-form-item>
         </div>
         <div v-if="form.task_data_source_label === 'cases_qa'">
@@ -543,6 +582,7 @@
               v-model="form.task_data_source.excel_qa.sheet_name"
               style="display: block; width: 100%;"
               autocomplete="off"
+              placeholder="请输入用例所在的Sheet页标签"
               clearable
               :fetch-suggestions="
                 (queryString, cb) => {
@@ -557,6 +597,7 @@
                 style="width: 70%"
                 v-model="form.task_data_source.excel_qa.file_name"
                 filterable
+                clearable
                 placeholder="请选择"
                 v-show="fileType === 'select'"
               >
@@ -586,9 +627,9 @@
                 <a
                   :href="kgTemplateAddress"
                   download="demo_kg.xlsx"
-                  style="margin-left: 20px"
+                  style="margin-left: 20px;color: #2d8cf0"
                 >下载模板</a>
-                <div class="el-upload__tip" slot="tip">只能上传xlsx文件</div>
+                <div class="el-upload__tip" slot="tip" style="color: crimson">只能上传xlsx文件</div>
               </el-upload>
               <el-button @click="changeFileType" type="success" style="height: 36px">{{ fileType === 'select' ? '我要上传文件' : '选择已有文件' }}
               </el-button>
@@ -597,7 +638,19 @@
         </div>
         <div v-if="form.task_data_source_label === 'source_tts'">
           <el-form-item label="过滤条件" prop="filter">
-            <el-input v-model="form.task_data_source.source_tts.filter"></el-input>
+            <el-autocomplete
+              v-model="form.task_data_source.source_tts.filter"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              placeholder="请输入基线用例筛选条件"
+              clearable
+              :fetch-suggestions="
+                (queryString, cb) => {
+              cb([{ value: 'usetest=1' },
+              { value: 'is_smoke=1' }])
+            }
+          "
+            />
           </el-form-item>
         </div>
         <div v-if="form.task_data_source_label === 'cases_tts'">
@@ -665,7 +718,19 @@
         </div>
         <div v-if="form.task_data_source_label === 'source_asr'">
           <el-form-item label="过滤条件" prop="filter">
-            <el-input v-model="form.task_data_source.source_asr.filter"></el-input>
+            <el-autocomplete
+              v-model="form.task_data_source.source_asr.filter"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              placeholder="请输入基线用例筛选条件"
+              clearable
+              :fetch-suggestions="
+                (queryString, cb) => {
+              cb([{ value: 'usetest=1' },
+              { value: 'is_smoke=1' }])
+            }
+          "
+            />
           </el-form-item>
         </div>
         <div v-if="form.task_data_source_label === 'cases_asr'">
@@ -693,6 +758,7 @@
                 style="width: 70%"
                 v-model="form.task_data_source.excel_asr.file_name"
                 filterable
+                clearable
                 placeholder="请选择"
                 v-show="fileType === 'select'"
               >
@@ -735,13 +801,14 @@
       <div v-if="active === 2">
         <div>
           <el-form-item label="任务名称" prop="task_name">
-            <el-input v-model="form.task_name" />
+            <el-input clearable v-model="form.task_name" />
           </el-form-item>
           <el-form-item label="任务分组" prop="task_group">
             <el-select
               v-model="form.task_group"
               placeholder="输入/选择任务需要加入的组"
               filterable
+              clearable
               allow-create
               style="display: block; width: 100%;"
             >
@@ -762,6 +829,7 @@
           <el-form-item label="定时表达式" prop="crontab_string">
             <el-input
               v-model="form.crontab_string"
+              clearable
               :placeholder="'[分] [时] [天] [月] [星期几]      例如每周四早上9点30分执行：30 9 * * 4'"
               :disabled="form.is_crontab === 'no'"
             />
@@ -789,6 +857,7 @@
             >
               <el-input
                 v-model="item.address"
+                clearable
                 :disabled="form.task_config.config_skill.is_report === 'no'"
               />
               <div class="addDelete">
@@ -830,6 +899,7 @@
             >
               <el-input
                 v-model="item.address"
+                clearable
                 :disabled="form.task_config.config_qa.is_report === 'no'"
               />
               <div class="addDelete">
@@ -872,6 +942,7 @@
             >
               <el-input
                 v-model="item.address"
+                clearable
                 :disabled="form.task_config.config_tts.is_report === 'no'"
               />
               <div class="addDelete">
@@ -913,6 +984,7 @@
             >
               <el-input
                 v-model="item.address"
+                clearable
                 :disabled="form.task_config.config_asr.is_report === 'no'"
               />
               <div class="addDelete">
@@ -954,6 +1026,7 @@
             >
               <el-input
                 v-model="item.address"
+                clearable
                 :disabled="form.task_config.config_kg.is_report === 'no'"
               />
               <div class="addDelete">

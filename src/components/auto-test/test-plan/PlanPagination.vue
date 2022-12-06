@@ -20,18 +20,18 @@ export default {
     },
     pageNum: {
       get() {
-        return this.$store.getters['TestPlan/getPageNum']
+        return this.$store.getters['TestPlan/getListPlanParamsPn']
       },
       set(val) {
-        this.$store.commit('TestPlan/SET_PN', val)
+        this.$store.commit('TestPlan/SET_LIST_PLAN_PARAMS_PN', val)
       }
     },
     pageSize: {
       get() {
-        return this.$store.getters['TestPlan/getPageSize']
+        return this.$store.getters['TestPlan/getListPlanParamsPz']
       },
       set(val) {
-        this.$store.commit('TestPlan/SET_PZ', val)
+        this.$store.commit('TestPlan/SET_LIST_PLAN_PARAMS_PZ', val)
       }
     }
   },
