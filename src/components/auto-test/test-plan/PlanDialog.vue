@@ -1242,11 +1242,20 @@ export default {
     onFileUpload(response) {
       if (response.code === 200) {
         this.form.task_data_source.excel_kg.file_name = response.data
+        this.form.task_data_source.excel_skill.file_name = response.data
+        this.form.task_data_source.excel_qa.file_name = response.data
+        this.form.task_data_source.excel_tts.file_name = response.data
+        this.form.task_data_source.excel_asr.file_name = response.data
         this.$refs.ruleForm.validateField('file_name', () => {})
+        return this.$store.dispatch('TestPlan/listUploadedFiles')
       }
     },
     onRemoveFile() {
       this.form.task_data_source.excel_kg.file_name = ''
+      this.form.task_data_source.excel_skill.file_name = ''
+      this.form.task_data_source.excel_qa.file_name = ''
+      this.form.task_data_source.excel_tts.file_name = ''
+      this.form.task_data_source.excel_asr.file_name = ''
       this.$refs.ruleForm.validateField('file_name', () => {})
     },
     getUploadedFiles() {
