@@ -1,7 +1,8 @@
 <template>
   <el-pagination
+    small
     :current-page.sync="pageNum"
-    :page-sizes="[30, 100, 200, 500, 1000]"
+    :page-sizes="[20, 100, 200, 500, 1000]"
     :page-size="pageSize"
     :total="total"
     layout="total, sizes, prev, pager, next, jumper"

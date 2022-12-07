@@ -32,7 +32,7 @@ const getDefaultState = () => {
       task_group: '',
       is_crontab: '',
       page_num: 1,
-      page_size: 30
+      page_size: 20
     },
     listHistoryParams: {
       job_instance_id: '',
@@ -40,7 +40,7 @@ const getDefaultState = () => {
       task_type: '',
       status: 0,
       page_num: 1,
-      page_size: 30
+      page_size: 20
     },
     listReportParams: {
       pagenum: 1,
@@ -299,7 +299,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       getHistory(state.listHistoryParams).then(response => {
         const { data } = response
-        commit('SET_TOTALS', data.count)
+        commit('SET_TOTALS', data.total)
         commit('SET_HISTORIES', data.data)
         resolve()
       }).catch(error => {
@@ -315,7 +315,7 @@ const actions = {
       getPlans(state.listPlanParams).then(response => {
         const { data } = response
         commit('SET_PLANS', data.data)
-        commit('SET_TOTALS', data.count)
+        commit('SET_TOTALS', data.total)
         resolve()
       }).catch(error => {
         reject(error)
