@@ -351,6 +351,8 @@ export default {
             c_type: 1,
             is_continue: 'no',
             is_random: 'no',
+            is_verify: 'no',
+            verify_addr: '',
             kg_data_base: {
               db: '',
               mongo_connect_url: ''

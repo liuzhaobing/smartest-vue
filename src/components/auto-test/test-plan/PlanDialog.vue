@@ -377,6 +377,31 @@
               :fetch-suggestions="dbConnectionSearch"
             />
           </el-form-item>
+          <el-form-item label="用例验证" prop="is_verify">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_data_source.source_kg.is_verify"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
+          </el-form-item>
+          <el-form-item label="验证地址" prop="verify_addr">
+            <el-autocomplete
+              v-model="form.task_data_source.source_kg.verify_addr"
+              style="display: block; width: 100%;"
+              autocomplete="off"
+              clearable
+              :disabled="form.task_data_source.source_kg.is_verify === 'no'"
+              :fetch-suggestions="
+                (queryString, cb) => {
+              cb([{ value: 'dit' },{ value: 'fit' },{ value: 'sit' },{ value: 'm8' }])
+            }
+          "
+            />
+          </el-form-item>
           <el-form-item label="单跳/两跳" prop="c_type">
             <el-radio-group
               v-model="form.task_data_source.source_kg.c_type"
@@ -1197,6 +1222,8 @@ export default {
                 c_type: [],
                 is_continue: [],
                 is_random: [],
+                is_verify: [],
+                verify_addr: [],
                 db: [],
                 mongo_connect_url: [],
                 template_json: []
@@ -1299,6 +1326,8 @@ export default {
           c_type: [],
           is_continue: [],
           is_random: [],
+          is_verify: [],
+          verify_addr: [],
           db: [],
           mongo_connect_url: [],
           template_json: []
