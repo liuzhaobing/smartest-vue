@@ -8,6 +8,7 @@
         placeholder="任务分组搜索"
         round
         size="mini"
+        @change="handleFilter"
         style="height: 20px; width: 150px; margin-right: 10px">
         <el-option v-for="g in taskGroups" :value="g" :label="g" />
       </el-select>
@@ -17,14 +18,15 @@
         placeholder="任务类型搜索"
         round
         size="mini"
+        @change="handleFilter"
         style="height: 20px; width: 150px; margin-right: 10px">
         <el-option v-for="(value, key, index) in preData" :value="key" :label="value.name" />
       </el-select>
       <el-input v-model="filterPlanParams.task_name" clearable placeholder="计划名称搜索" round size="mini" style="height: 20px; width: 200px; margin-right: 10px" />
       <el-button type="primary" icon="el-icon-search" @click="handleFilter" size="mini">查询</el-button>
       <el-button icon="el-icon-refresh-left" @click="resetFilter" size="mini">重置</el-button>
-      <el-button type="primary" icon="el-icon-document" size="mini" @click="addPlan">新增计划</el-button>
       <el-button type="primary" icon="el-icon-refresh" size="mini" @click="$store.dispatch('TestPlan/getPlansData')">刷新</el-button>
+      <el-button type="primary" icon="el-icon-document" size="mini" @click="addPlan">新增计划</el-button>
     </div>
     <el-table
       v-loading="loading"
@@ -111,20 +113,6 @@
               popper-class="cell-popover"
               trigger="hover"
               placement="top"
-              content="执行历史"
-            >
-              <el-button
-                type="primary"
-                size="mini"
-                icon="el-icon-data-board"
-                circle
-                @click="viewHistory(scope.row)"
-              />
-            </el-tooltip>
-            <el-tooltip
-              popper-class="cell-popover"
-              trigger="hover"
-              placement="top"
               content="编辑配置"
             >
               <el-button
@@ -149,6 +137,20 @@
                 icon="el-icon-s-promotion"
                 circle
                 @click="handleStartMission(scope.row)"
+              />
+            </el-tooltip>
+            <el-tooltip
+              popper-class="cell-popover"
+              trigger="hover"
+              placement="top"
+              content="执行历史"
+            >
+              <el-button
+                type="primary"
+                size="mini"
+                icon="el-icon-data-line"
+                circle
+                @click="viewHistory(scope.row)"
               />
             </el-tooltip>
             <el-popconfirm
@@ -204,17 +206,18 @@ export default {
           is_crontab: 'yes',
           crontab_string: ''
         }
-      },
-      filterPlanParams: {
-        task_name: '',
-        task_type: '',
-        task_group: '',
-        is_crontab: ''
-      },
-
+      }
     }
   },
   computed: {
+    filterPlanParams: {
+      get() {
+        return this.$store.getters['TestPlan/getListPlanParams']
+      },
+      set(val) {
+        this.$store.commit('TestPlan/SET_LIST_PLAN_PARAMS', val)
+      }
+    },
     crontabVisible: {
       get() {
         return this.$store.getters['TestPlan/getCrontabSettingVisible']
@@ -522,17 +525,15 @@ export default {
       })
     },
     handleFilter() {
-      this.$store.commit('TestPlan/SET_LIST_PLAN_PARAMS', this.filterPlanParams)
       return this.$store.dispatch('TestPlan/getPlansData')
     },
     resetFilter() {
-      this.filterPlanParams = {
+      this.$store.commit('TestPlan/SET_LIST_PLAN_PARAMS', {
         task_name: '',
-          task_type: '',
-          task_group: '',
-          is_crontab: ''
-      }
-      this.$store.commit('TestPlan/SET_LIST_PLAN_PARAMS', this.filterPlanParams)
+        task_type: '',
+        task_group: '',
+        is_crontab: ''
+      })
       return this.$store.dispatch('TestPlan/getPlansData')
     }
   },
