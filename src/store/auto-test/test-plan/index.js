@@ -209,6 +209,9 @@ const getters = {
   },
   getListHistoryParamsPz(state) {
     return state.listHistoryParams.page_size
+  },
+  getListHistoryParams(state) {
+    return state.listHistoryParams
   }
 }
 
@@ -293,6 +296,9 @@ const mutations = {
   },
   SET_LIST_HISTORY_PARAMS_TASK_NAME: (state, value) => {
     state.listHistoryParams.task_name = value
+  },
+  SET_LIST_HISTORY_PARAMS: (state, value) => {
+    state.listHistoryParams = value
   }
 }
 

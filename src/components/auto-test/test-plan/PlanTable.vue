@@ -90,7 +90,7 @@
           <span>{{ scope.row.next_run_time }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="200">
+      <el-table-column align="center" label="操作" width="230">
         <template slot-scope="scope">
           <el-row>
             <el-tooltip
@@ -100,11 +100,25 @@
               content="查看配置"
             >
               <el-button
-                type="primary"
+                type="info"
                 size="mini"
                 icon="el-icon-view"
                 circle
                 @click="viewConfig(scope.row)"
+              />
+            </el-tooltip>
+            <el-tooltip
+              popper-class="cell-popover"
+              trigger="hover"
+              placement="top"
+              content="执行历史"
+            >
+              <el-button
+                type="primary"
+                size="mini"
+                icon="el-icon-data-board"
+                circle
+                @click="viewHistory(scope.row)"
               />
             </el-tooltip>
             <el-tooltip
@@ -226,6 +240,10 @@ export default {
     viewConfig(row) {
       this.config = row
       this.configVisible = true
+    },
+    viewHistory(row) {
+      this.$store.commit('TestPlan/SET_LIST_HISTORY_PARAMS_TASK_NAME', row.task_name)
+      this.$router.push('test-history')
     },
     onCronChange(value) {
       this.$set(this.updateCrontabSetting.settings, 'crontab_string', value)

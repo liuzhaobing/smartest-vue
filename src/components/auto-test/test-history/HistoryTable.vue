@@ -151,13 +151,6 @@ import { Message } from 'element-ui'
 
 export default {
   name: 'HistoryTable',
-  data() {
-    return {
-      filterHistoryParams: {
-        task_name: ''
-      }
-    }
-  },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -179,6 +172,14 @@ export default {
     },
     preData() {
       return this.$store.getters['TestPlan/getPreData']
+    },
+    filterHistoryParams: {
+      get() {
+        return this.$store.getters['TestPlan/getListHistoryParams']
+      },
+      set(val) {
+        return this.$store.commit('TestPlan/SET_LIST_HISTORY_PARAMS', val)
+      }
     }
   },
   methods: {
