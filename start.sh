@@ -1,4 +1,6 @@
 #/bin/bash
+git stash
+git pull
 docker stop smartest-vue
 docker rm smartest-vue
 docker rmi smartest-vue:0.1.0
