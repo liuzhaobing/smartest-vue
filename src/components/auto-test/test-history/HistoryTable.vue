@@ -1,14 +1,12 @@
 <template>
   <div class="table-wrapper">
-    <div class="top-btn">
-      <el-button
-        type="text"
-        style="font-size: 14px"
-        icon="el-icon-refresh"
-        @click="$store.dispatch('TestPlan/getHistoriesData')"
-      >刷新
-      </el-button>
+    <div class="filter-container">
+      <el-input v-model="filterHistoryParams.task_name" clearable placeholder="计划名称搜索" round size="mini" style="height: 20px; width: 200px; margin-right: 10px" />
+      <el-button type="primary" icon="el-icon-search" @click="handleFilter" size="mini">查询</el-button>
+      <el-button icon="el-icon-refresh-left" @click="resetFilter" size="mini">重置</el-button>
+      <el-button type="primary" icon="el-icon-refresh" size="mini" @click="$store.dispatch('TestPlan/getHistoriesData')">刷新</el-button>
     </div>
+
     <el-table
       v-loading="loading"
       :data="historyData"
@@ -153,6 +151,13 @@ import { Message } from 'element-ui'
 
 export default {
   name: 'HistoryTable',
+  data() {
+    return {
+      filterHistoryParams: {
+        task_name: ''
+      }
+    }
+  },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -204,6 +209,15 @@ export default {
       a.click()
       window.URL.revokeObjectURL(a.href)
       Message.success('导出成功！')
+    },
+    handleFilter() {
+      this.$store.commit('TestPlan/SET_LIST_HISTORY_PARAMS_TASK_NAME', this.filterHistoryParams.task_name)
+      return this.$store.dispatch('TestPlan/getHistoriesData')
+    },
+    resetFilter() {
+      this.filterHistoryParams.task_name = ''
+      this.$store.commit('TestPlan/SET_LIST_HISTORY_PARAMS_TASK_NAME', this.filterHistoryParams.task_name)
+      return this.$store.dispatch('TestPlan/getHistoriesData')
     }
   }
 }
@@ -224,6 +238,12 @@ export default {
   display: flex;
   width: calc(100% - 10px);
   justify-content: flex-end;
+}
+
+.filter-container {
+  display: flex;
+  width: calc(100% - 10px);
+  margin: 15px 100px 5px 15px;
 }
 
 .configJson {

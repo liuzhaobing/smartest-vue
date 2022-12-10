@@ -22,6 +22,7 @@
       </el-select>
       <el-input v-model="filterPlanParams.task_name" clearable placeholder="计划名称搜索" round size="mini" style="height: 20px; width: 200px; margin-right: 10px" />
       <el-button type="primary" icon="el-icon-search" @click="handleFilter" size="mini">查询</el-button>
+      <el-button icon="el-icon-refresh-left" @click="resetFilter" size="mini">重置</el-button>
       <el-button type="primary" icon="el-icon-document" size="mini" @click="addPlan">新增计划</el-button>
       <el-button type="primary" icon="el-icon-refresh" size="mini" @click="$store.dispatch('TestPlan/getPlansData')">刷新</el-button>
     </div>
@@ -503,6 +504,16 @@ export default {
       })
     },
     handleFilter() {
+      this.$store.commit('TestPlan/SET_LIST_PLAN_PARAMS', this.filterPlanParams)
+      return this.$store.dispatch('TestPlan/getPlansData')
+    },
+    resetFilter() {
+      this.filterPlanParams = {
+        task_name: '',
+          task_type: '',
+          task_group: '',
+          is_crontab: ''
+      }
       this.$store.commit('TestPlan/SET_LIST_PLAN_PARAMS', this.filterPlanParams)
       return this.$store.dispatch('TestPlan/getPlansData')
     }

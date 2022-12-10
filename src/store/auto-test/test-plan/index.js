@@ -290,6 +290,9 @@ const mutations = {
   },
   SET_LIST_HISTORY_PARAMS_PZ: (state, value) => {
     state.listHistoryParams.page_size = value
+  },
+  SET_LIST_HISTORY_PARAMS_TASK_NAME: (state, value) => {
+    state.listHistoryParams.task_name = value
   }
 }
 
