@@ -14,8 +14,6 @@ import { addServerFunc, removeServerFunc, updateServerFunc, listFileFunc, listSe
 
 const getDefaultState = () => {
   return {
-    pn: 0,
-    pz: 30,
     total: 0,
     active: 0,
     servers: [],
@@ -117,12 +115,6 @@ function renderTime(date) {
 }
 
 const getters = {
-  getPageNum(state) {
-    return state.pn
-  },
-  getPageSize(state) {
-    return state.pz
-  },
   getTotal(state) {
     return state.total
   },
@@ -216,12 +208,6 @@ const getters = {
 }
 
 const mutations = {
-  SET_PN: (state, value) => {
-    state.pn = value
-  },
-  SET_PZ: (state, value) => {
-    state.pz = value
-  },
   SET_TOTALS: (state, data) => {
     state.total = data
   },
