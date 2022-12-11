@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
+import { findResults } from "@/api/auto-test/test-report";
 
 const state = () => ({
   // 数据库连接信息
@@ -27,7 +28,19 @@ const state = () => ({
 
   // skill result tendency 数据
   skillResultTendencyDataAxios: [],
-  skillResultTendencyDataAxiosAfterValue: {}
+  skillResultTendencyDataAxiosAfterValue: {},
+
+  // summary 表查询条件
+  summaryFilter: {
+    pagenum: 0,
+    pagesize: 10,
+    f_database: 'smartest',
+    f_collection: 'summary',
+    filter: {}
+  },
+
+  // summary 表查询结果
+  summaryData: []
 
 })
 
@@ -59,6 +72,55 @@ const getters = {
       tendencyData['param_info_accuracy_1'].push(param[1])
     }
     state.skillResultTendencyDataAxiosAfterValue = tendencyData
+    return tendencyData
+  },
+  getSkillResultTendencyDate(state) {
+    let tendencyData = {
+      execute_date: [],
+      fit_intent_accuracy: [],
+      fit_param_info_accuracy: [],
+      m8_intent_accuracy: [],
+      m8_param_info_accuracy: [],
+      qa_accuracy: []
+    }
+    const record = {
+      fit: [],
+      m8: [],
+      qa: []
+    }
+    for (let i = 0; i < state.summaryData.length; i++) {
+      if (!tendencyData.execute_date.includes(state.summaryData[i].execute_date)) {
+        tendencyData.execute_date.push(state.summaryData[i].execute_date)
+      }
+      if (state.summaryData[i].execute_date.task_name === '每日技能测试FIT环境') {
+        if (!record.fit.includes(state.summaryData[i].execute_date)) {
+          record.fit.push(state.summaryData[i].execute_date)
+        } else {
+          tendencyData.fit_intent_accuracy.pop()
+          tendencyData.fit_param_info_accuracy.pop()
+        }
+        tendencyData.fit_intent_accuracy.push(state.summaryData[i].first_version_intent_accuracy)
+        tendencyData.fit_param_info_accuracy.push(state.summaryData[i].first_version_paraminfo_accuracy)
+      }
+      if (state.summaryData[i].execute_date.task_name === '每日技能测试线上环境') {
+        if (!record.m8.includes(state.summaryData[i].execute_date)) {
+          record.m8.push(state.summaryData[i].execute_date)
+        } else {
+          tendencyData.m8_intent_accuracy.pop()
+          tendencyData.m8_param_info_accuracy.pop()
+        }
+        tendencyData.m8_intent_accuracy.push(state.summaryData[i].first_version_intent_accuracy)
+        tendencyData.m8_param_info_accuracy.push(state.summaryData[i].first_version_paraminfo_accuracy)
+      }
+      if (state.summaryData[i].execute_date.task_name === '每日QA测试线上环境') {
+        if (!record.qa.includes(state.summaryData[i].execute_date)) {
+          record.qa.push(state.summaryData[i].execute_date)
+        } else {
+          tendencyData.qa_accuracy.pop()
+        }
+        tendencyData.qa_accuracy.push(state.summaryData[i].first_version_accuracy)
+      }
+    }
     return tendencyData
   }
 }
@@ -109,6 +171,15 @@ const mutations = {
   },
   setSkillResultTendencyDataAxiosAfterValue(state, value) {
     state.skillResultTendencyDataAxiosAfterValue = value
+  },
+  SET_SUMMARY_DATA(state, value) {
+    state.summaryData = value
+  },
+  SET_LOADING(state, value) {
+    state.loading = value
+  },
+  SET_SUMMARY_FILTER(state, value) {
+    state.summaryFilter = value
   }
 }
 
@@ -296,6 +367,20 @@ const actions = {
           commit('setSkillResultTendencyDataAxios', response.data.responseData.data)
         }
       })
+  },
+  getSkillResultTendencyNew: function ({ state, commit }) {
+    commit('SET_LOADING', true)
+    return new Promise((resolve, reject) => {
+      findResults(state.summaryFilter).then(response => {
+        const { data } = response
+        commit('SET_SUMMARY_DATA', data.data)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      }).finally(() => {
+        commit('SET_LOADING', false)
+      })
+    })
   }
 }
 
