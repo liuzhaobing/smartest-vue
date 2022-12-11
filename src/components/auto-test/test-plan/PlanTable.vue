@@ -22,11 +22,11 @@
         style="height: 20px; width: 150px; margin-right: 10px">
         <el-option v-for="(value, key, index) in preData" :value="key" :label="value.name" />
       </el-select>
-      <el-input v-model="filterPlanParams.task_name" clearable placeholder="计划名称搜索" round size="mini" style="height: 20px; width: 200px; margin-right: 10px" />
+      <el-input v-model="filterPlanParams.task_name" clearable placeholder="任务名称搜索" round size="mini" style="height: 20px; width: 200px; margin-right: 10px" />
       <el-button type="primary" icon="el-icon-search" @click="handleFilter" size="mini">查询</el-button>
       <el-button icon="el-icon-refresh-left" @click="resetFilter" size="mini">重置</el-button>
       <el-button type="primary" icon="el-icon-refresh" size="mini" @click="$store.dispatch('TestPlan/getPlansData')">刷新</el-button>
-      <el-button type="primary" icon="el-icon-document-add" size="mini" @click="addPlan">新增计划</el-button>
+      <el-button type="primary" icon="el-icon-document-add" size="mini" @click="addPlan">新增任务</el-button>
     </div>
     <el-table
       v-loading="loading"
@@ -52,7 +52,7 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="计划名称">
+      <el-table-column label="任务名称">
         <template slot-scope="scope">
           {{ scope.row.task_name }}
         </template>

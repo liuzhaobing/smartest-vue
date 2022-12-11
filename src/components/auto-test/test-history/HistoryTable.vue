@@ -1,7 +1,7 @@
 <template>
   <div class="table-wrapper">
     <div class="filter-container">
-      <el-input v-model="filterHistoryParams.task_name" clearable placeholder="计划名称搜索" round size="mini" style="height: 20px; width: 200px; margin-right: 10px" />
+      <el-input v-model="filterHistoryParams.task_name" clearable placeholder="任务名称搜索" round size="mini" style="height: 20px; width: 200px; margin-right: 10px" />
       <el-button type="primary" icon="el-icon-search" @click="handleFilter" size="mini">查询</el-button>
       <el-button icon="el-icon-refresh-left" @click="resetFilter" size="mini">重置</el-button>
       <el-button type="primary" icon="el-icon-refresh" size="mini" @click="$store.dispatch('TestPlan/getHistoriesData')">刷新</el-button>

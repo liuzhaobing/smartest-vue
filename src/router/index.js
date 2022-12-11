@@ -70,7 +70,7 @@ export const constantRoutes = [
         component: () => import('@/views/auto-test/test-plan'),
         name: 'test-plan',
         meta: {
-          title: '测试计划',
+          title: '测试任务',
           icon: 'el-icon-document'
         }
       },
