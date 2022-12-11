@@ -21,6 +21,7 @@
               v-model="form.task_type"
               placeholder="选择任务类型"
               style="display: block; width: 100%;"
+              :disabled="form.id > 0"
               @change="onTypeChange"
             >
               <el-option v-for="(value, key, index) in preData" :value="key" :label="value.name" />
@@ -338,6 +339,7 @@
             <el-select
               v-model="form.task_data_source_label"
               placeholder="选择用例来源"
+              :disabled="form.id > 0"
               style="display: block; width: 100%;"
             >
               <el-option v-for="(value, key, index) in preData[form.task_type]['source']" :value="key" :label="value.name" />
