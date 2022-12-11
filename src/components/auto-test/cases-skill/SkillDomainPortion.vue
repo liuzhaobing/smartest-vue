@@ -12,9 +12,9 @@ export default {
     skill_domain_portion_chart: null,
     skill_domain_portion_chart_option: {
       title: {
-        text: 'domains',
+        text: '技能用例Domain占比',
         subtext: '',
-        left: 'right'
+        left: 'left'
       },
       tooltip: {
         trigger: 'item'

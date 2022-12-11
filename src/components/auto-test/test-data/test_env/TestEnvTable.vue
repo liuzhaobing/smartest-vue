@@ -3,7 +3,7 @@
     <div class="top-btn">
       <el-button
         type="text"
-        icon="el-icon-document"
+        icon="el-icon-document-add"
         style="font-size: 14px"
         @click="addServer"
       >新增环境

@@ -51,7 +51,7 @@ export const constantRoutes = [
       path: 'overview',
       name: 'SmartTalk',
       component: () => import('@/views/auto-test/cases-skill/SkillReport'),
-      meta: { title: 'SmartTalk', icon: 'dashboard' }
+      meta: { title: 'SmartTalk', icon: 'el-icon-data-line' }
     }]
   },
 
@@ -62,38 +62,44 @@ export const constantRoutes = [
     name: 'smartest',
     meta: {
       title: '自动化测试',
-      icon: 'nested'
+      icon: 'el-icon-data-board'
     },
     children: [
       {
         path: 'test-plan',
         component: () => import('@/views/auto-test/test-plan'),
         name: 'test-plan',
-        meta: { title: '测试计划' }
+        meta: {
+          title: '测试计划',
+          icon: 'el-icon-document'
+        }
       },
       {
         path: 'test-history',
         component: () => import('@/views/auto-test/test-history'),
         name: 'test-history',
-        meta: { title: '执行历史' }
+        meta: {
+          title: '执行历史',
+          icon: 'el-icon-document-checked'
+        }
       },
       {
         path: 'test-data',
-        component: () => import('@/views/auto-test/test-data'),
+        component: () => import('@/views/auto-test/test-data/test-address'),
         name: 'test-data',
-        meta: { title: '用例管理' }
-      },
-      {
-        path: 'test-env',
-        component: () => import('@/views/auto-test/test-env/test-address'),
-        name: 'test-env',
-        meta: { title: '环境配置' }
+        meta: {
+          title: '数据管理',
+          icon: 'el-icon-tickets'
+        }
       },
       {
         path: 'data-analysis',
         component: () => import('@/views/auto-test/test-table'),
         name: 'data-analysis',
-        meta: { title: '调试页面' }
+        meta: {
+          title: '调试页面',
+          icon: 'el-icon-headset'
+        }
       }
     ]
   },

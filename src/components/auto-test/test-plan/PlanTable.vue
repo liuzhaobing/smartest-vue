@@ -26,7 +26,7 @@
       <el-button type="primary" icon="el-icon-search" @click="handleFilter" size="mini">查询</el-button>
       <el-button icon="el-icon-refresh-left" @click="resetFilter" size="mini">重置</el-button>
       <el-button type="primary" icon="el-icon-refresh" size="mini" @click="$store.dispatch('TestPlan/getPlansData')">刷新</el-button>
-      <el-button type="primary" icon="el-icon-document" size="mini" @click="addPlan">新增计划</el-button>
+      <el-button type="primary" icon="el-icon-document-add" size="mini" @click="addPlan">新增计划</el-button>
     </div>
     <el-table
       v-loading="loading"

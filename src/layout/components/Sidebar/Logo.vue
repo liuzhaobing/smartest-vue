@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: 'Vue Admin Template',
+      title: 'SmartTalk',
       logo: require('@/images/logo.png') // 替换成公司LOGO
     }
   }

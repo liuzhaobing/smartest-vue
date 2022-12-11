@@ -12,9 +12,9 @@ export default {
     skill_intent_portion_chart: null,
     skill_intent_portion_chart_option: {
       title: {
-        text: 'intents',
+        text: '技能用例Intent占比',
         subtext: '',
-        left: 'right'
+        left: 'left'
       },
       tooltip: {
         trigger: 'item'

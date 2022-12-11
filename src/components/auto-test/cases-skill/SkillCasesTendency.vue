@@ -12,7 +12,7 @@ export default {
     skill_cases_tendency_chart: null,
     skill_cases_tendency_chart_option: {
       title: {
-        text: '技能测试集',
+        text: '技能测试集建设',
         subtext: '',
         left: 'left'
       },

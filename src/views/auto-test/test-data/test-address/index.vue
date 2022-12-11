@@ -10,7 +10,7 @@
   </div>
 </template>
 <script>
-import ServerTable from '@/components/auto-test/test_env/TestEnvTable'
+import ServerTable from '@/components/auto-test/test-data/test_env/TestEnvTable'
 export default {
   name: 'EnvTable',
   components: { ServerTable },
