@@ -357,10 +357,22 @@ export default {
             report_string: [{ address: '' }]
           },
           config_asr: {
+            task_name: '',
             chan_num: 1,
-            front_url: '',
-            asr_url: '',
-            asr_ctrl_url: '',
+            is_asr_cloud_minds: 'no',
+            asr_addr: '',
+            is_asr_ctrl: 'no',
+            asr_ctrl_addr: '',
+            is_add_hot: 'no',
+            env_info: {
+              front_url: '',
+              backend_url: '',
+              token: '',
+              username: '',
+              pwd: '',
+              captchaid: '5555',
+              authcode: '5555'
+            },
             agent_id: 2259,
             robot_id: '',
             is_report: 'no',

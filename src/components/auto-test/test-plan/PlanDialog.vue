@@ -279,38 +279,50 @@
         </div>
         <div v-if="form.task_type === 'tts'"></div>
         <div v-if="form.task_type === 'asr'">
-          <el-form-item label="前端地址" prop="front_url">
+          <el-form-item label="自研ASR" prop="is_asr_cloud_minds">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_config.config_asr.is_asr_cloud_minds"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
+          </el-form-item>
+          <el-form-item label="自研ASR地址" prop="asr_addr">
             <el-select
-              v-model="form.task_config.config_asr.front_url"
-              placeholder="请选择前端地址"
+              v-model="form.task_config.config_asr.asr_addr"
+              placeholder="请选择自研ASR地址"
               filterable
               allow-create
               style="display: block; width: 100%;"
               autocomplete="off"
+              :disabled="form.task_config.config_asr.is_asr_cloud_minds === 'no'"
             >
               <el-option v-for="(item, index) in Servers" :value="item.address" :label="item.name + ': ' + item.address" />
             </el-select>
           </el-form-item>
-          <el-form-item label="ASR地址" prop="asr_url">
-            <el-select
-              v-model="form.task_config.config_asr.asr_url"
-              placeholder="请选择ASR测试地址"
-              filterable
-              allow-create
-              style="display: block; width: 100%;"
-              autocomplete="off"
-            >
-              <el-option v-for="(item, index) in Servers" :value="item.address" :label="item.name + ': ' + item.address" />
-            </el-select>
+          <el-form-item label="ASR Ctrl" prop="is_asr_ctrl">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_config.config_asr.is_asr_ctrl"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
           </el-form-item>
-          <el-form-item label="Control地址" prop="asr_ctrl_url">
+          <el-form-item label="ASR Ctrl地址" prop="asr_ctrl_addr">
             <el-select
-              v-model="form.task_config.config_asr.asr_ctrl_url"
-              placeholder="请选择ASR Control测试地址"
+              v-model="form.task_config.config_asr.asr_ctrl_addr"
+              placeholder="请选择ASR Control地址"
               filterable
               allow-create
               style="display: block; width: 100%;"
               autocomplete="off"
+              :disabled="form.task_config.config_asr.is_asr_ctrl === 'no'"
             >
               <el-option v-for="(item, index) in Servers" :value="item.address" :label="item.name + ': ' + item.address" />
             </el-select>
@@ -330,6 +342,17 @@
             }
           "
             />
+          </el-form-item>
+          <el-form-item label="热词添加" prop="is_add_hot">
+            <el-tooltip>
+              <el-switch
+                v-model="form.task_config.config_asr.is_add_hot"
+                active-color="#13ce66"
+                active-value="yes"
+                inactive-color="#eaeefb"
+                inactive-value="no"
+              />
+            </el-tooltip>
           </el-form-item>
         </div>
       </div>
@@ -1252,6 +1275,25 @@ export default {
               this.rules = Object.assign(this.rules, extraRules4)
             }
           }
+          if (this.form.task_type === 'asr') {
+            const extraResult4 = {
+              front_url: [{ required: true, trigger: 'blur', validator: this.checkFrontUrl }],
+              token: [],
+              username: [{ required: true, trigger: 'blur', validator: this.checkUserName }],
+              pwd: [{ required: true, trigger: 'blur', validator: this.checkUserPass }],
+              authcode: [],
+              captchaid: [],
+              is_asr_cloud_minds: [],
+              asr_addr: [],
+              is_asr_ctrl: [],
+              asr_ctrl_addr: [],
+              is_add_hot: []
+            }
+            this.rules = Object.assign(this.rules, extraResult4)
+            if (this.form.task_data_source_label === 'source_asr') {
+              this.rules = Object.assign(this.rules, { filter: [] })
+            }
+          }
         }
       }
     }
@@ -1403,6 +1445,15 @@ export default {
           }
           if (this.form.task_data_source_label === 'excel_skill') {
             payload.task_data_source = {excel_skill: this.form.task_data_source.excel_skill}
+          }
+
+          if (this.form.task_type === 'asr') {
+            this.form.task_config.config_asr.task_name = this.form.task_name
+            payload.task_config = {config_asr: this.form.task_config.config_asr}
+          }
+
+          if (this.form.task_data_source_label === 'source_asr') {
+            payload.task_data_source = {source_asr: this.form.task_data_source.source_asr}
           }
 
           this.$store.commit('TestPlan/SET_PLAN_DIALOG_VISIBLE', false)
