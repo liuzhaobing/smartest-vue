@@ -10,7 +10,14 @@ import {
 } from '@/api/auto-test/test-plan'
 import { Message } from 'element-ui'
 import { exportResults } from '@/api/auto-test/test-report'
-import { addServerFunc, removeServerFunc, updateServerFunc, listFileFunc, listServerFunc } from '@/api/auto-test/common'
+import {
+  addServerFunc,
+  removeServerFunc,
+  updateServerFunc,
+  listFileFunc,
+  listServerFunc,
+  listGroupsFunc
+} from '@/api/auto-test/common'
 
 const getDefaultState = () => {
   return {
@@ -133,9 +140,6 @@ const getters = {
               state.plans[i].next_run_time = renderTime(state.crontabs[j].next_run_time)
             }
           }
-        }
-        if (!state.taskGroups.includes(state.plans[i].task_group)) {
-          state.taskGroups.push(state.plans[i].task_group)
         }
       }
       return state.plans
@@ -285,6 +289,9 @@ const mutations = {
   },
   SET_LIST_HISTORY_PARAMS: (state, value) => {
     state.listHistoryParams = value
+  },
+  SET_TASK_GROUPS: (state, value) => {
+    state.taskGroups = value
   }
 }
 
@@ -348,6 +355,7 @@ const actions = {
       }).finally(() => {
         dispatch('getCrontabData')
         dispatch('getPlansData')
+        dispatch('getGroups')
       })
     })
   },
@@ -366,6 +374,7 @@ const actions = {
       }).finally(() => {
         dispatch('getCrontabData')
         dispatch('getPlansData')
+        dispatch('getGroups')
       })
     })
   },
@@ -397,6 +406,7 @@ const actions = {
       }).finally(() => {
         dispatch('getCrontabData')
         dispatch('getPlansData')
+        dispatch('getGroups')
       })
     })
   },
@@ -490,6 +500,17 @@ const actions = {
       listFileFunc(path).then(response => {
         const { data } = response
         commit('SET_UPLOADED_FILES', data)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  getGroups: function ({ commit }) {
+    return new Promise((resolve, reject) => {
+      listGroupsFunc().then(response => {
+        const { data } = response
+        commit('SET_TASK_GROUPS', data)
         resolve()
       }).catch(error => {
         reject(error)

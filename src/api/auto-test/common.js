@@ -54,3 +54,10 @@ export function addServerFunc(payload) {
     data: payload
   })
 }
+
+export function listGroupsFunc() {
+  return request({
+    url: `/api/v1/groups`,
+    method: 'get'
+  })
+}

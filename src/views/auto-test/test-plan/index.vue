@@ -16,6 +16,7 @@ export default {
   name: 'TaskPlanTable',
   components: { JsonDialog, PlanDialog, PlanTable, PlanPagination },
   mounted() {
+    this.$store.dispatch('TestPlan/getGroups')
     this.$store.dispatch('TestPlan/getPlansData')
     this.$store.dispatch('TestPlan/getCrontabData')
   }
