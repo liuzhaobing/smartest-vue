@@ -33,7 +33,7 @@ const state = () => ({
   // summary 表查询条件
   summaryFilter: {
     pagenum: 0,
-    pagesize: 10,
+    pagesize: 15,
     f_database: 'smartest',
     f_collection: 'summary',
     filter: {}

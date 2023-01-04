@@ -15,7 +15,7 @@
       fit
       highlight-current-row
       :row-style="{
-        height: '20px'
+        height: '40px'
       }"
       :cell-style="{
         padding: '1px'

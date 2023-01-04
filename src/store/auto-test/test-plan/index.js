@@ -30,7 +30,7 @@ const getDefaultState = () => {
       task_group: '',
       is_crontab: '',
       page_num: 1,
-      page_size: 20
+      page_size: 15
     },
     listHistoryParams: {
       job_instance_id: '',
@@ -38,7 +38,7 @@ const getDefaultState = () => {
       task_type: '',
       status: 0,
       page_num: 1,
-      page_size: 20
+      page_size: 15
     },
     listReportParams: {
       pagenum: 1,

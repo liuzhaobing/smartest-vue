@@ -36,7 +36,7 @@
       fit
       :highlight-current-row="true"
       :row-style="{
-        height: '20px'
+        height: '40px'
       }"
       :cell-style="{
         padding: '1px'
@@ -544,7 +544,9 @@ export default {
         task_name: '',
         task_type: '',
         task_group: '',
-        is_crontab: ''
+        is_crontab: '',
+        page_num: 1,
+        page_size: 15
       })
       return this.$store.dispatch('TestPlan/getPlansData')
     }
