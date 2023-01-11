@@ -93,6 +93,15 @@ export const constantRoutes = [
         }
       },
       {
+        path: 'data-grafana',
+        component: () => import('@/views/auto-test/test-grafana'),
+        name: 'data-grafana',
+        meta: {
+          title: '性能指标',
+          icon: 'el-icon-data-line'
+        }
+      },
+      {
         path: 'data-analysis',
         component: () => import('@/views/auto-test/test-table'),
         name: 'data-analysis',
