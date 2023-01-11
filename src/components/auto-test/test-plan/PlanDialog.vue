@@ -223,6 +223,7 @@
                 active-value="yes"
                 inactive-color="#eaeefb"
                 inactive-value="no"
+                disabled
               />
             </el-tooltip>
           </el-form-item>
