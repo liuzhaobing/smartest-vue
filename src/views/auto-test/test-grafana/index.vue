@@ -1,6 +1,6 @@
 <template>
   <div style="width: auto; height: calc(100vh - 50px)">
-    <iframe src="http://172.16.23.33:27928" frameborder="0" align="center" width="100%" height="100%"/>
+    <iframe src="http://172.16.23.33:27928/d/XLUx_hM4z/apache-jmeter-dashboard-using-core-influxdbbackendlistenerclient?orgId=1&kiosk=tv" frameborder="0" align="center" width="100%" height="100%"/>
   </div>
 </template>
 
