@@ -13,9 +13,10 @@
       element-loading-text="Loading"
       border
       fit
+      height="calc(100vh - 150px)"
       highlight-current-row
       :row-style="{
-        height: '40px'
+        height: '50px'
       }"
       :cell-style="{
         padding: '1px'

@@ -1,6 +1,6 @@
 <template>
   <el-pagination
-    small
+    background
     :current-page.sync="pageNum"
     :page-sizes="[15, 30, 100, 200, 500, 1000]"
     :page-size="pageSize"

@@ -34,9 +34,10 @@
       element-loading-text="Loading"
       border
       fit
+      height="calc(100vh - 150px)"
       :highlight-current-row="true"
       :row-style="{
-        height: '40px'
+        height: '50px'
       }"
       :cell-style="{
         padding: '1px'
@@ -88,7 +89,7 @@
       </el-table-column>
       <el-table-column align="left" label="下次执行时间" width="170">
         <template slot-scope="scope">
-          <i class="el-icon-time" />
+          <i class="el-icon-date" v-show="scope.row.next_run_time !== undefined && scope.row.next_run_time !== null"/>
           <span>{{ scope.row.next_run_time }}</span>
         </template>
       </el-table-column>
