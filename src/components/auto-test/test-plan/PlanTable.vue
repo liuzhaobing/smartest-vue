@@ -75,7 +75,7 @@
       </el-table-column>
       <el-table-column label="定时任务" width="100" align="center">
         <template slot-scope="scope">
-          <el-tooltip>
+          <el-tooltip :content="showCrontabStatus(scope.row)" placement="top">
             <el-switch
               v-model="scope.row.is_crontab"
               active-color="#13ce66"
@@ -259,6 +259,12 @@ export default {
       } else {
         return this.$store.dispatch('TestPlan/updateOnePlanSetting', { id: row.id, settings: { is_crontab: 'no' }})
       }
+    },
+    showCrontabStatus(row) {
+      if (row.is_crontab === 'yes') {
+        return '已启用'
+      }
+      return '已禁用'
     },
     turnOnCrontab() {
       this.$refs['vue-cron-linux'].submit()
